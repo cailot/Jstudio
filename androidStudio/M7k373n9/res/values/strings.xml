@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+**
+** Copyright 2008, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Title for Latin keyboard  -->
+    <string name="ime_name">Samrt Soft Keyboard</string>
+    <string name="app_name">Smartey</string>
+
+    <!-- Symbols that are commonly considered word separators in this language -->
+    <string name="word_separators">\u0020.,;:!?\n()[]*&amp;@{}/&lt;&gt;_+=|&quot;</string>
+    
+    <!-- Labels on soft keys -->
+    <string name="label_go_key">Go</string>
+    <string name="label_next_key">Next</string>
+    <string name="label_send_key">Send</string>
+
+    <!-- Labels for subtype -->
+    <string name="label_subtype_generic">%s</string>
+    <string name="label_subtype_en_GB">English (GB)</string>
+
+    <!-- Titles for ImePreference -->
+    <string name="settings_name">Sample Soft Keyboard Settings</string>
+    <string name="language_selection_title">Input languages</string>
+    <string name="select_language">Select input languages</string>
+    <string name="general_category">General</string>
+
+    
+    <!-- Action Bar -->
+    <string name="action_menu_about">About</string>
+    
+    <!-- ImePreference -->
+    <string name="display_name_english_keyboard_ime">English</string>
+    
+    <!-- About  -->
+    <string name="app_credits">jinhyung.seo@gmail.com</string>
+    <string name="info_msg">
+		<b>Author</b>: Jinhyung Seo \n\n
+		
+		======================= \n
+		<i><b>Description</b></i> \n
+		======================= \n
+		
+		Smartey is the app designed simple yet powerful for your life. Why? Because it …\n
+		* Keeps private input in a public place\n
+		* Avoid typos in small screen\n
+		* Enter complicate phase in a short time\n
+		Don’t believe me? Check out and try it by yourself!\n\n
+		
+		======================= \n
+		<i><b>Disclaimer</b></i> \n
+		======================= \n
+		Smartey is proected by Korean Intellectual Property Office registered as 1020130135799.\n
+	</string>
+    <!-- 
+    <string name="info_msg">
+<b>Version</b>: 2.0.0 \n
+<b>Date</b>: 28 May, 2011 \n
+<b>Author</b>: Jinhyung Seo \n
+<b>Email</b>: jinhyung.seo@gmail.com \n\n
+I publish this program in the hope that it might be useful to others, but do not hold me responsible for any problems you might run into :-) \n\n
+
+================================= \n
+            <i><b>Description</b></i> \n
+================================= \n
+
+Melbourne Transport Alarm alerts you so you do not miss your stop when traveling on the Train, Tram or Bus in Melbourne. \n
+The app works by comparing your current location with the destination during the journey and triggers an alert when you approach the destination. \n
+It requires Network service or GPS to determine your current location. \n
+Network uses Tower cell-ID and/or Wi-Fi signals (where available) to provide location information. \n
+You may also use GPS with Network since it is more accurate. However, it consumes more battery power so please ensure to EXIT (select Menu, Exit) when you arrive at the destination and the app is no longer required. \n 
+
+================================= \n
+            <i><b>How To Use</b></i> \n
+================================= \n
+
+1. From the top three icons, blue (Train), green (Tram) and red (Bus), tap on an icon to choose the transport mode.\n
+2. Tap on LINE to choose the line travelled.\n
+3. Tap on DIRECTION to choose which direction you are headed.\n
+4. Tap on STATION to select your destination station or stop.\n
+5. Finally, tap on the grey tack at the bottom of screen and it will confirm if you want to SET Destination.\n
+6. Select YES button and the colour of the tack will change to red. You can now enjoy your journey knowing that you will be reminded of your stop.\n
+7. The mobile device will alert by vibrating 10 times when approaching your destination.\n
+8. To EXIT the app, click on Menu, Exit. \n\n
+
+================================= \n
+            <i><b>Version History</b></i> \n
+================================= \n
+V 0.1 - Initial Release \n 
+
+================================= \n
+            <i><b>Disclaimer</b></i> \n
+================================= \n
+The author Jinhyung Seo disclaims all warranties with regard to this software, included all implied warranties of merchantability and fitness, in no event shall the author be liable for any special, indirect or consequential damages or any damages whatever resulting from loss of use, data or profits, whether in an action of contract, negligence or other tortious action, arising out if or in connection with the use of performance of this software. \n
+	</string>
+    -->
+</resources>

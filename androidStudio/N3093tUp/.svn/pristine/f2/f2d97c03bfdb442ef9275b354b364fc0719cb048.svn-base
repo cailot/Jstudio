@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+    <!-- just giving space at the top -->
+    <PreferenceCategory android:icon="@null"></PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Alarm Setting">
+        <com.hyung.jin.seo.getup.mobile.utils.TimePreference
+            android:key="timeSet"
+            android:name="Default notification time"
+            android:summary="Set alarm to wake up"
+            android:dialogLayout="@layout/time_preference"
+            android:dialogTitle=""
+            android:title="Time To Wake Up" />
+        <com.hyung.jin.seo.getup.mobile.utils.MultiSelectPreference
+            android:key="daysSet"
+            android:selectable="true"
+            android:dialogTitle="Please select days to apply"
+            android:summary="Set days to apply"
+            android:entries="@array/days_entries"
+            android:entryValues="@array/days_values"
+            android:title="Day Selection" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Exercise Setting">
+        <EditTextPreference
+            android:inputType="number"
+            android:key="exerciseSet"
+            android:defaultValue="5"
+            android:summary="How many stretching do you want ?"
+            android:title="Times" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Notification Setting">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="soundSet"
+            android:switchTextOff="OFF"
+            android:switchTextOn="ON"
+            android:title="Enable Sound" />
+
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="vibrationSet"
+            android:switchTextOff="OFF"
+            android:switchTextOn="ON"
+            android:title="Enable Vibration" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

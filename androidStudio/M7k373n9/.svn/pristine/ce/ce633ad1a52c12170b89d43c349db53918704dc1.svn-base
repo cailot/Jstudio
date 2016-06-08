@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C0C0C0"
+    android:orientation="vertical" 
+    >
+	<LinearLayout
+        android:id="@+id/encapsulate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp" 
+        >
+
+        <TextView
+            android:id="@+id/toptext"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="20dip"
+            android:paddingBottom="10dip"
+            android:text="top"
+            android:textSize="40px" />
+
+        <TextView
+            android:id="@+id/bottomtext"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="bottom"
+            android:textSize="20px"  />
+        
+    </LinearLayout>
+</LinearLayout>
+    -->
+    
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="#C0C0C0" 
+    >   
+    <ImageView 
+      android:id="@+id/list_image"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingTop="20dip"
+      android:paddingLeft="30dip"
+      android:paddingRight="30dip"
+      android:adjustViewBounds="true"
+   	  android:contentDescription="TODO"/>   
+
+    
+	    <LinearLayout
+	        android:id="@+id/encapsulate"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical"
+	        android:padding="10dp" 
+	        >
+	
+	        <TextView
+	            android:id="@+id/toptext"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_vertical"
+	            android:adjustViewBounds="true"
+	            android:paddingTop="20dip"
+	            android:paddingBottom="10dip"
+	            android:text="top"
+	            android:textSize="40px" />
+	
+	        <TextView
+	            android:id="@+id/bottomtext"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:adjustViewBounds="true"
+	            android:singleLine="true"
+	            android:text="bottom"
+	            android:textSize="20px"  />
+	        
+	    </LinearLayout>
+	    
+
+</LinearLayout>

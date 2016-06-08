@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/jinseo/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/commons-lang3-3.4_9065a900a07aaf0b2b891f8a754210972080f207.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.4/5fe28b9518e58819180a43a850fbc0dd24b7c050/commons-lang3-3.4.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="5fe28b9518e58819180a43a850fbc0dd24b7c050">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/commons-lang3-3.4_9065a900a07aaf0b2b891f8a754210972080f207.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/support-annotations-23.2.1_d37ea22e5f482845f5e0d40f888f918fcd8680f5.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/support-annotations-23.2.1_d37ea22e5f482845f5e0d40f888f918fcd8680f5.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/libs/internal_impl-23.2.1.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/internal_impl-23.2.1_e708fe0a7a5a103f0ea9d0f0135a364f2091863b.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/libs/internal_impl-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/internal_impl-23.2.1_e708fe0a7a5a103f0ea9d0f0135a364f2091863b.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/com.android.support-appcompat-v7-23.2.1_d4f58dbfed146ff6803064c72498b9bcb2124f7a.jar" />
+    </item>
+    <item
+        jar="/Applications/Android Studio.app/Contents/gradle/m2repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="4b95f4897fa13f2cd904aee711aeafc0c5295cd8">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/commons-codec-1.10_ce4872e80eba2cc282b3568a40f7b2cad47fe255.jar" />
+    </item>
+    <item
+        jar="/Applications/Android Studio.app/Contents/gradle/m2repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="4b95f4897fa13f2cd904aee711aeafc0c5295cd8">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/commons-codec-1.10_ce4872e80eba2cc282b3568a40f7b2cad47fe255.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.2.1_d4f58dbfed146ff6803064c72498b9bcb2124f7a.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="edefffc7372cc19f6f52ed7ec94b97c28417e175">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_fb5141e265af987ab4bca9366fd8196369b35c38.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/com.android.support-support-vector-drawable-23.2.1_9463e4a01965e863c2441705a4f89f03069f81bc.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.2.1_9463e4a01965e863c2441705a4f89f03069f81bc.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="8503b3cf007faeb960749d2dfd2030ed1aaa6447">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/instant-run_c3210b06e31eca0ad978a90178d9a016b5112217.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.2.1_2fc869d27f1611b51dfa337f680e8b56de2be514.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/com.android.support-support-v4-23.2.1_5b3a18ba2be3ff5d3a08b61e277995a7e7da2f3f.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.2.1_5b3a18ba2be3ff5d3a08b61e277995a7e7da2f3f.jar" />
+    </item>
+    <item
+        jar="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.2"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/pre-dexed/release/com.android.support-animated-vector-drawable-23.2.1_2fc869d27f1611b51dfa337f680e8b56de2be514.jar" />
+    </item>
+
+</items>

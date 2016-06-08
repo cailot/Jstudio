@@ -1,0 +1,22 @@
+[
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/res/merged/debug/xml/method.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/src/main/res/xml/method.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/res/merged/debug/xml/ime_preferences.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/src/main/res/xml/ime_preferences.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/res/merged/debug/xml/symbols.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/src/main/res/xml/symbols.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/res/merged/debug/xml/qwerty.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/src/main/res/xml/qwerty.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/build/intermediates/res/merged/debug/xml/symbols_shift.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/M7k373n9/app/src/main/res/xml/symbols_shift.xml"
+    }
+]

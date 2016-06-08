@@ -1,0 +1,274 @@
+[
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_share_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_share_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_overflow_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_overflow_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/border.xml",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/border.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_sound_off.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_sound_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_alarm_off.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_alarm_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_checkbox_checked_mtrl.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_checkbox_checked_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_half_black_36dp.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_sound_on.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_sound_on.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_paste_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_paste_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_copy_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_copy_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_selectall_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_selectall_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_selectall_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_selectall_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_checkbox_unchecked_mtrl.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_checkbox_unchecked_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_voice_search_api_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_voice_search_api_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_paste_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_paste_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_search_api_mtrl_alpha.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_search_api_mtrl_alpha.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/border.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/border.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_share_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_share_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_alarm_off.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_alarm_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_cut_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_cut_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_copy_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_copy_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_vibration_on.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_vibration_on.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_vibration_off.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_vibration_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_go_search_api_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_go_search_api_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_sound_on.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_sound_on.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_search_api_mtrl_alpha.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_search_api_mtrl_alpha.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_overflow_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_overflow_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_checkbox_unchecked_mtrl.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_checkbox_unchecked_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_radio_on_mtrl.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_radio_on_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_switch_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_voice_search_api_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_voice_search_api_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00012.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_005.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_vibration_on.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_vibration_on.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_half_black_16dp.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_half_black_16dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_radio_on_mtrl.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_radio_on_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_sound_off.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_sound_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/animation_image.xml",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/animation_image.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_vibration_off.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_vibration_off.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_half_black_16dp.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_half_black_16dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_ab_back_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_ab_back_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_alarm_on.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_alarm_on.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_radio_off_mtrl.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_radio_off_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_half_black_36dp.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_half_black_36dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_radio_off_mtrl.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_radio_off_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_spinner_mtrl_am_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_black_36dp.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_black_36dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_go_search_api_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_go_search_api_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/animation_image.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/animation_image.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_clear_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_clear_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_tab_indicator_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_btn_switch_to_on_mtrl_00001.9.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_btn_checkbox_checked_mtrl.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_btn_checkbox_checked_mtrl.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_clear_material.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_clear_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_black_36dp.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_black_36dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_scrubber_control_to_pressed_mtrl_000.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_cut_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_menu_cut_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_black_16dp.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_black_16dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_star_black_16dp.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-xxxhdpi-v4/abc_ic_star_black_16dp.png"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_ab_back_material.png",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/generated/res/pngs/debug/drawable-xxxhdpi/abc_ic_ab_back_material.png"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/m_alarm_on.png",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/src/main/res/drawable-xxxhdpi/m_alarm_on.png"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/layout-v17/mr_media_route_list_item.xml",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/res/layout-v17/mr_media_route_list_item.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/layout-v17/mr_media_route_list_item.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/res/layout-v17/mr_media_route_list_item.xml"
+    }
+]

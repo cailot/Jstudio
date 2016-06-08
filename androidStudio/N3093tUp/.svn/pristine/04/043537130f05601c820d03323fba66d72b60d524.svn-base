@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-v23/abc_control_background_material.xml",
+        "source": "/Users/jinseo/Dropbox/OneDrive/Jstudio/androidStudio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-v23/abc_control_background_material.xml"
+    },
+    {
+        "merged": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/res/merged/debug/drawable-v23/abc_control_background_material.xml",
+        "source": "/Users/jinseo/Desktop/Jins/dev/android_studio/N3093tUp/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.0/res/drawable-v23/abc_control_background_material.xml"
+    }
+]

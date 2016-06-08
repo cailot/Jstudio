@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#C0C0C0"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp" >
+
+        <EditText
+            android:id="@+id/masterInputValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Input 4 digits"
+            android:inputType="number|phone"
+            android:maxLength="4"
+            android:password="true" >
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp" >
+
+        <EditText
+            android:id="@+id/masterInputConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Confirm digits"
+            android:inputType="number|phone"
+            android:maxLength="4"
+            android:password="true" >
+        </EditText>
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:padding="20dp" >
+
+         <Button
+            android:id="@+id/masterSetButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Set PIN" />
+    </LinearLayout>
+
+</LinearLayout>

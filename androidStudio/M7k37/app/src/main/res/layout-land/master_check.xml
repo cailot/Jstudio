@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/masterCheckLayout"
+    android:background="#C0C0C0"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="=" >
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <EditText
+                android:id="@+id/masterField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Your 4 digits"
+                android:inputType="number|phone"
+                android:maxLength="4"
+                android:password="true" >
+
+                <requestFocus />
+            </EditText>
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>
