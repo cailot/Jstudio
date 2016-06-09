@@ -130,7 +130,7 @@ public class SettingActivity extends ActionBarActivity
         intent.putExtra(G3tUpMobileConstants.ALARM_STATE, G3tUpMobileConstants.ALARM_START);
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), G3tUpMobileConstants.REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         Calendar cal = G3tUpMobileUtils.getAlarmTime(hour, minute);
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*60*5, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*60*5, pendingIntent);
     }
 }
