@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">DriverConsole</string>
+    <string name="action_settings">MDC</string>
+    <string name="first_tab_name">Trip</string>
+    <string name="second_tab_name">Fare</string>
+</resources>
