@@ -14,6 +14,7 @@ import android.view.View;
 
 import kr.co.tmoney.mobiledriverconsole.ui.fragments.MDCTabAdapter;
 
+// Jin desk
 public class MDCMainActivity extends AppCompatActivity {
 
     /**
