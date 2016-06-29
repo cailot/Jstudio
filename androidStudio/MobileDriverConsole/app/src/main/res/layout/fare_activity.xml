@@ -18,7 +18,8 @@ android:stretchColumns="1">
         android:layout_weight="1"
         android:textAlignment="center"
         android:text="Current Stop Name"
-        android:background="@color/bright_foreground_disabled_material_light" />
+        android:background="@color/bright_foreground_disabled_material_light"
+        android:textColor="@android:color/background_light" />
 </TableRow>
 
 <!-- Row 2 -->
@@ -31,7 +32,8 @@ android:stretchColumns="1">
         android:layout_weight="1"
         android:textAlignment="center"
         android:text="Destination Stop or Zone"
-        android:background="@color/bright_foreground_disabled_material_light" />
+        android:background="@color/bright_foreground_disabled_material_light"
+        android:textColor="@android:color/background_light" />
 
 </TableRow>
 
@@ -91,6 +93,7 @@ android:stretchColumns="1">
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:text="Fare"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:textAlignment="center"
         android:gravity="center_vertical"
         android:background="@color/button_material_light" />
