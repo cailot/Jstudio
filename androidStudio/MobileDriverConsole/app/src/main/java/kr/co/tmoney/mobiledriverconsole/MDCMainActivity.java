@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 
 import kr.co.tmoney.mobiledriverconsole.ui.fragments.MDCTabAdapter;
 
+// Jin desk 2nd
 public class MDCMainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MDCMainActivity.class.getSimpleName();
