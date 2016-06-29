@@ -1,0 +1,108 @@
+
+
+
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:stretchColumns="1">
+
+<!-- Row 1 -->
+<TableRow>
+
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:text="Current Stop Name"
+        android:background="@color/bright_foreground_disabled_material_light" />
+</TableRow>
+
+<!-- Row 2 -->
+<TableRow>
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        android:text="Destination Stop or Zone"
+        android:background="@color/bright_foreground_disabled_material_light" />
+
+</TableRow>
+
+<!-- just draw a red line -->
+<View
+    android:layout_height="2dip"
+    android:background="#FF0000" />
+
+<!-- Row 3 -->
+<TableRow>
+    <!-- Column 1 -->
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_weight="1"
+        android:text="Passenger"
+        android:background="@color/button_material_light" />
+
+    <!-- Column 2 -->
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_weight="1"
+        android:text="Fare"
+        android:textAlignment="center"
+        android:background="@color/button_material_light" />
+
+    <!-- Column 3 -->
+    <TextView
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_weight="1"
+        android:text=""
+        android:background="@color/button_material_light" />
+</TableRow>
+
+<!-- Row 4 -->
+<TableRow>
+    <!-- Column 1 -->
+
+    <NumberPicker
+        android:id="@+id/numberPicker"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1"
+        />
+
+    <!-- Column 2 -->
+    <TextView
+        android:id="@+id/fareTxt"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Fare"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:background="@color/button_material_light" />
+
+    <!-- Column 3 -->
+    <Button
+        android:text="Payment"
+        android:id="@+id/paymentBtn"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1" />
+</TableRow>
+</TableLayout>
