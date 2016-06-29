@@ -32,5 +32,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-safetynet:8.3.0'
     compile 'com.google.android.gms:play-services-auth:8.3.0'
 
+    /* Google Clinet API for Map*/
+    compile 'com.google.android.gms:play-services:8+'
+
+    /* StringUtils from apache common library */
     compile 'org.apache.commons:commons-lang3:3.4'
 }
