@@ -44,8 +44,8 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
 //                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
                 break;
             case 1:
-//                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
-                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
+                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
+//                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
                 break;
             default:
                 break;

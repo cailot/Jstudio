@@ -52,6 +52,8 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
 
     private GoogleMap mGoogleMap;
 
+    MarkerOptions mMarker;
+
     TextView tx;
 
 
@@ -116,6 +118,7 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
     private void initialiseMap() {
         LatLng melbourne = new LatLng(-37.8339319,144.9714436);
 //        mGoogleMap.addMarker(new MarkerOptions().position(melbourne));
+        mMarker = new MarkerOptions();
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, 15));
     }
 
@@ -184,7 +187,8 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
         String msg = "Lat : " + location.getLatitude()+", Lon : " + location.getLongitude();
         tx.setText(msg + "   You can click to add Geofences");
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(current));
+        mMarker.position(current);
+        mGoogleMap.addMarker(mMarker);
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, 15));
         Log.d(LOG_TAG, msg);
     }
