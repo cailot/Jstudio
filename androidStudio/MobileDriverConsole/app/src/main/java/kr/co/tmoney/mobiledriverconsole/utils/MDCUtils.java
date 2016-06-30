@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
  */
 public class MDCUtils {
 
+    private MDCUtils(){}
 
     public static String getValueFromSharedPreferences(Context context, String key){
         String value = "";
@@ -16,6 +17,11 @@ public class MDCUtils {
         value = preferences.getString(key, "");
         return value;
     }
+
+    public static String getLogTag(Class className){
+        return MDCConstants.PRE_LOG_ENTRY +  className.getSimpleName() + MDCConstants.POST_LOG_ENTRY;
+    }
+
 
 
 }

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 
 /**
@@ -17,6 +18,8 @@ import kr.co.tmoney.mobiledriverconsole.R;
  * one of the sections/tabs/pages.
  */
 public class MDCTabAdapter extends FragmentPagerAdapter {
+
+    private final String LOG_TAG = MDCUtils.getLogTag(MDCTabAdapter.class);
 
     Context mContext;
 
@@ -38,9 +41,11 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
         switch(position) {
             case 0:
                 fragment = Fragment.instantiate(mContext, TripOnFragment.class.getName());
+//                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
                 break;
             case 1:
-                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
+//                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
+                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
                 break;
             default:
                 break;

@@ -50,4 +50,17 @@ public interface MDCConstants {
     public static final double ADULT_FARE = 25.0;
 
 
+    public static final String PRE_LOG_ENTRY = "###\t";
+
+    public static final String POST_LOG_ENTRY = "\t###";
+
+    ///////////////////////////// Geofencing Test ////////////////////////////////
+    /**
+     * For this sample, geofences expire after one hour.
+     */
+    public static final long GEOFENCE_EXPIRATION = 60 * 60 * 1000;
+    //public static final float GEOFENCE_RADIUS_IN_METERS = 1609; // 1 mile, 1.6 km
+    public static final float GEOFENCE_RADIUS_IN_METERS = 1; // 1 mile, 1.6 km
+
+
 }

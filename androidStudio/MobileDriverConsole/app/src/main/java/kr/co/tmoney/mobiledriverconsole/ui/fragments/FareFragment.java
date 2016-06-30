@@ -15,13 +15,14 @@ import android.widget.TextView;
 
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCConstants;
+import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
  * Created by jinseo on 2016. 6. 25..
  */
 public class FareFragment extends Fragment {
 
-    private static final String LOG_TAG = FareFragment.class.getSimpleName();
+    private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
     private Button mPaymentBtn;
 

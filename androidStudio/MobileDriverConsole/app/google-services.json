@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "765954447697",
+    "firebase_url": "https://tmoney-260ba.firebaseio.com",
+    "project_id": "tmoney-260ba",
+    "storage_bucket": "tmoney-260ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:765954447697:android:a5fa88c49a06e692",
+        "android_client_info": {
+          "package_name": "kr.co.tmoney.mobiledriverconsole"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "765954447697-1e2ad2qlt3j4qh7ep6lt0bcj9564mhk3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARcc57YdbbyaiS517LoES5i4sqBl2kyh8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

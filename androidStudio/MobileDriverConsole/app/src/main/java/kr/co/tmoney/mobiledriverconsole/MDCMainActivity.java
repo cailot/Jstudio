@@ -8,11 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import kr.co.tmoney.mobiledriverconsole.ui.fragments.MDCTabAdapter;
+import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 // Jin desk 2nd
 public class MDCMainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MDCMainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MDCUtils.getLogTag(MDCMainActivity.class);
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
