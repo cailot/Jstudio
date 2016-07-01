@@ -40,8 +40,14 @@ public interface MDCConstants {
 
     public static final int NO_VALUE = STATUS_BASE + 3;
 
+    public static final int FARE_ORIGIN_REQUEST = STATUS_BASE + 4;
+
+    public static final int FARE_DESTINATION_REQUEST = STATUS_BASE + 5;
 
 
+
+
+    public static final int GOOGLE_MAP_ZOOM_LEVEL = 15;
 
     public static final String GOOGLE_LOG_STATUS = "googleLog";
 

@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -127,7 +128,7 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
         Log.d(LOG_TAG, "GoogleApiClient onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000);
+        mLocationRequest.setInterval(1000*5);
 
         // Android SDK 23
         int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -184,12 +185,13 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
 
     @Override
     public void onLocationChanged(Location location) {
-        String msg = "Lat : " + location.getLatitude()+", Lon : " + location.getLongitude();
-        tx.setText(msg + "   You can click to add Geofences");
+        String msg = "Lat : " + location.getLatitude()+"\t, Lon : " + location.getLongitude();
+        tx.setText("GPS subscription test  \t\t" + msg);
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-        mMarker.position(current);
+        mMarker.position(current)
+        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_marker));
         mGoogleMap.addMarker(mMarker);
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, 15));
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, MDCConstants.GOOGLE_MAP_ZOOM_LEVEL));
         Log.d(LOG_TAG, msg);
     }
 
