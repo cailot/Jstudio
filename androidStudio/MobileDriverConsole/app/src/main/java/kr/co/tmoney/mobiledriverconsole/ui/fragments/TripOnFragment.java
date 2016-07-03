@@ -2,12 +2,14 @@ package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,9 +47,11 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class TripOnFragment extends TripFragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
+public class TripOnFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOnFragment.class);
+
+    Context mContext;
 
     private MapView mMapView;
 
@@ -55,7 +59,7 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
 
     MarkerOptions mMarker;
 
-    TextView tx;
+    TextView mTripOnTxt;
 
 
     LocationRequest mLocationRequest;
@@ -74,11 +78,8 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
         View view = inflater.inflate(R.layout.trip_on_activity, null);
         mContext = container.getContext();
 
-
-
-
-        tx = (TextView)view.findViewById(R.id.tripOnTxt);
-        tx.setOnClickListener(new View.OnClickListener(){
+        mTripOnTxt = (TextView)view.findViewById(R.id.trip_on_txt);
+        mTripOnTxt.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
@@ -87,11 +88,7 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
             }
         });
 
-
-
-
-
-        mMapView=(MapView)view.findViewById(R.id.tripMap);
+        mMapView=(MapView)view.findViewById(R.id.trip_on_map);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         mMapView.getMapAsync(this);
@@ -128,7 +125,7 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
         Log.d(LOG_TAG, "GoogleApiClient onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(1000*5);
+        mLocationRequest.setInterval(MDCConstants.GOOGLE_MAP_POLLING_INTERVAL);
 
         // Android SDK 23
         int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -185,8 +182,8 @@ public class TripOnFragment extends TripFragment implements OnMapReadyCallback, 
 
     @Override
     public void onLocationChanged(Location location) {
-        String msg = "Lat : " + location.getLatitude()+"\t, Lon : " + location.getLongitude();
-        tx.setText("GPS subscription test  \t\t" + msg);
+        String msg = "Lat : " + location.getLatitude()+"\nLon : " + location.getLongitude();
+        mTripOnTxt.setText(msg);
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
         mMarker.position(current)
         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_marker));

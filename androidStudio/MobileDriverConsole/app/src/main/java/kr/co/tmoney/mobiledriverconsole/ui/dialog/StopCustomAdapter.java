@@ -12,12 +12,12 @@ import kr.co.tmoney.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class StopsCustomAdapter extends BaseAdapter{
+public class StopCustomAdapter extends BaseAdapter{
     private Context mContext;
     private String[] mNames;
     private String[] mTeams;
 
-    public StopsCustomAdapter(Context context, String[] names, String[] teams){
+    public StopCustomAdapter(Context context, String[] names, String[] teams){
         mContext = context;
         mNames = names;
         mTeams = teams;
@@ -43,7 +43,7 @@ public class StopsCustomAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.stops_detail, null);
+            view = layoutInflater.inflate(R.layout.stop_detail, null);
         }
 
         // Get View

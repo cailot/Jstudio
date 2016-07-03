@@ -11,18 +11,55 @@
     >
 
     <TextView
-        android:id="@+id/tripOffTxt"
+        android:id="@+id/trip_off_route_txt"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_weight="1"
+        android:text="Select Route"
+        android:background="@color/bright_foreground_disabled_material_light"
+        android:textColor="@android:color/background_light"
+        android:minLines="3"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/abc_action_bar_content_inset_material" />
+
+    <TextView
+        android:id="@+id/trip_off_vehicle_txt"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1"
+        android:text="Select Vehicle"
+        android:background="@color/bright_foreground_disabled_material_light"
+        android:textColor="@android:color/background_light"
+        android:minLines="3"
+        android:gravity="center"
+        android:layout_width="match_parent" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trip On Info will be here"
-        android:background="@android:color/darker_gray"
-        android:textColor="@android:color/white" />
+        android:orientation="horizontal"
+        android:minHeight="@dimen/item_touch_helper_swipe_escape_velocity"
+        android:gravity="center_horizontal|bottom">
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/testMap"
-        android:layout_width="fill_parent"
-        android:layout_height="0.0dip"
-        android:layout_weight="8"
-        android:name="com.google.android.gms.maps.MapFragment" />
+        <Button
+            android:id="@+id/trip_off_logout_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:layout_marginRight="@dimen/design_navigation_max_width" />
+
+        <Button
+            android:id="@+id/trip_off_tripon_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trip On" />
+
+
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

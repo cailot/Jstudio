@@ -17,6 +17,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    //Add the following block
+    packagingOptions{
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+
+    }
 }
 
 dependencies {
@@ -26,6 +33,7 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
 
     // Firebase config
+    //
     compile 'com.firebase:firebase-client-android:2.5.2+'
 
     /* For Google Play Services */
@@ -37,4 +45,5 @@ dependencies {
 
     /* StringUtils from apache common library */
     compile 'org.apache.commons:commons-lang3:3.4'
+
 }

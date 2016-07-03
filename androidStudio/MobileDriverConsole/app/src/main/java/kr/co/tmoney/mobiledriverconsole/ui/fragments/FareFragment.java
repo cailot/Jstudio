@@ -3,7 +3,6 @@ package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,14 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopsDialog;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCConstants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopsDialog.PassValueFromDialogListener{
+public class FareFragment extends Fragment implements StopDialog.PassValueFromDialogListener{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -92,20 +91,18 @@ public class FareFragment extends Fragment implements StopsDialog.PassValueFromD
 
     private void showOriginDialog() {
 
-        FragmentManager fragmentManager = getFragmentManager();
-        StopsDialog stopsDialog = new StopsDialog();
+        StopDialog stopsDialog = new StopDialog();
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromDialogListener(FareFragment.this, MDCConstants.FARE_ORIGIN_REQUEST);
-        stopsDialog.show(fragmentManager, "Origin Stop");
+        stopsDialog.show(getFragmentManager(), MDCConstants.ORIGIN_DIALOG_TAG);
 
     }
 
     private void showDestinationDialog() {
-        FragmentManager fragmentManager = getFragmentManager();
-        StopsDialog stopsDialog = new StopsDialog();
+        StopDialog stopsDialog = new StopDialog();
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromDialogListener(FareFragment.this, MDCConstants.FARE_DESTINATION_REQUEST);
-        stopsDialog.show(fragmentManager, "Destination Stop");
+        stopsDialog.show(getFragmentManager(), MDCConstants.DESTINATION_DIALOG_TAG);
     }
 
 

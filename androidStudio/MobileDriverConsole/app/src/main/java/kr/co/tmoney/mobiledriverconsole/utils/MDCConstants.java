@@ -20,7 +20,7 @@ public interface MDCConstants {
 
 
 
-    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com";
+    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/TH_PMB/routes/";
 
     public static final String FIREBASE_DRIVE_PATH = "Thai_Private/TH_PMB";
 
@@ -47,7 +47,23 @@ public interface MDCConstants {
 
 
 
+    ////////////////////////////
+    //
+    //  Dialog Tags
+    //
+    //////////////////////////////
+    public static final String ROUTE_DIALOG_TAG = "Route Dialog";
+
+    public static final String VEHICLE_DIALOG_TAG = "Vehicle Dialog";
+
+    public static final String ORIGIN_DIALOG_TAG = "Origin Dialog";
+
+    public static final String DESTINATION_DIALOG_TAG = "Destination Dialog";
+
+
     public static final int GOOGLE_MAP_ZOOM_LEVEL = 15;
+
+    public static final int GOOGLE_MAP_POLLING_INTERVAL = 1000*10; // may need to change to 14 ~ 15 in beta test
 
     public static final String GOOGLE_LOG_STATUS = "googleLog";
 
