@@ -4,6 +4,14 @@
     <string name="first_tab_name">Trip               </string>
     <string name="second_tab_name">Fare              </string>
 
+
+    <!-- TripOff UI strings -->
+    <string name="trip_off_route_txt_description">Select Route</string>
+    <string name="trip_off_vehicle_txt_description">Select Vehicle</string>
+    <string name="trip_off_logout_btn_description">LOG OUT</string>
+    <string name="trip_off_tripon_btn_description">TRIP ON</string>
+
+
     <!-- Transition type strings -->
     <string name="geofence_transition_entered">Entered</string>
     <string name="geofence_transition_exited">Exited</string>

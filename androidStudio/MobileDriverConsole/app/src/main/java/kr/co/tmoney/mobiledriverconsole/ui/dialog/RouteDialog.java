@@ -19,9 +19,12 @@ import kr.co.tmoney.mobiledriverconsole.R;
  */
 public class RouteDialog extends DialogFragment{
 
-    // Bind the value between user selection in dialog and stop name on FareFragment
-    public interface PassValueFromDialogListener{
-        void sendRouteName(String route);
+    // Bind the value between user selection in dialog and stop name on TripOffActivity
+    public interface PassValueFromRouteDialogListener{
+        void sendRouteName(String routeId, String routeName);
+    }
+
+    public RouteDialog() {
     }
 
     /**
@@ -29,15 +32,19 @@ public class RouteDialog extends DialogFragment{
      * 1. calling setPassValueFromDialogListener() from FareFragment
      * 2. passing value via sendStopName() from StopsDialog
      */
-    PassValueFromDialogListener mPassValueFromDialogListener;
+    PassValueFromRouteDialogListener mPassValueFromRouteDialogListener;
+
+    public RouteDialog(String[] ids, String[] names) {
+        this.mRouteIds = ids;
+        this.mNames = names;
+    }
+
+    String[] mRouteIds = {"อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3", "อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3"};
+    String[] mNames = {"Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2", "Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2"};
 
 
-    String[] names = {"อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3", "อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3"};
-    String[] zones = {"Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2", "Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2"};
-
-
-    public void setPassValueFromDialogListener(PassValueFromDialogListener passValueFromDialogListener){
-        mPassValueFromDialogListener = passValueFromDialogListener;
+    public void setPassValueFromRouteDialogListener(PassValueFromRouteDialogListener passValueFromRouteDialogListener){
+        mPassValueFromRouteDialogListener = passValueFromRouteDialogListener;
     }
 
     @NonNull
@@ -61,17 +68,16 @@ public class RouteDialog extends DialogFragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.stops_dialog, container, false);
+        View view = inflater.inflate(R.layout.routes_dialog, container, false);
 
-        GridView gridView = (GridView) view.findViewById(R.id.stop_grid_view);
-        RouteCustomAdapter stopsCustomAdapter = new RouteCustomAdapter(getActivity(), names, zones);
+        GridView gridView = (GridView) view.findViewById(R.id.route_grid_view);
+        RouteCustomAdapter stopsCustomAdapter = new RouteCustomAdapter(getActivity(), mRouteIds, mNames);
         gridView.setAdapter(stopsCustomAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                String stopInfo = names[pos] + " : " + zones[pos];
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromDialogListener.sendRouteName(stopInfo);
+                mPassValueFromRouteDialogListener.sendRouteName(mRouteIds[pos], mNames[pos]);
                 dismiss();
             }
         });

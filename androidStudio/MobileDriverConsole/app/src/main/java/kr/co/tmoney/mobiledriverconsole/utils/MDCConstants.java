@@ -19,15 +19,34 @@ public interface MDCConstants {
     public static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
 
 
+    public static final String ROUTE_ID = "route_id";
 
-    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/TH_PMB/routes/";
+    public static final String STRING_ARRAY_SEPARATOR = " *$#@^! ";
 
-    public static final String FIREBASE_DRIVE_PATH = "Thai_Private/TH_PMB";
+    public static final String STOPS_DETAIL_IN_ROUTE = "stops_detail";
 
-    public static final String FIREBASE_USER_PATH = "users";
+    public static final String STOPS_ID_IN_ROUTE = "stops_id";
 
-    public static final String FIREBASE_TEST_PATH = "Jins";
+    public static final String STOPS_NAME_IN_ROUTE = "stops_name";
 
+    public static final String STOPS_TYPE_IN_ROUTE = "stops_type";
+
+    public static final String STOPS_LATITUDE_IN_ROUTE = "stops_latitude";
+
+    public static final String STOPS_LONGITUDE_IN_ROUTE = "stops_longitude";
+
+
+
+
+
+
+
+
+    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/";
+
+
+    //public static final String FIREBASE_ROUTE_LIST_PATH = "Jins/route_list";
+    public static final String FIREBASE_ROUTE_LIST_PATH = "Thai_Private/TH_PMB/routes";
 
 
 
@@ -59,6 +78,7 @@ public interface MDCConstants {
     public static final String ORIGIN_DIALOG_TAG = "Origin Dialog";
 
     public static final String DESTINATION_DIALOG_TAG = "Destination Dialog";
+
 
 
     public static final int GOOGLE_MAP_ZOOM_LEVEL = 15;

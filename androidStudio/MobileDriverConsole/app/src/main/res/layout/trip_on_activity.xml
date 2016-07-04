@@ -41,7 +41,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/bus_background_danger" />
+                android:src="@drawable/bus_background_danger"
+                android:layout_margin="10dp" />
 
             <TextView
                 android:id="@+id/trip_on_front_info"
@@ -50,7 +51,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:text="7 m"
                 android:textColor="@android:color/white" />
 
@@ -99,7 +100,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/bus_background_safe" />
+                android:src="@drawable/bus_background_safe"
+                android:layout_margin="10dp" />
 
             <TextView
                 android:id="@+id/trip_on_rear_info"
@@ -108,7 +110,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:textSize="25dp"
+                android:textSize="20dp"
                 android:text="23 m"
                 android:textColor="@android:color/white" />
         </RelativeLayout>
@@ -118,7 +120,7 @@
     <com.google.android.gms.maps.MapView
         android:id="@+id/trip_on_map"
         android:layout_width="match_parent"
-        android:layout_height="0.0dip"
+        android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.MapFragment" />
 
 </LinearLayout>

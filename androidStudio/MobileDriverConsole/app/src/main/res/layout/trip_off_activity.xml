@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:padding="10dip"
         android:layout_weight="1"
-        android:text="Select Route"
+        android:text="@string/trip_off_route_txt_description"
         android:background="@color/bright_foreground_disabled_material_light"
         android:textColor="@android:color/background_light"
         android:minLines="3"
@@ -29,7 +29,7 @@
         android:padding="10dip"
         android:layout_margin="4dip"
         android:layout_weight="1"
-        android:text="Select Vehicle"
+        android:text="@string/trip_off_vehicle_txt_description"
         android:background="@color/bright_foreground_disabled_material_light"
         android:textColor="@android:color/background_light"
         android:minLines="3"
@@ -47,14 +47,14 @@
             android:id="@+id/trip_off_logout_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log Out"
+            android:text="@string/trip_off_logout_btn_description"
             android:layout_marginRight="@dimen/design_navigation_max_width" />
 
         <Button
             android:id="@+id/trip_off_tripon_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trip On" />
+            android:text="@string/trip_off_tripon_btn_description" />
 
 
     </LinearLayout>

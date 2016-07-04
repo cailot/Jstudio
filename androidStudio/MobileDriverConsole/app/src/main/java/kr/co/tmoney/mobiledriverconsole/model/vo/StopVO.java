@@ -6,9 +6,9 @@ package kr.co.tmoney.mobiledriverconsole.model.vo;
 public class StopVO {
     private String direction;
     private int fareStopTag;
-    private int stopId;
-    private double latitude;
-    private double longitude;
+    private String id;
+    private double lon;
+    private double lat;
     private String name;
     private int sortIndex;
     private String type;
@@ -16,25 +16,14 @@ public class StopVO {
     public StopVO() {
     }
 
-    public StopVO(String direction, int fareStopTag, int id, double latitude, double longitude, String name, int sortIndex, String type) {
-        this.direction = direction;
-        this.fareStopTag = fareStopTag;
-        this.stopId = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.name = name;
-        this.sortIndex = sortIndex;
-        this.type = type;
-    }
-
     @Override
     public String toString() {
         return "StopVO{" +
                 "direction='" + direction + '\'' +
                 ", fareStopTag=" + fareStopTag +
-                ", id=" + stopId +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
+                ", id=" + id +
+                ", lon=" + lon +
+                ", lat=" + lat +
                 ", name='" + name + '\'' +
                 ", sortIndex=" + sortIndex +
                 ", type='" + type + '\'' +
@@ -57,28 +46,28 @@ public class StopVO {
         this.fareStopTag = fareStopTag;
     }
 
-    public int getId() {
-        return stopId;
+    public String getId() {
+        return id;
     }
 
-    public void setId(int id) {
-        this.stopId = id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public double getLat() {
+        return lat;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public double getLon() {
+        return lon;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
     public String getName() {
@@ -102,6 +91,17 @@ public class StopVO {
     }
 
     public void setType(String type) {
+        this.type = type;
+    }
+
+    public StopVO(String direction, int fareStopTag, String id, double lat, double lon, String name, int sortIndex, String type) {
+        this.direction = direction;
+        this.fareStopTag = fareStopTag;
+        this.id = id;
+        this.lat = lat;
+        this.lon = lon;
+        this.name = name;
+        this.sortIndex = sortIndex;
         this.type = type;
     }
 }
