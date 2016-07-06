@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -41,8 +40,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     String[] mRouteIds;
     String[] mRouteNames;
-//    String[] mVehicles;
-    List<String> mVehicles = new ArrayList<String>();;
+    String[] mVehicles;
+//    List<String> mVehicles = new ArrayList<String>();;
 
     List<StopVO> mStops = new ArrayList<StopVO>();
 
@@ -98,6 +97,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     protected void onStart() {
         super.onStart();
         getRouteList();
+        getVehicleList();
 
 
     }
@@ -141,6 +141,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 //        getStopsDetail();
 //        // save stop details into SharedPreferences
 //        saveStopsDetail();
+        // save vehicle name into SharedPreferences
+        put(MDCConstants.VEHICLE_NAME, mVehicleTxt.getText().toString());
+
         // switch to TripOn
         Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
         startActivity(i);
@@ -190,10 +193,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         put(MDCConstants.ROUTE_ID, mRouteId);
         // update selected route info in TextView
         mRouteTxt.setText(id + " : " + name);
-        // flush old vehicle info
-        mVehicles.clear();
-        // retreive vehicles belong to the route
-        getVehicleList();
         // get stops detail in route
         getStopsDetail();
 //        // save stop details into SharedPreferences
@@ -222,14 +221,14 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
     private void showVehicleDialog() {
-        if(mVehicles.size()==0){
+        if(mVehicles.length==0){
             // show warning message
             Toast.makeText(getApplicationContext(), "No available vehicle on the Route", Toast.LENGTH_SHORT).show();
             // update TextView
             mVehicleTxt.setText(getString(R.string.trip_off_vehicle_txt_description));
             return;
         }
-        VehicleDialog vehicleDialog = new VehicleDialog(MDCUtils.convertListToStringArray(mVehicles));
+        VehicleDialog vehicleDialog = new VehicleDialog(mVehicles);
         // link itself to be updated via 'PassValueFromVehicleDialogListener.sendVehicleName()'
         vehicleDialog.setPassValueFromVechicleDialogListener(TripOffActivity.this);
         vehicleDialog.show(getFragmentManager(), MDCConstants.VEHICLE_DIALOG_TAG);
@@ -237,8 +236,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     private void getRouteList() {
         Firebase ref = new Firebase(MDCConstants.FIREBASE_HOME + MDCConstants.FIREBASE_ROUTE_LIST_PATH);
+        Query queryRef = ref.orderByChild("sortIndex");
         // get only once when need to initialise
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 List routeIds = new ArrayList();
@@ -264,36 +265,60 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
     /**
-     * Bring available vehicle name under selected route
+     * Bring vehicle list
      */
     private void getVehicleList(){
 
-        Firebase ref = new Firebase(MDCConstants.FIREBASE_HOME + MDCConstants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId +"/vehicles");
+        Firebase ref = new Firebase(MDCConstants.FIREBASE_HOME + MDCConstants.FIREBASE_VEHICLE_LIST_PATH);
         Query queryRef = ref.orderByKey();
-        queryRef.addChildEventListener(new ChildEventListener() {
-
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                mVehicles.add(snapshot.getKey());
-//                Log.e(LOG_TAG, "Vehicle added ===> " + snapshot.getKey());
-            }
+            public void onDataChange(DataSnapshot snapshot) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
+                List vehicles = new ArrayList();
+                for (DataSnapshot shot : snapshot.getChildren()) {
+//                    RouteVO route = shot.getValue(RouteVO.class);
+//                    routeIds.add(shot.getKey());
+//                    routeNames.add(route.getName());
+                    vehicles.add(shot.getKey());
+                    Log.d(LOG_TAG, shot.getKey() + " ==>");// + route.toString());
+                }
+                if(vehicles.size()>0){
+                    mVehicles = MDCUtils.convertListToStringArray(vehicles);
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
             @Override
             public void onCancelled(FirebaseError firebaseError) {
+                Log.e(LOG_TAG, "Error happens while getting Route list : " + firebaseError.getMessage());
             }
         });
+
+
+//        queryRef.addChildEventListener(new ChildEventListener() {
+//
+//            @Override
+//            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+//                mVehicles.add(snapshot.getKey());
+////                Log.e(LOG_TAG, "Vehicle added ===> " + snapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//            }
+//        });
     }
 
 

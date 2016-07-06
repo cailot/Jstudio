@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:minHeight="@dimen/item_touch_helper_swipe_escape_velocity"
+
         android:gravity="center_horizontal|bottom">
 
         <Button

@@ -4,53 +4,56 @@ package kr.co.tmoney.mobiledriverconsole.model.vo;
  * Created by jinseo on 2016. 6. 30..
  */
 public class VehicleVO {
-    private String vehicleId;
     private int accuracy;
     private String currentRoute;
     private int currentStopIndex;
+    private String currentStopName;
     private int heading;
-    private double latitude;
-    private double longitude;
-    private int passenger;
+    private String id;
+    private double lat;
+    private double lon;
+    private int passengers;
     private String rearVehicle;
     private double speed;
     private boolean tripOn;
-    private long updated;
+    private String updated;
 
     public VehicleVO() {
-    }
-
-    public VehicleVO(int accuracy, String currentRoute, int currentStopIndex, int heading, double latitude, double longitude, int passenger, String rearVehicle, double speed, boolean tripOn, long updated, String vehicleId) {
-        this.accuracy = accuracy;
-        this.currentRoute = currentRoute;
-        this.currentStopIndex = currentStopIndex;
-        this.heading = heading;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.passenger = passenger;
-        this.rearVehicle = rearVehicle;
-        this.speed = speed;
-        this.tripOn = tripOn;
-        this.updated = updated;
-        this.vehicleId = vehicleId;
     }
 
     @Override
     public String toString() {
         return "VehicleVO{" +
                 "accuracy=" + accuracy +
-                ", vehicleId='" + vehicleId + '\'' +
                 ", currentRoute='" + currentRoute + '\'' +
                 ", currentStopIndex=" + currentStopIndex +
+                ", currentStopName='" + currentStopName + '\'' +
                 ", heading=" + heading +
-                ", latitude=" + latitude +
-                ", longitude=" + longitude +
-                ", passenger=" + passenger +
+                ", id='" + id + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
+                ", passengers=" + passengers +
                 ", rearVehicle='" + rearVehicle + '\'' +
                 ", speed=" + speed +
                 ", tripOn=" + tripOn +
-                ", updated=" + updated +
+                ", updated='" + updated + '\'' +
                 '}';
+    }
+
+    public VehicleVO(int accuracy, String currentRoute, int currentStopIndex, String currentStopName, int heading, String id, double lat, double lon, int passengers, String rearVehicle, double speed, boolean tripOn, String updated) {
+        this.accuracy = accuracy;
+        this.currentRoute = currentRoute;
+        this.currentStopIndex = currentStopIndex;
+        this.currentStopName = currentStopName;
+        this.heading = heading;
+        this.id = id;
+        this.lat = lat;
+        this.lon = lon;
+        this.passengers = passengers;
+        this.rearVehicle = rearVehicle;
+        this.speed = speed;
+        this.tripOn = tripOn;
+        this.updated = updated;
     }
 
     public int getAccuracy() {
@@ -77,6 +80,14 @@ public class VehicleVO {
         this.currentStopIndex = currentStopIndex;
     }
 
+    public String getCurrentStopName() {
+        return currentStopName;
+    }
+
+    public void setCurrentStopName(String currentStopName) {
+        this.currentStopName = currentStopName;
+    }
+
     public int getHeading() {
         return heading;
     }
@@ -85,28 +96,36 @@ public class VehicleVO {
         this.heading = heading;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getId() {
+        return id;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public double getLat() {
+        return lat;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public int getPassenger() {
-        return passenger;
+    public double getLon() {
+        return lon;
     }
 
-    public void setPassenger(int passenger) {
-        this.passenger = passenger;
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public int getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(int passengers) {
+        this.passengers = passengers;
     }
 
     public String getRearVehicle() {
@@ -133,19 +152,11 @@ public class VehicleVO {
         this.tripOn = tripOn;
     }
 
-    public long getUpdated() {
+    public String getUpdated() {
         return updated;
     }
 
-    public void setUpdated(long updated) {
+    public void setUpdated(String updated) {
         this.updated = updated;
-    }
-
-    public String getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(String vehicleId) {
-        this.vehicleId = vehicleId;
     }
 }

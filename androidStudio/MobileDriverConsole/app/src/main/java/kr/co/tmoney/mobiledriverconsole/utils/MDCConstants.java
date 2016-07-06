@@ -35,6 +35,8 @@ public interface MDCConstants {
 
     public static final String STOPS_LONGITUDE_IN_ROUTE = "stops_longitude";
 
+    public static final String VEHICLE_NAME = "vehicle_name";
+
 
 
 
@@ -44,9 +46,9 @@ public interface MDCConstants {
 
     public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/";
 
-
-    //public static final String FIREBASE_ROUTE_LIST_PATH = "Jins/route_list";
     public static final String FIREBASE_ROUTE_LIST_PATH = "Thai_Private/TH_PMB/routes";
+
+    public static final String FIREBASE_VEHICLE_LIST_PATH = "Thai_Private/TH_PMB/vehicles";
 
 
 
@@ -80,6 +82,24 @@ public interface MDCConstants {
     public static final String DESTINATION_DIALOG_TAG = "Destination Dialog";
 
 
+    ////////////////////////////////
+    //
+    //  Receiver for IntentService
+    //
+    /////////////////////////////////
+
+    public static final String GEO_UPDATE_INTENT_SERVICE = "geo_update_intent_service";
+
+    public static final String GEOFIRE_INTENT_SERVICE = "geofire_intent_service";
+
+    public static final String GEO_LOCATION_LATITUDE = "geo_location_latitude";
+
+    public static final String GEO_LOCATION_LONGITUDE = "geo_location_longitude";
+
+
+
+
+
 
     public static final int GOOGLE_MAP_ZOOM_LEVEL = 15;
 
@@ -101,8 +121,10 @@ public interface MDCConstants {
      * For this sample, geofences expire after one hour.
      */
     public static final long GEOFENCE_EXPIRATION = 60 * 60 * 1000;
-    //public static final float GEOFENCE_RADIUS_IN_METERS = 1609; // 1 mile, 1.6 km
-    public static final float GEOFENCE_RADIUS_IN_METERS = 1; // 1 mile, 1.6 km
+
+    public static final float GEOFENCE_RADIUS_IN_METERS = 50;
+
+
 
 
 }

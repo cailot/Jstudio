@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -44,6 +45,7 @@ public class MDCGeofenceService extends IntentService {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if(geofencingEvent.hasError()){
             String errorMessage = MDCErrorMessage.getErrorMessage(this, geofencingEvent.getErrorCode());
+            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
             Log.e(LOG_TAG, errorMessage);
             return;
         }
@@ -53,9 +55,12 @@ public class MDCGeofenceService extends IntentService {
         if(transition== Geofence.GEOFENCE_TRANSITION_ENTER || transition==Geofence.GEOFENCE_TRANSITION_EXIT){
             List<Geofence> geofences = geofencingEvent.getTriggeringGeofences();
             String details = getGeofenceTransitionDetails(this, transition, geofences);
-            sendNotification(details);
+            Toast.makeText(getApplicationContext(), details, Toast.LENGTH_LONG).show();
+            //sendNotification(details);
             Log.d(LOG_TAG, details);
         }else{
+            Toast.makeText(getApplicationContext(), "Error happen !!", Toast.LENGTH_LONG).show();
+
             Log.e(LOG_TAG, getString(R.string.geofence_transition_invalid_type, transition));
         }
 

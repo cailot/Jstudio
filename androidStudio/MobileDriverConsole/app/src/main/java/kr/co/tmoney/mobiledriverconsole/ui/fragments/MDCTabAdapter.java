@@ -23,6 +23,10 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
 
     Context mContext;
 
+    TripOnFragment mTripOnFragment;
+
+    FareFragment mFareFragment;
+
     public MDCTabAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -30,6 +34,8 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
     public MDCTabAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
+        mTripOnFragment = new TripOnFragment();
+        mFareFragment = new FareFragment();
     }
 
     @Override
@@ -40,12 +46,12 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch(position) {
             case 0:
-                fragment = Fragment.instantiate(mContext, TripOnFragment.class.getName());
-//                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
+                //fragment = Fragment.instantiate(mContext, TripOnFragment.class.getName());
+                fragment = mTripOnFragment;
                 break;
             case 1:
-                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
-//                fragment = Fragment.instantiate(mContext, TripOffFragment.class.getName());
+//                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
+                fragment = mFareFragment;
                 break;
             default:
                 break;
@@ -69,4 +75,10 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
+
+//    public void switchView(){
+//        if(fragment instanceof TripOnFragment){
+//
+//        }
+//    }
 }

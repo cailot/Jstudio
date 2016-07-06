@@ -10,6 +10,11 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+
+        // Enabling multidex support.
+        multiDexEnabled true
+
+
     }
     buildTypes {
         release {
@@ -37,14 +42,26 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.5.2+'
 
     /* For Google Play Services */
-    compile 'com.google.android.gms:play-services-safetynet:8.3.0'
-    compile 'com.google.android.gms:play-services-auth:8.3.0'
+    //compile 'com.google.android.gms:play-services-safetynet:8.3.0'
+    //compile 'com.google.android.gms:play-services-auth:8.3.0'
+    compile 'com.google.android.gms:play-services-safetynet:9.2.0'
+    compile 'com.google.android.gms:play-services-auth:9.2.0'
 
     /* Google Clinet API for Map*/
-    compile 'com.google.android.gms:play-services:8+'
+    //compile 'com.google.android.gms:play-services:8+'
+    compile 'com.google.android.gms:play-services-maps:9.2.0'
+
+    compile 'com.google.android.gms:play-services-location:9.2.0'
 
     /* StringUtils from apache common library */
     compile 'org.apache.commons:commons-lang3:3.4'
+
+    /* GeoFire */
+    compile 'com.firebase:geofire:1.1.0+'
+
+    compile 'com.android.support:multidex:1.0.0'
+
+
 
 
 }
