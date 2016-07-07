@@ -17,9 +17,9 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class MDCTabAdapter extends FragmentPagerAdapter {
+public class TabAdapter extends FragmentPagerAdapter {
 
-    private final String LOG_TAG = MDCUtils.getLogTag(MDCTabAdapter.class);
+    private final String LOG_TAG = MDCUtils.getLogTag(TabAdapter.class);
 
     Context mContext;
 
@@ -27,15 +27,22 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
 
     FareFragment mFareFragment;
 
-    public MDCTabAdapter(FragmentManager fm) {
+    public TabAdapter(FragmentManager fm) {
         super(fm);
     }
 
-    public MDCTabAdapter(FragmentManager fm, Context context) {
+    public TabAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
         mTripOnFragment = new TripOnFragment();
         mFareFragment = new FareFragment();
+    }
+
+    public TabAdapter(FragmentManager fm, Context context, Fragment f1, Fragment f2) {
+        super(fm);
+        this.mContext = context;
+        mTripOnFragment = (TripOnFragment) f1;
+        mFareFragment = (FareFragment) f2;
     }
 
     @Override
@@ -75,10 +82,4 @@ public class MDCTabAdapter extends FragmentPagerAdapter {
         }
         return null;
     }
-
-//    public void switchView(){
-//        if(fragment instanceof TripOnFragment){
-//
-//        }
-//    }
 }

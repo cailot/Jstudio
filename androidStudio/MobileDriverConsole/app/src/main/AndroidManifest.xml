@@ -59,7 +59,7 @@
             android:value="AIzaSyARcc57YdbbyaiS517LoES5i4sqBl2kyh8" />
 
         <!-- Declaring Services -->
-        <service android:name=".geofencing.MDCGeofenceService"
+        <service android:name=".geofencing.GeofenceService"
             />
     </application>
 

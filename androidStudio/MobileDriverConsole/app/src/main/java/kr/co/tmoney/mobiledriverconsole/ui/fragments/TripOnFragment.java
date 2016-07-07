@@ -17,13 +17,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
@@ -43,17 +42,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.geofencing.MDCGeofenceService;
+import kr.co.tmoney.mobiledriverconsole.geofencing.GeofenceService;
+import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.VehicleVO;
-import kr.co.tmoney.mobiledriverconsole.utils.MDCConstants;
-import kr.co.tmoney.mobiledriverconsole.utils.MDCErrorMessage;
+import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class TripOnFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status> {
+public class TripOnFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 // implements OnMapReadyCallback, LocationListener, ResultCallback<Status> {
 
@@ -69,7 +68,12 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private MarkerOptions mMarkerOptions;
 
-    TextView mTripOnTxt;
+    private TextView mTripOnTxt; // vehicle info
+
+    private ImageView mFrontVehicleImg, mRearVehicleImg;
+
+    private TextView mFrontVehicleTxt, mRearVehicleTxt;
+
 
 
     // From MDCMainActivity
@@ -85,18 +89,23 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private String mVehicleId;
 
+    private String mRouteId;
+
     private VehicleVO mVehicle;
 
+    private TripVO mTrip;
+
+    private Firebase mFirebase;
 
 
-    boolean isGeofenceOn;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
         mContext = container.getContext();
 
-        mVehicleId = getValue(MDCConstants.VEHICLE_NAME, "No available vehicle");
+        mVehicleId = getValue(Constants.VEHICLE_NAME, "No available vehicle");
         // get VehicleInfo from Firebase
 
         mTripOnTxt = (TextView) view.findViewById(R.id.trip_on_txt);
@@ -105,25 +114,14 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
             @Override
             public void onClick(View view) {
-                Log.d(LOG_TAG, "##########");
-                registerGeofences();
+//                registerGeofences();
             }
         });
 
-//        MDCMainActivity mainActivity = (MDCMainActivity) getActivity();
-//        mGoogleApiClient = mainActivity.getGoogleApiClient();
-//        mLocationRequest = mainActivity.getLocationRequest();
-//        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            Log.d(LOG_TAG, "Permission check needs later....");
-//        }
-//        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        mFrontVehicleImg = (ImageView) view.findViewById(R.id.trip_on_front_img);
+        mRearVehicleImg = (ImageView) view.findViewById(R.id.trip_on_rear_img);
+        mFrontVehicleTxt = (TextView) view.findViewById(R.id.trip_on_front_info);
+        mRearVehicleTxt = (TextView) view.findViewById(R.id.trip_on_rear_info);
 
 
         mMapView=(MapView)view.findViewById(R.id.trip_on_map);
@@ -154,7 +152,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     private void initialiseMap() {
         LatLng melbourne = new LatLng(-37.835909, 144.981128);
         mMarkerOptions = new MarkerOptions();
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, MDCConstants.GOOGLE_MAP_ZOOM_LEVEL));
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         // temporary showing geofences
         showGeofences();
     }
@@ -164,7 +162,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(LOG_TAG, "GoogleApiClient onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(MDCConstants.GOOGLE_MAP_POLLING_INTERVAL);
+        mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
 
         // Android SDK 23
         int permissionCheck = ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
@@ -176,7 +174,13 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
         // activate Geofences
-        activateGeofences();
+//        activateGeofences();
+
+        // initialise TripVO
+//        mVehicle = new VehicleVO();
+        mTrip = new TripVO();
+        mFirebase = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_TRIP_LIST_PATH);
+        mRouteId = getValue(Constants.ROUTE_ID, "");
 
     }
 
@@ -203,9 +207,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onStop() {
         super.onStop();
-//        if(mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()){
-//            mGoogleApiClient.disconnect();
-//        }
     }
 
     @Override
@@ -217,24 +218,18 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
     @Override
-    public void onResult(@NonNull Status status) {
-        if (status.isSuccess()) {
-            Log.d(LOG_TAG, "Geofences Added");
-            Toast.makeText(getActivity(), "Geofences Added", Toast.LENGTH_LONG).show();
-        } else {
-            String errorMsg = MDCErrorMessage.getErrorMessage(getActivity(), status.getStatusCode());
-            Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();
-            Log.e(LOG_TAG, errorMsg);
-        }
-    }
-
-
-    @Override
     public void onLocationChanged(Location location) {
         if(mMarker!=null){
             mMarker.remove();
         }
-        String msg = mVehicleId + "\n" + "Lat : " + location.getLatitude()+"\nLon : " + location.getLongitude();
+        //String msg = mVehicleId + "\n" + "Lat : " + location.getLatitude()+"\nLon : " + location.getLongitude();
+        String msg = mVehicleId + "\n";
+        if(location.hasSpeed()){
+//            msg += "Speed : " + (location.getSpeed()*3600/1000 +"km/h") + "\n";
+        }
+        msg += "Speed : " + 0.0 +"km/h" + "\n";
+        msg += "Passenger : " + "0"; // will subscribe passenger count in future....
+
         mTripOnTxt.setText(msg);
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
         mMarkerOptions.position(current)
@@ -242,12 +237,52 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
 
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, MDCConstants.GOOGLE_MAP_ZOOM_LEVEL));
-        Log.d(LOG_TAG, msg);
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
+//        Log.d(LOG_TAG, msg);
+
+        // insert transaction into trips
+        auditTransaction(location.getLatitude(), location.getLongitude());
+
+        // display dummy data for front & rear vehicle
+        updateVehicles();
+    }
+
+    private void auditTransaction(double lat, double lon) {
+        String key = MDCUtils.getTipNode(mVehicleId);
+        mTrip.setCurrentStopId("1");
+        mTrip.setDriverId("jinhyung.seo");
+        mTrip.setRouteKey(mRouteId);
+        Firebase vehicleRef = mFirebase.child(key);
+        vehicleRef.setValue(mTrip);
+        Log.d(LOG_TAG, mTrip.toString());
+
+
+    }
+
+    private void updateVehicles() {
+        int front = MDCUtils.getRandomNumberInRange(20, 70);
+        int rear = MDCUtils.getRandomNumberInRange(20, 70);
+        if(front<30){
+            mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
+        }else if(front<40){
+            mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
+        }else{
+            mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
+        }
+        mFrontVehicleTxt.setText(front + " m");
+        if(rear<30){
+            mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
+        }else if(rear<40){
+            mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
+        }else{
+            mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
+        }
+        mRearVehicleTxt.setText(rear + " m");
+
     }
 
     private PendingIntent getGeofencePendingIntent(){
-        Intent intent = new Intent(getActivity(), MDCGeofenceService.class);
+        Intent intent = new Intent(getActivity(), GeofenceService.class);
         return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
@@ -259,22 +294,22 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         return builder.build();
     }
 
-    private void registerGeofences() {
-        if(mGoogleApiClient==null || !mGoogleApiClient.isConnected()){
-            Log.e(LOG_TAG, getString(R.string.not_connected));
-            Toast.makeText(getActivity(), getString(R.string.not_connected), Toast.LENGTH_LONG).show();
-            return;
-        }
-        try{
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    getGeofencingRequest(),
-                    getGeofencePendingIntent()
-            ).setResultCallback(this);
-        }catch (SecurityException e){
-            Log.e(LOG_TAG, e.getMessage());
-        }
-    }
+//    private void registerGeofences() {
+//        if(mGoogleApiClient==null || !mGoogleApiClient.isConnected()){
+//            Log.e(LOG_TAG, getString(R.string.not_connected));
+//            Toast.makeText(getActivity(), getString(R.string.not_connected), Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        try{
+//            LocationServices.GeofencingApi.addGeofences(
+//                    mGoogleApiClient,
+//                    getGeofencingRequest(),
+//                    getGeofencePendingIntent()
+//            ).setResultCallback(this);
+//        }catch (SecurityException e){
+//            Log.e(LOG_TAG, e.getMessage());
+//        }
+//    }
 
     protected synchronized void buildGoogleApiClient(){
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -290,7 +325,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
     public String getValue(String key, String dftValue) {
-        SharedPreferences pref = mContext.getSharedPreferences(MDCConstants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
 
         try {
             return pref.getString(key, dftValue);
@@ -316,29 +351,29 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mGeofences = new ArrayList<Geofence>();
         mGeofences.add(new Geofence.Builder()
                 .setRequestId("Flinders")
-                .setCircularRegion(-37.8210934,144.9686004, MDCConstants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(MDCConstants.GEOFENCE_EXPIRATION)
+                .setCircularRegion(-37.8210934,144.9686004, Constants.GEOFENCE_RADIUS_IN_METERS)
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build()
         );
         mGeofences.add(new Geofence.Builder()
                 .setRequestId("Bourke Street")
-                .setCircularRegion(-37.813471,144.9655192, MDCConstants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(MDCConstants.GEOFENCE_EXPIRATION)
+                .setCircularRegion(-37.813471,144.9655192, Constants.GEOFENCE_RADIUS_IN_METERS)
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build()
         );
         mGeofences.add(new Geofence.Builder()
                 .setRequestId("Around DHHS")
-                .setCircularRegion(-37.8098068,144.9656684, MDCConstants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(MDCConstants.GEOFENCE_EXPIRATION)
+                .setCircularRegion(-37.8098068,144.9656684, Constants.GEOFENCE_RADIUS_IN_METERS)
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build()
         );
         mGeofences.add(new Geofence.Builder()
                 .setRequestId("Domain Interchage")
-                .setCircularRegion(-37.8339319,144.9714436, MDCConstants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(MDCConstants.GEOFENCE_EXPIRATION)
+                .setCircularRegion(-37.8339319,144.9714436, Constants.GEOFENCE_RADIUS_IN_METERS)
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build()
         );
@@ -367,21 +402,21 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     }
 
-    public void activateGeofences() {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(getContext(), "Google API Client not connected!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    getGeofencingRequest(),
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-        }
-    }
+//    public void activateGeofences() {
+//        if (!mGoogleApiClient.isConnected()) {
+//            Toast.makeText(getContext(), "Google API Client not connected!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        try {
+//            LocationServices.GeofencingApi.addGeofences(
+//                    mGoogleApiClient,
+//                    getGeofencingRequest(),
+//                    getGeofencePendingIntent()
+//            ).setResultCallback(this); // Result processed in onResult().
+//        } catch (SecurityException securityException) {
+//            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+//        }
+//    }
 
 }

@@ -10,11 +10,11 @@ import kr.co.tmoney.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class MDCErrorMessage {
+public class ErrorMessage {
     /**
      * Will use only static methods
      */
-    private MDCErrorMessage(){}
+    private ErrorMessage(){}
 
     public static String getErrorMessage(Context context, int error){
         Resources resources = context.getResources();

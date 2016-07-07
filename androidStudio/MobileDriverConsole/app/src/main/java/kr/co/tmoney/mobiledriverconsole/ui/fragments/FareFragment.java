@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
-import kr.co.tmoney.mobiledriverconsole.utils.MDCConstants;
+import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
@@ -49,8 +49,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
         initialiseStopDetails();
         // initialise Firebase
-//        Firebase root = new Firebase(MDCConstants.FIREBASE_HOME);
-//        root.child(MDCConstants.FIREBASE_TEST_PATH);
+//        Firebase root = new Firebase(Constants.FIREBASE_HOME);
+//        root.child(Constants.FIREBASE_TEST_PATH);
 //        root.child("users/mchen/name");
 
 
@@ -92,32 +92,32 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker numberPicker, int old, int recent) {
-                mPriceTxt.setText(" ฿ " + recent* MDCConstants.ADULT_FARE);
+                mPriceTxt.setText(" ฿ " + recent* Constants.ADULT_FARE);
             }
         });
     }
 
     private void initialiseStopDetails(){
-        String names = getValue(MDCConstants.STOPS_NAME_IN_ROUTE, "");
+        String names = getValue(Constants.STOPS_NAME_IN_ROUTE, "");
         mNames = MDCUtils.convertStringToStringArray(names);
-        String types = getValue(MDCConstants.STOPS_TYPE_IN_ROUTE, "");
+        String types = getValue(Constants.STOPS_TYPE_IN_ROUTE, "");
         mTypes = MDCUtils.convertStringToStringArray(types);
 
     }
 
     private void showOriginDialog() {
-        StopDialog stopsDialog = new StopDialog(mNames, mTypes, MDCConstants.FARE_ORIGIN_REQUEST);
+        StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_ORIGIN_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
-        stopsDialog.show(getFragmentManager(), MDCConstants.ORIGIN_DIALOG_TAG);
+        stopsDialog.show(getFragmentManager(), Constants.ORIGIN_DIALOG_TAG);
 
     }
 
     private void showDestinationDialog() {
-        StopDialog stopsDialog = new StopDialog(mNames, mTypes, MDCConstants.FARE_DESTINATION_REQUEST);
+        StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_DESTINATION_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
-        stopsDialog.show(getFragmentManager(), MDCConstants.DESTINATION_DIALOG_TAG);
+        stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
     }
 
 
@@ -125,10 +125,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     public void sendStopName(String name, String type, int request) {
         // update stop info into TextView
         switch (request){
-            case MDCConstants.FARE_ORIGIN_REQUEST :
+            case Constants.FARE_ORIGIN_REQUEST :
                 mOriginTxt.setText(name + " : " + type);
                 break;
-            case MDCConstants.FARE_DESTINATION_REQUEST:
+            case Constants.FARE_DESTINATION_REQUEST:
                 mDestinationTxt.setText(name + " : " + type);
                 break;
         }
@@ -137,7 +137,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
 
     public String getValue(String key, String dftValue) {
-        SharedPreferences pref = mContext.getSharedPreferences(MDCConstants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
 
         try {
             return pref.getString(key, dftValue);

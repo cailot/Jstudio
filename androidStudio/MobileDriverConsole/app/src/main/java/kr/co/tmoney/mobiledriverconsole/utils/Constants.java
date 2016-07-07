@@ -3,7 +3,7 @@ package kr.co.tmoney.mobiledriverconsole.utils;
 /**
  * Created by jinseo on 2016. 6. 24..
  */
-public interface MDCConstants {
+public interface Constants {
 
 
     /*
@@ -17,6 +17,7 @@ public interface MDCConstants {
     public static final String SHARED_PREFERENCES_NAME = PACKAGE_NAME + ".SHARED_PREFERENCES_NAME";
 
     public static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
+
 
 
     public static final String ROUTE_ID = "route_id";
@@ -37,6 +38,11 @@ public interface MDCConstants {
 
     public static final String VEHICLE_NAME = "vehicle_name";
 
+    public static final String VEHICLE_TRIP_ON = "tripOn";
+
+    public static final String VEHICLE_CURRENT_ROUTE = "currentRoute";
+
+    public static final String VEHICLE_UPDATED = "updated";
 
 
 
@@ -49,6 +55,8 @@ public interface MDCConstants {
     public static final String FIREBASE_ROUTE_LIST_PATH = "Thai_Private/TH_PMB/routes";
 
     public static final String FIREBASE_VEHICLE_LIST_PATH = "Thai_Private/TH_PMB/vehicles";
+
+    public static final String FIREBASE_TRIP_LIST_PATH = "Thai_Private/TH_PMB/trips2";
 
 
 
@@ -87,6 +95,8 @@ public interface MDCConstants {
     //  Receiver for IntentService
     //
     /////////////////////////////////
+
+    public static final String BROADCAST_SERVICE = PACKAGE_NAME + ".BROADCAST";
 
     public static final String GEO_UPDATE_INTENT_SERVICE = "geo_update_intent_service";
 
