@@ -1,10 +1,9 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -30,34 +31,36 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private TextView mPriceTxt, mOriginTxt, mDestinationTxt;
 
-    String[] stops = {"City Hall", "Flinders Station", "St. Kilda", "Lunar Park"};
-
-    boolean[] checkedItems = new boolean[stops.length];
-
     Context mContext;
 
     private String[] mNames;
 
     private String[] mTypes;
 
+    private StopVO[] mStops;
+
+    private StopVO mClosestStop;
+
+    private MDCMainActivity mMainActivity;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fare_activity, null);
         mContext = container.getContext();
+        mMainActivity = (MDCMainActivity)getActivity();
+        // build UI
         initialiseUI(view);
-
+        // load Stops info
         initialiseStopDetails();
-        // initialise Firebase
-//        Firebase root = new Firebase(Constants.FIREBASE_HOME);
-//        root.child(Constants.FIREBASE_TEST_PATH);
-//        root.child("users/mchen/name");
-
-
-
         return view;
     }
 
+    /**
+     * build up UI components
+     * @param view
+     */
     private void initialiseUI(View view) {
         mPriceTxt = (TextView) view.findViewById(R.id.fare_price_txt);
         mOriginTxt = (TextView) view.findViewById(R.id.fare_origin_txt);
@@ -97,14 +100,70 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         });
     }
 
+    /**
+     * Retrieve stops info from MDCMainActivity
+     */
     private void initialiseStopDetails(){
-        String names = getValue(Constants.STOPS_NAME_IN_ROUTE, "");
-        mNames = MDCUtils.convertStringToStringArray(names);
-        String types = getValue(Constants.STOPS_TYPE_IN_ROUTE, "");
-        mTypes = MDCUtils.convertStringToStringArray(types);
 
+        mStops = mMainActivity.getStops();
+        mNames = new String[mStops.length];
+        mTypes = new String[mStops.length];
+        int i = 0;
+        for(StopVO stop : mStops){
+            mNames[i] = stop.getName();
+            mTypes[i] = stop.getType();
+//            Log.d(LOG_TAG, stop.toString());
+            i++;
+        }
     }
 
+
+    /**
+     * Check whether current tab is selected or not
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(this.isVisible()){
+            if(isVisibleToUser){
+                getClosestStop();
+                Log.d(LOG_TAG, "FareFragment is visible");
+            }else{
+                Log.d(LOG_TAG, "FareFragment is not visible");
+            }
+        }
+    }
+
+
+    /**
+     * Search and get closest stop info
+     */
+    private void getClosestStop() {
+        // 1. get current GPS
+        double lat = mMainActivity.getCurrentLat();
+        double lon = mMainActivity.getCurrentLon();
+        double[] gps = new double[mStops.length];
+        // 2. calculate distance
+        int i = 0;
+        for(StopVO stop : mStops){
+            //13.8577,100.626699
+             double distance = MDCUtils.getDistanceMeters(lat, lon, stop.getLat(), stop.getLon());
+            //double distance = MDCUtils.getDistanceMeters(13.8577,100.626699, stop.getLat(), stop.getLon());
+            Log.e(LOG_TAG, stop.getId() + " : " + distance);
+            gps[i] = distance;
+            i++;
+        }
+        int index = MDCUtils.getMinDistanceIndex(gps);
+        mClosestStop = mStops[index];
+        // auto select closest stop in Origin
+        mOriginTxt.setText(mClosestStop.getName() + " : " + mClosestStop.getType());
+    }
+
+
+    /**
+     * Pop up dialog for origin stop
+     */
     private void showOriginDialog() {
         StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_ORIGIN_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
@@ -113,6 +172,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     }
 
+    /**
+     * Pop up dialog for destination stop
+     */
     private void showDestinationDialog() {
         StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_DESTINATION_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
@@ -121,6 +183,12 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     }
 
 
+    /**
+     * check whether update will happen either origin or destination
+     * @param name
+     * @param type
+     * @param request
+     */
     @Override
     public void sendStopName(String name, String type, int request) {
         // update stop info into TextView
@@ -133,20 +201,5 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 break;
         }
     }
-
-
-
-    public String getValue(String key, String dftValue) {
-        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        try {
-            return pref.getString(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-
-    }
-
-
 
 }

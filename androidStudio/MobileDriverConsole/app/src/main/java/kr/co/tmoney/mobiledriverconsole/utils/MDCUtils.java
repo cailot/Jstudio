@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Random;
  * Created by jinseo on 2016. 6. 25..
  */
 public class MDCUtils {
+
+    private static DecimalFormat mDecimalFormat = new DecimalFormat("##.00");
 
     private MDCUtils(){}
 
@@ -111,6 +114,46 @@ public class MDCUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String date = sdf.format(new Date());
         return date + "_" + vehicle;
+    }
+
+
+    /**
+     * // http://www.movable-type.co.uk/scripts/latlong.html
+     * // Under Creative Commons License http://creativecommons.org/licenses/by/3.0/
+     * Calculate distance between two GPS co-ordinate
+     * @param lat1
+     * @param lon1
+     * @param lat2
+     * @param lon2
+     * @return
+     */
+    public static double getDistanceMeters(double lat1, double lon1, double lat2, double lon2){
+        int r = 6371;
+        double dLat = Math.abs(lat2-lat1) * (Math.PI/180);
+        double dLon = Math.abs(lon2-lon1) * (Math.PI/180);
+        double a = (Math.sin(dLat/2) * Math.sin(dLat/2)) +
+                (Math.cos(lat1 * (Math.PI/180)) * Math.cos(lat2 * (Math.PI/180)) * Math.sin(dLon/2) * Math.sin(dLon/2));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = r * c * 1000; // show as meters
+
+        return Double.parseDouble(mDecimalFormat.format(d));
+    }
+
+    /**
+     * Get the index of closest distance
+     * @param gps
+     * @return
+     */
+    public static int getMinDistanceIndex(double[] gps){
+        int index = 0;
+        double min = gps[0];
+        for(int i=1; i<gps.length; i++){
+            if(gps[i]<min){
+                min = gps[i];
+                index = i;
+            }
+        }
+        return index;
     }
 
 }

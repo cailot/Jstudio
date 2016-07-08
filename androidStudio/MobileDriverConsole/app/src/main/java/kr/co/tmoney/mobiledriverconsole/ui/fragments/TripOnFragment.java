@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.geofencing.GeofenceService;
 import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
@@ -97,17 +99,46 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private Firebase mFirebase;
 
-
+    private MDCMainActivity mMainActivity;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
         mContext = container.getContext();
-
-        mVehicleId = getValue(Constants.VEHICLE_NAME, "No available vehicle");
+        mMainActivity = (MDCMainActivity)getActivity();
+        mVehicleId = mMainActivity.getVehicleId();
         // get VehicleInfo from Firebase
 
+        initialiseUI(view);
+
+
+        initialiseMap(savedInstanceState, view);
+
+        // set up googleApi
+        buildGoogleApiClient();
+
+        // inflate dummy Geofence list
+        populateGeofenceList();
+
+        // trigger IntentService
+       // registerGeofences();
+
+
+
+
+
+        return view;
+    }
+
+    private void initialiseMap(Bundle savedInstanceState, View view) {
+        mMapView=(MapView)view.findViewById(R.id.trip_on_map);
+        mMapView.onCreate(savedInstanceState);
+        mMapView.onResume();
+        mMapView.getMapAsync(this);
+    }
+
+    private void initialiseUI(View view) {
         mTripOnTxt = (TextView) view.findViewById(R.id.trip_on_txt);
         mTripOnTxt.setText(mVehicleId);
         mTripOnTxt.setOnClickListener(new View.OnClickListener() {
@@ -122,23 +153,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mRearVehicleImg = (ImageView) view.findViewById(R.id.trip_on_rear_img);
         mFrontVehicleTxt = (TextView) view.findViewById(R.id.trip_on_front_info);
         mRearVehicleTxt = (TextView) view.findViewById(R.id.trip_on_rear_info);
-
-
-        mMapView=(MapView)view.findViewById(R.id.trip_on_map);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.onResume();
-        mMapView.getMapAsync(this);
-
-        // set up googleApi
-        buildGoogleApiClient();
-
-        // inflate dummy Geofence list
-        populateGeofenceList();
-
-        // trigger IntentService
-       // registerGeofences();
-
-        return view;
     }
 
 
@@ -177,7 +191,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        activateGeofences();
 
         // initialise TripVO
-//        mVehicle = new VehicleVO();
         mTrip = new TripVO();
         mFirebase = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_TRIP_LIST_PATH);
         mRouteId = getValue(Constants.ROUTE_ID, "");
@@ -201,6 +214,23 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
             Log.d(LOG_TAG, "GoogleApiClient is now connected");
+        }
+    }
+
+
+    /**
+     * Check whether current tab is selected or not
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(this.isVisible()){
+            if(isVisibleToUser){
+                Log.d(LOG_TAG, "TripOnFragment is visible");
+            }else{
+                Log.d(LOG_TAG, "TripOnFragment is not visible");
+            }
         }
     }
 
@@ -238,6 +268,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
 
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
+
+        mGoogleMap.setTrafficEnabled(true);
 //        Log.d(LOG_TAG, msg);
 
         // insert transaction into trips
@@ -247,35 +279,56 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         updateVehicles();
     }
 
+    /**
+     * Insert transaction record into Firebase
+     * @param lat
+     * @param lon
+     */
     private void auditTransaction(double lat, double lon) {
         String key = MDCUtils.getTipNode(mVehicleId);
         mTrip.setCurrentStopId("1");
         mTrip.setDriverId("jinhyung.seo");
         mTrip.setRouteKey(mRouteId);
+        mTrip.setLat(lat);
+        mTrip.setLon(lon);
         Firebase vehicleRef = mFirebase.child(key);
         vehicleRef.setValue(mTrip);
-        Log.d(LOG_TAG, mTrip.toString());
+//        Log.d(LOG_TAG, mTrip.toString());
+    }
 
-
+    /**
+     * Keep current location in MainActivity
+     * @param lat
+     * @param lon
+     */
+    private void updateCurrentLocation(double lat, double lon){
+        mMainActivity.setCurrentLat(lat);
+        mMainActivity.setCurrentLon(lon);
     }
 
     private void updateVehicles() {
-        int front = MDCUtils.getRandomNumberInRange(20, 70);
-        int rear = MDCUtils.getRandomNumberInRange(20, 70);
-        if(front<30){
+        int front = MDCUtils.getRandomNumberInRange(10, 1000);
+        int rear = MDCUtils.getRandomNumberInRange(10, 1000);
+        if(front<100){
             mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
-        }else if(front<40){
+            mFrontVehicleTxt.setTextColor(Color.WHITE);
+        }else if(front<500){
             mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
+            mFrontVehicleTxt.setTextColor(Color.BLACK);
         }else{
             mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
+            mFrontVehicleTxt.setTextColor(Color.WHITE);
         }
         mFrontVehicleTxt.setText(front + " m");
-        if(rear<30){
+        if(rear<100){
             mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
-        }else if(rear<40){
+            mRearVehicleTxt.setTextColor(Color.WHITE);
+        }else if(rear<500){
             mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
+            mRearVehicleTxt.setTextColor(Color.BLACK);
         }else{
             mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
+            mRearVehicleTxt.setTextColor(Color.WHITE);
         }
         mRearVehicleTxt.setText(rear + " m");
 

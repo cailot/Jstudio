@@ -1,9 +1,11 @@
 package kr.co.tmoney.mobiledriverconsole.model.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class VehicleVO {
+public class VehicleVO implements Serializable{
     private int accuracy;
     private String currentRoute;
     private int currentStopIndex;

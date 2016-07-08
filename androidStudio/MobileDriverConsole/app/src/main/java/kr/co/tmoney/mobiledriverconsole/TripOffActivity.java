@@ -18,6 +18,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,9 +45,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     String[] mRouteIds;
     String[] mRouteNames;
     String[] mVehicles;
-//    List<String> mVehicles = new ArrayList<String>();;
 
-    List<StopVO> mStops = new ArrayList<StopVO>();
+    StopVO[] mStops;
 
     private String mRouteId; // ex> 554R
 
@@ -66,6 +66,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     }
 
+
+    /**
+     * build up UI and register click events per component
+     */
     private void initialiseUI() {
         mRouteTxt = (TextView) findViewById(R.id.trip_off_route_txt);
         mRouteTxt.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +133,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 break;
             case R.id.trip_off_logout_btn :
                 Log.d(LOG_TAG, "Logout Event");
+                logout();
                 break;
             case R.id.trip_off_tripon_btn :
                 Log.d(LOG_TAG, "TripOn Event");
@@ -138,14 +143,16 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
 
-
+    /**
+     * Just about to leave this activity so set up data for next activities
+     * 1. save stops information under route
+     * 2. save vehicleId
+     * 3. change tripOn to true
+     * 4. startIntent
+     */
     private void turnOnTripOn() {
-        // clear stops detail
-//        mStops.clear();
-//        // get stops detail in route
-//        getStopsDetail();
 //        // save stop details into SharedPreferences
-//        saveStopsDetail();
+        saveStopsDetail();
         // save vehicle name into SharedPreferences
         mVehicleId = mVehicleTxt.getText().toString();
         put(Constants.VEHICLE_NAME, mVehicleId);
@@ -160,39 +167,27 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
     private void saveStopsDetail() {
-        int size = mStops.size();
-        String[] ids = new String[size];
-        String[] names = new String[size];
-        String[] types = new String[size];
-        String[] lats = new String[size];
-        String[] lons = new String[size];
-        for(int i=0; i<size; i++){
-            StopVO stop = (StopVO) mStops.get(i);
-            ids[i] = stop.getId();
-            names[i] = stop.getName();
-            types[i] = stop.getType();
-            lats[i] = stop.getLat()+"";
-            lons[i] = stop.getLon()+"";
-        }
-        String idStr= MDCUtils.convertStringArrayToString(ids);
-        String nameStr = MDCUtils.convertStringArrayToString(names);
-        String typeStr= MDCUtils.convertStringArrayToString(types);
-        String latStr = MDCUtils.convertStringArrayToString(lats);
-        String lonStr= MDCUtils.convertStringArrayToString(lons);
-
-        put(Constants.STOPS_ID_IN_ROUTE, idStr);
-        put(Constants.STOPS_NAME_IN_ROUTE, nameStr);
-        put(Constants.STOPS_TYPE_IN_ROUTE, typeStr);
-        put(Constants.STOPS_LATITUDE_IN_ROUTE, latStr);
-        put(Constants.STOPS_LONGITUDE_IN_ROUTE, lonStr);
+        put(Constants.STOPS_ID_IN_ROUTE, mStops);
     }
 
+
+    /**
+     *  logout
+     */
     private void logout(){
-        Firebase ref = new Firebase(Constants.FIREBASE_HOME);
-        ref.child("testKey").setValue("myValue");
+        StopVO stopVO = new StopVO();
+        stopVO.setLon(12.1212);
+        stopVO.setLat(45.4545);
+        stopVO.setId("MyStop");
+        put("stop", stopVO);
     }
 
 
+    /**
+     * callback method on routeTxt
+     * @param id
+     * @param name
+     */
     @Override
     public void sendRouteName(String id, String name) {
         // update route name according to user's choice
@@ -209,6 +204,11 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     }
 
+
+    /**
+     * callback method on vehicleTxt
+     * @param routeName
+     */
     @Override
     public void sendVehicleName(String routeName) {
 //        // get stops detail in route
@@ -219,6 +219,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         mVehicleTxt.setText(routeName);
     }
 
+
+    /**
+     * Dialog to select routes
+     */
     private void showRouteDialog() {
 
         RouteDialog routeDialog = new RouteDialog(mRouteIds, mRouteNames);
@@ -229,6 +233,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         mVehicleTxt.setText(getString(R.string.trip_off_vehicle_txt_description));
     }
 
+    /**
+     * Dialog to select vehicles
+     */
     private void showVehicleDialog() {
         if(mVehicles.length==0){
             // show warning message
@@ -243,6 +250,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         vehicleDialog.show(getFragmentManager(), Constants.VEHICLE_DIALOG_TAG);
     }
 
+    /**
+     * Get route list from firebase
+     */
     private void getRouteList() {
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH);
         Query queryRef = ref.orderByChild("sortIndex");
@@ -281,9 +291,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
                 List vehicles = new ArrayList();
                 for (DataSnapshot shot : snapshot.getChildren()) {
-//                    RouteVO route = shot.getValue(RouteVO.class);
-//                    routeIds.add(shot.getKey());
-//                    routeNames.add(route.getName());
                     vehicles.add(shot.getKey());
                     Log.d(LOG_TAG, shot.getKey() + " ==>");// + route.toString());
                 }
@@ -318,18 +325,22 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
 
+    /**
+     * Bring stops info from firebase and save into Arraylist
+     */
     private void getStopsDetail(){
-        mStops.clear();
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId +"/routeStop");
         Query queryRef = ref.orderByChild("id");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                List<StopVO> list = new ArrayList<StopVO>();
                 for(DataSnapshot shot : dataSnapshot.getChildren()){
                     StopVO stopVO = shot.getValue(StopVO.class);
-                    mStops.add(stopVO);
-                    Log.e(LOG_TAG, stopVO.toString());
+                    list.add(stopVO);
                 }
+                mStops = new StopVO[list.size()];
+                mStops = list.toArray(mStops);
             }
 
             @Override
@@ -338,11 +349,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
         });
     }
-
-
-
-
-
 
 
     /////////////////////////////
@@ -355,49 +361,13 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         editor.commit();
     }
 
-    public void put(String key, boolean value) {
+    public void put(String key, Object value) {
         SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(key, value);
+        String json = new Gson().toJson(value);
+        editor.putString(key, json);
         editor.commit();
+        Log.d(LOG_TAG, "saved object to sharedpreferences : " + json);
     }
 
-    public void put(String key, int value) {
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(key, value);
-        editor.commit();
-    }
-
-    public String getValue(String key, String dftValue) {
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        try {
-            return pref.getString(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-
-    }
-
-    public int getValue(String key, int dftValue) {
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        try {
-            return pref.getInt(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-
-    }
-
-    public boolean getValue(String key, boolean dftValue) {
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        try {
-            return pref.getBoolean(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-    }
 }

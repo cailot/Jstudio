@@ -2,6 +2,8 @@ package kr.co.tmoney.mobiledriverconsole.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.io.Serializable;
+
 /**
  * This class is just for listing Route in TripOff.
  * It doesn't need to bring vehicle list all together so will eliminate vehicle property
@@ -9,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 //@JsonIgnoreProperties({"vehicles"})
 @JsonIgnoreProperties({"routeStop", "vehicles"})
-public class RouteVO {
+public class RouteVO implements Serializable{
     private String name;
     private int sortIndex;
 

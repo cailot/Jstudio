@@ -1,11 +1,12 @@
 package kr.co.tmoney.mobiledriverconsole.model.vo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by jinseo on 2016. 7. 7..
  */
-public class TripVO {
+public class TripVO implements Serializable{
     private String currentStopId;
 
     private String currentStopName;
@@ -30,13 +31,35 @@ public class TripVO {
 
     private String vehicleId;
 
+    private double lat;
+
+    private double lon;
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
     public TripVO() {
     }
 
-    public TripVO(String currentStopId, String currentStopName, String driverId, HashMap<String, String> messagelogs, String route, String routeKey, int runningNo, HashMap<String, Object> stoplogs, HashMap<String, Object> transactions, long tripStartTime, long updated, String vehicleId) {
+    public TripVO(String currentStopId, String currentStopName, String driverId, double lat, double lon, HashMap<String, String> messagelogs, String route, String routeKey, int runningNo, HashMap<String, Object> stoplogs, HashMap<String, Object> transactions, long tripStartTime, long updated, String vehicleId) {
         this.currentStopId = currentStopId;
         this.currentStopName = currentStopName;
         this.driverId = driverId;
+        this.lat = lat;
+        this.lon = lon;
         this.messagelogs = messagelogs;
         this.route = route;
         this.routeKey = routeKey;
@@ -63,6 +86,8 @@ public class TripVO {
                 ", tripStartTime=" + tripStartTime +
                 ", updated=" + updated +
                 ", vehicleId='" + vehicleId + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
                 '}';
     }
 

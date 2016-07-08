@@ -22,6 +22,8 @@ public interface Constants {
 
     public static final String ROUTE_ID = "route_id";
 
+    public static final String STOPS_IN_ROUTE = "stops_in_route";
+
     public static final String STRING_ARRAY_SEPARATOR = " *$#@^! ";
 
     public static final String STOPS_DETAIL_IN_ROUTE = "stops_detail";
@@ -60,6 +62,10 @@ public interface Constants {
 
 
 
+
+    public static final int TRIP_ON_FRAGMENT_TAB = 0;
+
+    public static final int FARE_FRAGMENT_TAB = 1;
 
     public static final int STATUS_BASE = 2016;
 

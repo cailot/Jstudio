@@ -1,9 +1,11 @@
 package kr.co.tmoney.mobiledriverconsole.model.vo;
 
+import java.io.Serializable;
+
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class StopVO {
+public class StopVO implements Serializable{
     private String direction;
     private int fareStopTag;
     private String id;
