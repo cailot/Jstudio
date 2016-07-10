@@ -42,23 +42,40 @@ public interface Constants {
 
     public static final String VEHICLE_TRIP_ON = "tripOn";
 
+    public static final String VEHICLE_INDEX = "index";
+
+    public static final String VEHICLE_TRIP = "trip";
+
     public static final String VEHICLE_CURRENT_ROUTE = "currentRoute";
+
+    public static final String VEHICLE_REAR = "rearVehicle";
+
+    public static final String VEHICLE_FRONT = "frontVehicle";
+
+    public static final String VEHICLE_LATITUDE = "lat";
+
+    public static final String VEHICLE_LONGITUDE = "lon";
 
     public static final String VEHICLE_UPDATED = "updated";
 
 
 
+    public static final String FRONT_VEHICLE_ID = "front_vehicle_id";
+
+    public static final String FRONT_VEHICLE_INDEX = "front_vehicle_index";
 
 
 
 
-    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/";
 
-    public static final String FIREBASE_ROUTE_LIST_PATH = "Thai_Private/TH_PMB/routes";
 
-    public static final String FIREBASE_VEHICLE_LIST_PATH = "Thai_Private/TH_PMB/vehicles";
+    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/TH_PMB/";
 
-    public static final String FIREBASE_TRIP_LIST_PATH = "Thai_Private/TH_PMB/trips2";
+    public static final String FIREBASE_ROUTE_LIST_PATH = "routes";
+
+    public static final String FIREBASE_VEHICLE_LIST_PATH = "vehicles";
+
+    public static final String FIREBASE_TRIP_LIST_PATH = "trips2";
 
 
 
@@ -119,11 +136,7 @@ public interface Constants {
 
     public static final int GOOGLE_MAP_ZOOM_LEVEL = 15;
 
-    public static final int GOOGLE_MAP_POLLING_INTERVAL = 1000*10; // may need to change to 14 ~ 15 in beta test
-
-    public static final String GOOGLE_LOG_STATUS = "googleLog";
-
-    public static final String TRIP_STATUS = "trip";
+    public static final int GOOGLE_MAP_POLLING_INTERVAL = 1000; // every second GPS update
 
     public static final double ADULT_FARE = 25.0;
 
@@ -131,6 +144,27 @@ public interface Constants {
     public static final String PRE_LOG_ENTRY = "###\t";
 
     public static final String POST_LOG_ENTRY = "\t###";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_ADDRESS = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_API_KEY = "AIzaSyARcc57YdbbyaiS517LoES5i4sqBl2kyh8";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_OK = "OK";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_STATUS = "status";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_ROWS = "rows";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_ELEMENTS = "elements";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_DISTANCE = "distance";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_DURATION = "duration";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_VALUE = "value";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_TEXT = "text";
+
 
     ///////////////////////////// Geofencing Test ////////////////////////////////
     /**

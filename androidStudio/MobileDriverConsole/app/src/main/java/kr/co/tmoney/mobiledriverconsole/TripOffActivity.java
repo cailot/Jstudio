@@ -52,17 +52,25 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     private String mVehicleId; // ex> SV580005
 
+    private Map mFrontVehicleInfo = new HashMap();
+
+    Firebase mFirebase;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_off_activity);
 
+        // loading Splash
+        startActivity(new Intent(this, SplashActivity.class));
+
+        // build UI
         initialiseUI();
 
         // setup Firebase on Android
         Firebase.setAndroidContext(this);
-
+        mFirebase = new Firebase(Constants.FIREBASE_HOME);
 
     }
 
@@ -105,10 +113,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     @Override
     protected void onStart() {
         super.onStart();
+        // bring up all routes & vehicles list to save up time
         getRouteList();
         getVehicleList();
-
-
     }
 
     @Override
@@ -157,15 +164,17 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         mVehicleId = mVehicleTxt.getText().toString();
         put(Constants.VEHICLE_NAME, mVehicleId);
 
-        // set TripOn = true
-        setTripOnFlag();
+        // update DB to indicate starting
+        setTripOn();
 
         // switch to TripOn
         Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
         startActivity(i);
-       // setContentView(R.layout.avtivity_next);
     }
 
+    /**
+     * save all stops information into SharedPreference by Gson
+     */
     private void saveStopsDetail() {
         put(Constants.STOPS_ID_IN_ROUTE, mStops);
     }
@@ -175,11 +184,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      *  logout
      */
     private void logout(){
-        StopVO stopVO = new StopVO();
-        stopVO.setLon(12.1212);
-        stopVO.setLat(45.4545);
-        stopVO.setId("MyStop");
-        put("stop", stopVO);
+//        searchFrontVehicle();
+//        setTripOn();
     }
 
 
@@ -197,11 +203,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         put(Constants.ROUTE_ID, mRouteId);
         // update selected route info in TextView
         mRouteTxt.setText(id + " : " + name);
+        // get the front vehicle info & index to prepare updating vehicle
+        searchFrontVehicle();
         // get stops detail in route
         getStopsDetail();
-//        // save stop details into SharedPreferences
-//        saveStopsDetail();
-
     }
 
 
@@ -211,8 +216,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     @Override
     public void sendVehicleName(String routeName) {
-//        // get stops detail in route
-//        getStopsDetail();
         // save stop details into SharedPreferences
         saveStopsDetail();
         // update selected vehicle info in TextView
@@ -282,7 +285,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      * Bring vehicle list
      */
     private void getVehicleList(){
-
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH);
         Query queryRef = ref.orderByKey();
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -291,8 +293,12 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
                 List vehicles = new ArrayList();
                 for (DataSnapshot shot : snapshot.getChildren()) {
-                    vehicles.add(shot.getKey());
-                    Log.d(LOG_TAG, shot.getKey() + " ==>");// + route.toString());
+                    // bring only available vehicles
+                    boolean isTrip = (boolean) shot.child(Constants.VEHICLE_TRIP_ON).getValue();
+//                    if(!isTrip) for testing purpose
+                    {
+                        vehicles.add(shot.getKey());
+                    }
                 }
                 if(vehicles.size()>0){
                     mVehicles = MDCUtils.convertListToStringArray(vehicles);
@@ -309,19 +315,80 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     /*
      * As soon as user clicks tripOn button it triggers
      * Set several values under selected vehicle
-     * 1. tripOn - true
-     * 2. currentRoute - routeId ex> 554R
-     * 3. updated - ServerValue.TIMESTAMP
+     * 1. update Vehicle info under 'vehicles'
+     * 2. update front Vehicle's rearVehicle value
+     * 3. register vehicle name under 'routes'/vehicles
     */
-    private void setTripOnFlag() {
+    private void setTripOn() {
 
-        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH);
-        Firebase vehicleRef = ref.child(mVehicleId);
-        Map<String, Object> tripOn = new HashMap<String, Object>();
-        tripOn.put(Constants.VEHICLE_TRIP_ON, true);
-        tripOn.put(Constants.VEHICLE_CURRENT_ROUTE, mRouteId);
-        tripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
-        vehicleRef.updateChildren(tripOn);
+        String frontCar = (String) mFrontVehicleInfo.get(Constants.FRONT_VEHICLE_ID);
+        String frontIndex = (String) mFrontVehicleInfo.get(Constants.FRONT_VEHICLE_INDEX);
+
+        // update Vehicle info under 'vehicles'
+        Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+        Map<String, Object> currentTripOn = new HashMap<String, Object>();
+        currentTripOn.put(Constants.VEHICLE_TRIP_ON, true);
+        currentTripOn.put(Constants.VEHICLE_CURRENT_ROUTE, mRouteId);
+        currentTripOn.put(Constants.VEHICLE_FRONT, frontCar);
+        currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+        currentVehicle.updateChildren(currentTripOn);
+
+        // update front Vehicle's rearVehicle value if exists
+        if(!frontCar.equalsIgnoreCase("")){
+            Firebase frontVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + frontCar);
+            Map<String, Object> frontTripOn = new HashMap<String, Object>();
+            frontTripOn.put(Constants.VEHICLE_REAR, mVehicleId);
+            frontTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+            frontVehicle.updateChildren(frontTripOn);
+        }
+
+        // register vehicle name under 'routes'/vehicles
+        String trip = MDCUtils.getTipNode(mVehicleId);
+        Firebase routeVehicle = mFirebase.child(Constants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId + "/vehicles/" + mVehicleId);
+        Map<String, Object> routeUpdate = new HashMap<String, Object>();
+        routeUpdate.put(Constants.VEHICLE_TRIP, trip);
+        if(!frontCar.equalsIgnoreCase("")){
+            routeUpdate.put(Constants.VEHICLE_INDEX, (Integer.parseInt(frontIndex)+1));
+        }else{
+            routeUpdate.put(Constants.VEHICLE_INDEX, 0);
+        }
+        routeVehicle.updateChildren(routeUpdate);
+
+    }
+
+    /**
+     * Search front vehicle info by looking maximum 'index' under /routes/{routeId}/vheicles/{vehicle}/index
+     */
+    private void searchFrontVehicle(){
+        mFrontVehicleInfo.clear();
+        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH);
+        Firebase childRef = ref.child(mRouteId + "/vehicles");
+        Query queryRef = childRef.orderByChild("index");
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                String front = "";
+                String index = "0";
+                if(snapshot.getValue()==null){
+                    Log.d(LOG_TAG, "You are the first");
+                }else {
+                    // get highest index
+                    for(DataSnapshot shot : snapshot.getChildren()){
+                        front = shot.getKey();
+                        index = shot.child("index").getValue().toString();
+//                        Log.d(LOG_TAG, "child...." + shot.getKey() + " ===> "+ shot.child("index").getValue().toString());
+                    }
+                    Log.d(LOG_TAG, front + " ==> " + index);
+                }
+                mFrontVehicleInfo.put(Constants.FRONT_VEHICLE_ID, front);
+                mFrontVehicleInfo.put(Constants.FRONT_VEHICLE_INDEX, index);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                Log.e(LOG_TAG, "Error happens while getting Route list : " + firebaseError.getMessage());
+            }
+        });
+
     }
 
 

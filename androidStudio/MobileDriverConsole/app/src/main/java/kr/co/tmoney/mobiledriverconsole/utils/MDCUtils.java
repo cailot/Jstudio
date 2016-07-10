@@ -4,8 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.apache.commons.lang3.StringUtils;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
+import org.apache.commons.lang3.StringUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -155,5 +164,76 @@ public class MDCUtils {
         }
         return index;
     }
+
+    public static String[] getDistanceInfo(double originLat, double originLon, double destLat, double destLon) {
+
+        String[] infos = new String[]{"0","0"};
+
+        String address = Constants.GOOGLE_DISTANCE_MATRIX_ADDRESS;
+        address += originLat + "," + originLon;
+        address += "&destinations=";
+        address += destLat + "," + destLon;
+        address += "&mode=driving&units=metric&language=en&key=";
+        address += Constants.GOOGLE_DISTANCE_MATRIX_API_KEY;
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(address)
+                .build();
+        Response response = null;
+        String dist = null;
+        try {
+            response = client.newCall(request).execute();
+            dist = response.body().string();
+        } catch (IOException e) {
+            return infos;
+        }
+
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject) jsonParser.parse(dist);
+        } catch (ParseException e) {
+            return infos;
+        }
+
+        // status check as well
+        String status = jsonObject.get(Constants.GOOGLE_DISTANCE_MATRIX_STATUS).toString();
+        System.out.println(status);
+        if (!StringUtils.equalsIgnoreCase(Constants.GOOGLE_DISTANCE_MATRIX_OK, status)) {
+            return  infos;
+        }
+        JSONArray rows = (JSONArray) jsonObject.get(Constants.GOOGLE_DISTANCE_MATRIX_ROWS);
+        for (int i = 0; i < rows.size(); i++) {
+            JSONObject obj = (JSONObject) rows.get(i);
+            JSONArray elements = (JSONArray) obj.get(Constants.GOOGLE_DISTANCE_MATRIX_ELEMENTS);
+            for (int j = 0; j < elements.size(); j++) {
+                JSONObject datas = (JSONObject) elements.get(j);
+                JSONObject distance = (JSONObject) datas.get(Constants.GOOGLE_DISTANCE_MATRIX_DISTANCE);
+                JSONObject duration = (JSONObject) datas.get(Constants.GOOGLE_DISTANCE_MATRIX_DURATION);
+                infos[0] = (String) distance.get(Constants.GOOGLE_DISTANCE_MATRIX_VALUE);
+                infos[1] = (String) duration.get(Constants.GOOGLE_DISTANCE_MATRIX_TEXT);
+
+            }
+
+        }
+        return infos;
+    }
+
+    /**
+     * Convert into proper format of distance such as 1.2 km or 234 m
+     * @param digit
+     * @return
+     */
+    public static String getDistanceFormat(int digit){
+        String info = "";
+        if(digit > 1000){
+            double d = digit/1000.0;
+            info = String.format( "%.1f", d) + " Km";
+        }else{
+            info = digit + " m";
+        }
+        return info;
+    }
+
 
 }

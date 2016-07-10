@@ -15,13 +15,11 @@ public class VehicleVO implements Serializable{
     private double lat;
     private double lon;
     private int passengers;
+    private String frontVehicle;
     private String rearVehicle;
     private double speed;
     private boolean tripOn;
     private String updated;
-
-    public VehicleVO() {
-    }
 
     @Override
     public String toString() {
@@ -35,6 +33,7 @@ public class VehicleVO implements Serializable{
                 ", lat=" + lat +
                 ", lon=" + lon +
                 ", passengers=" + passengers +
+                ", frontVehicle='" + frontVehicle + '\'' +
                 ", rearVehicle='" + rearVehicle + '\'' +
                 ", speed=" + speed +
                 ", tripOn=" + tripOn +
@@ -42,20 +41,7 @@ public class VehicleVO implements Serializable{
                 '}';
     }
 
-    public VehicleVO(int accuracy, String currentRoute, int currentStopIndex, String currentStopName, int heading, String id, double lat, double lon, int passengers, String rearVehicle, double speed, boolean tripOn, String updated) {
-        this.accuracy = accuracy;
-        this.currentRoute = currentRoute;
-        this.currentStopIndex = currentStopIndex;
-        this.currentStopName = currentStopName;
-        this.heading = heading;
-        this.id = id;
-        this.lat = lat;
-        this.lon = lon;
-        this.passengers = passengers;
-        this.rearVehicle = rearVehicle;
-        this.speed = speed;
-        this.tripOn = tripOn;
-        this.updated = updated;
+    public VehicleVO() {
     }
 
     public int getAccuracy() {
@@ -88,6 +74,14 @@ public class VehicleVO implements Serializable{
 
     public void setCurrentStopName(String currentStopName) {
         this.currentStopName = currentStopName;
+    }
+
+    public String getFrontVehicle() {
+        return frontVehicle;
+    }
+
+    public void setFrontVehicle(String frontVehicle) {
+        this.frontVehicle = frontVehicle;
     }
 
     public int getHeading() {
@@ -159,6 +153,23 @@ public class VehicleVO implements Serializable{
     }
 
     public void setUpdated(String updated) {
+        this.updated = updated;
+    }
+
+    public VehicleVO(int accuracy, String currentRoute, int currentStopIndex, String currentStopName, String frontVehicle, int heading, String id, double lat, double lon, int passengers, String rearVehicle, double speed, boolean tripOn, String updated) {
+        this.accuracy = accuracy;
+        this.currentRoute = currentRoute;
+        this.currentStopIndex = currentStopIndex;
+        this.currentStopName = currentStopName;
+        this.frontVehicle = frontVehicle;
+        this.heading = heading;
+        this.id = id;
+        this.lat = lat;
+        this.lon = lon;
+        this.passengers = passengers;
+        this.rearVehicle = rearVehicle;
+        this.speed = speed;
+        this.tripOn = tripOn;
         this.updated = updated;
     }
 }
