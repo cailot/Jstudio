@@ -440,7 +440,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
 
-
+/// edit test
 
     /**
      * trigger Google Distance Matrix Api and parse 'meter' and 'miniute' from front & rear vehicle location
