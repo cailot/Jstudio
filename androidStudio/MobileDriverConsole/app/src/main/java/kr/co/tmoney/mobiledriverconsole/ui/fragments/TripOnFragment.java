@@ -181,6 +181,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
 
         // Android SDK 23
+		checkPermission();
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //Execute location service call if user has explicitly granted ACCESS_FINE_LOCATION..
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -203,6 +204,28 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         initialiseTripInfo();
     }
 
+	
+	
+	private void checkPermission() {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // 권한이 없을 경우
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // 사용자가 임의로 권한을 취소시킨 경우
+            // 권한 재요청
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1993);
+        } else {
+            // 권한 요청 (최초 요청)
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1993);
+        }
+    }else{
+		 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+	}
+}
+
+	
+	
+	
+	
     /**
      * GPS permission handles - Android SDK 23
      * @param requestCode
@@ -212,20 +235,20 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case GPS_PERMISSION_GRANT:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED){
-//                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-
-                } else {
-
-                    Toast.makeText(mContext,"Permission Denied, You cannot access location data.",Toast.LENGTH_LONG).show();
-
-                }
-                break;
-
+        case 1993: {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 동의 및 로직 처리
+				 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                Log.e(TAG, ">>> 동의함.");
+            } else {
+                // 동의 안함
+                Log.e(TAG, ">>> 동의를 해주셔야 합니다.");
+            }
+            return;
         }
+        // 예외 케이스
+    
     }
 
 
