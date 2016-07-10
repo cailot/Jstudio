@@ -318,6 +318,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
             // display data for front & rear vehicle - google distance matrix call
 //            updateDistances(location.getLatitude(), location.getLongitude());
+            new SubscribeDistanceTask().execute(location.getLatitude(), location.getLongitude());
         }
         Log.d(LOG_TAG, location.getLatitude() + "\t" + location.getLongitude());
     }
@@ -420,27 +421,51 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
 
-
-    public class updateAsyncTask extends AsyncTask<double[], Void, String>{
-
-
+    public class SubscribeDistanceTask extends AsyncTask<Double, Void, Map> {
         @Override
-        protected String doInBackground(double[]... doubles) {
-            double lat = doubles[0];
-            double lon = doubles[1];
-            return null;
+        protected Map doInBackground(Double... doubles) {
+            Map<String, String[]> distances = new HashMap<String, String[]>();
+            double a = doubles[0];
+            double b = doubles[1];
+            String[] frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+            String[] rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+            distances.put("front", frontInfo);
+            distances.put("rear", rearInfo);
+            return distances;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(Map info) {
+
+            String[] frontInfo = (String[])info.get("front");
+            String[] rearInfo = (String[])info.get("rear");
+
+            int frontDistance = Integer.parseInt(frontInfo[0]);
+            int rearDistance = Integer.parseInt(rearInfo[0]);
+            if(frontDistance<100){
+                mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
+                mFrontVehicleTxt.setTextColor(Color.WHITE);
+            }else if(frontDistance<500){
+                mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
+                mFrontVehicleTxt.setTextColor(Color.BLACK);
+            }else{
+                mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
+                mFrontVehicleTxt.setTextColor(Color.WHITE);
+            }
+            mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\t" + frontInfo[1]);
+            if(rearDistance<100){
+                mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
+                mRearVehicleTxt.setTextColor(Color.WHITE);
+            }else if(rearDistance<500){
+                mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
+                mRearVehicleTxt.setTextColor(Color.BLACK);
+            }else{
+                mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
+                mRearVehicleTxt.setTextColor(Color.WHITE);
+            }
+            mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\t" + rearInfo[1]);
         }
     }
-
-
-
-
-/// edit test
 
     /**
      * trigger Google Distance Matrix Api and parse 'meter' and 'miniute' from front & rear vehicle location
@@ -670,5 +695,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
 //        }
 //    }
+
 
 }
