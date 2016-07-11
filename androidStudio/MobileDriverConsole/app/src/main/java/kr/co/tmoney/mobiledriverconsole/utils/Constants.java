@@ -96,7 +96,15 @@ public interface Constants {
 
     public static final int FARE_DESTINATION_REQUEST = STATUS_BASE + 5;
 
+    public static final int GPS_PERMISSION_GRANT = 6;
 
+    public static final int GPS_UPDATE_VEHICLES_INTERVAL = 10;
+
+    public static final int DISTANCE_THRESHOLD_SAFE = 500;
+
+    public static final int DISTANCE_THRESHOLD_DANGER = 100;
+
+    public static final int GPS_UPDATE_MAXIMUM = 99999;
 
 
     ////////////////////////////
@@ -170,9 +178,9 @@ public interface Constants {
     /**
      * For this sample, geofences expire after one hour.
      */
-    public static final long GEOFENCE_EXPIRATION = 60 * 60 * 1000;
+    public static final long GEOFENCE_EXPIRATION = 5 * 60 * 60 * 1000;
 
-    public static final float GEOFENCE_RADIUS_IN_METERS = 50;
+    public static final float GEOFENCE_RADIUS_IN_METERS = 150;
 
 
 

@@ -3,6 +3,7 @@ package kr.co.tmoney.mobiledriverconsole.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -188,6 +189,7 @@ public class MDCUtils {
             return infos;
         }
 
+        Log.d("@@@@@@", dist);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = null;
         try {
@@ -197,11 +199,7 @@ public class MDCUtils {
         }
 
         // status check as well
-        String status = jsonObject.get(Constants.GOOGLE_DISTANCE_MATRIX_STATUS).toString();
-        System.out.println(status);
-        if (!StringUtils.equalsIgnoreCase(Constants.GOOGLE_DISTANCE_MATRIX_OK, status)) {
-            return  infos;
-        }
+
         JSONArray rows = (JSONArray) jsonObject.get(Constants.GOOGLE_DISTANCE_MATRIX_ROWS);
         for (int i = 0; i < rows.size(); i++) {
             JSONObject obj = (JSONObject) rows.get(i);
@@ -210,11 +208,16 @@ public class MDCUtils {
                 JSONObject datas = (JSONObject) elements.get(j);
                 JSONObject distance = (JSONObject) datas.get(Constants.GOOGLE_DISTANCE_MATRIX_DISTANCE);
                 JSONObject duration = (JSONObject) datas.get(Constants.GOOGLE_DISTANCE_MATRIX_DURATION);
-                infos[0] = (String) distance.get(Constants.GOOGLE_DISTANCE_MATRIX_VALUE);
-                infos[1] = (String) duration.get(Constants.GOOGLE_DISTANCE_MATRIX_TEXT);
+                infos[0] = distance.get(Constants.GOOGLE_DISTANCE_MATRIX_VALUE)+"";
+                infos[1] = duration.get(Constants.GOOGLE_DISTANCE_MATRIX_TEXT)+"";
 
             }
 
+        }
+        String status = jsonObject.get(Constants.GOOGLE_DISTANCE_MATRIX_STATUS).toString();
+//        Log.d("@@@@@@", status);
+        if (!StringUtils.equalsIgnoreCase(Constants.GOOGLE_DISTANCE_MATRIX_OK, status)) {
+            return  infos;
         }
         return infos;
     }

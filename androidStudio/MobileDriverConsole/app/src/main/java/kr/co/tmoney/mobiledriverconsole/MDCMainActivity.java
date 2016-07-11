@@ -43,31 +43,12 @@ public class MDCMainActivity extends AppCompatActivity {
 
     private StopVO[] mStops; // shared by FareFragment
 
-    private double currentLat; // will be assigned from TripOnFragment
-
-    private double currentLon; // will be assigned from TripOnFragment
-
     public String getVehicleId() {
         return mVehicleId;
     }
 
     private String mVehicleId; // vehicle id
 
-    public double getCurrentLat() {
-        return currentLat;
-    }
-
-    public void setCurrentLat(double currentLat) {
-        this.currentLat = currentLat;
-    }
-
-    public double getCurrentLon() {
-        return currentLon;
-    }
-
-    public void setCurrentLon(double currentLon) {
-        this.currentLon = currentLon;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

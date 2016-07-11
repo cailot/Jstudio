@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -123,6 +122,10 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         // set up googleApi
         buildGoogleApiClient();
 
+
+        // set up basic info
+        initialiseTripInfo();
+
         // inflate dummy Geofence list
         populateGeofenceList();
 
@@ -170,9 +173,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
 
-    public static final int GPS_PERMISSION_GRANT = 19;
-
-
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(LOG_TAG, "GoogleApiClient onConnected");
@@ -181,39 +181,14 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
 
         // Android SDK 23
-	checkPermission();
-     
+        requestLocationUpdate();
+
 
         // activate Geofences
 //        activateGeofences();
-
-        // initialise TripVO
-        initialiseTripInfo();
     }
 
-	
-	
-    private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // 권한이 없을 경우
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // 사용자가 임의로 권한을 취소시킨 경우
-                // 권한 재요청
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 19);
-            } else {
-                // 권한 요청 (최초 요청)
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 19);
-            }
-        }else{
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-    }
-
-	
-	
-	
-	
-        /**
+    /**
      * GPS permission handles - Android SDK 23
      * @param requestCode
      * @param permissions
@@ -222,22 +197,38 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case 19: {
+            case Constants.GPS_PERMISSION_GRANT: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // 동의 및 로직 처리
-                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-                    Log.e(TAG, ">>> 동의함.");
+                    requestLocationUpdate();
+                    Log.e(LOG_TAG, "User grants GPS permission");
                 } else {
-                    // 동의 안함
-                    Log.e(TAG, ">>> 동의를 해주셔야 합니다.");
+                    Log.e(LOG_TAG, "User should grant a permission to proceed");
                 }
                 return;
             }
-            // 예외 케이스
-
         }
-    
+    }
+
+
+    /**
+     * From SDK 23, device checks the required permission in runtime.
+     * This will also cover Android Marshmallow 6 or the above for furture device upgrade
+     */
+    private void requestLocationUpdate() {
+        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
+        }else{
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        }
+
     }
 
 
@@ -300,10 +291,12 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onLocationChanged(Location location) {
         mGpsCount++;
-        if(mGpsCount>99999){
+        if(mGpsCount > Constants.GPS_UPDATE_MAXIMUM){ // just in case, prevent count going out of int range
             mGpsCount=0;
         }
-
+        if(mGpsCount==10){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
+            updateFrontAndBackVehicles();
+        }
         // update Map
         if(mMarker!=null){
             mMarker.remove();
@@ -314,25 +307,17 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
 
-        if(mGpsCount%15 ==0) { // runs every 15 seconds
+        // update current vehicle Info
+        String msg = mVehicleId + "\n";
+        if (location.hasSpeed()) {
+            msg += "Speed : " + String.format( "%.2f", location.getSpeed() * 3600 / 1000) + " km/h" + "\n";
+        }
+        msg += "Passenger : " + "0"; // will subscribe passenger count in future....
+        mTripOnTxt.setText(msg);
 
-            // update current vehicle Info
-            String msg = mVehicleId + "\n";
-            if (location.hasSpeed()) {
-                msg += "Speed : " + (location.getSpeed() * 3600 / 1000 + "km/h") + "\n";
-            }
-            msg += "Passenger : " + "0"; // will subscribe passenger count in future....
-            mTripOnTxt.setText(msg);
-
-
-            // update Vehicle info on Firebase
-            updateCurrentGPS(location.getLatitude(), location.getLongitude());
-
-            // display data for front & rear vehicle - google distance matrix call
-//            updateDistances(location.getLatitude(), location.getLongitude());
+        if(mGpsCount%Constants.GPS_UPDATE_VEHICLES_INTERVAL ==0) { // runs every 10 seconds
             new SubscribeDistanceTask().execute(location.getLatitude(), location.getLongitude());
         }
-        Log.d(LOG_TAG, location.getLatitude() + "\t" + location.getLongitude());
     }
 
     /**
@@ -370,10 +355,17 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
             }
         });
+    }
 
+    /**
+     * subscribe updated front/rear vehicle's GPS
+     */
+    private void updateFrontAndBackVehicles() {
         // update front gps
+//        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
         if(mFrontVehicle.getId()!=null && !mFrontVehicle.getId().equalsIgnoreCase("")) {
             Firebase frontRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mFrontVehicle.getId());
+            Log.d(LOG_TAG,"Front - path : " + frontRef.getPath());
             frontRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -390,6 +382,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
                 }
             });
+
         }
 
         // update rear gps
@@ -416,48 +409,54 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
     /**
-     * update latitude & longitude for current vehicle
-     * @param lat
-     * @param lon
+     * This is worker thread class running every 10 secs for...
+     * 1. update current GPS
+     * 2. bring distance info between front/rear vehicles
      */
-    private void updateCurrentGPS(double lat, double lon){
-        // update Vehicle info under 'vehicles'
-        Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
-        Map<String, Object> currentTripOn = new HashMap<String, Object>();
-        currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
-        currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
-        currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
-        currentVehicle.updateChildren(currentTripOn);
-
-    }
-
-
-
     public class SubscribeDistanceTask extends AsyncTask<Double, Void, Map> {
         @Override
         protected Map doInBackground(Double... doubles) {
+
+            double lat = doubles[0];
+            double lon = doubles[1];
+
+            // update GPS on current vehicle
+            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+            Map<String, Object> currentTripOn = new HashMap<String, Object>();
+            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
+            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
+            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+            currentVehicle.updateChildren(currentTripOn);
+
+            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
             Map<String, String[]> distances = new HashMap<String, String[]>();
-            double a = doubles[0];
-            double b = doubles[1];
-            String[] frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
-            String[] rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
-            distances.put("front", frontInfo);
-            distances.put("rear", rearInfo);
+            String[] frontInfo = new String[]{"0","0"};
+            String[] rearInfo = new String[]{"0","0"};
+            if(mFrontVehicle==null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon()==0.0){
+                // no need to subscribe
+            }else {
+                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+            }
+            if(mRearVehicle==null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon()==0.0){
+                // no need to subscribe
+            }else {
+                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+            }
+            distances.put(Constants.VEHICLE_FRONT, frontInfo);
+            distances.put(Constants.VEHICLE_REAR, rearInfo);
             return distances;
         }
 
         @Override
         protected void onPostExecute(Map info) {
-
-            String[] frontInfo = (String[])info.get("front");
-            String[] rearInfo = (String[])info.get("rear");
-
+            String[] frontInfo = (String[])info.get(Constants.VEHICLE_FRONT);
+            String[] rearInfo = (String[])info.get(Constants.VEHICLE_REAR);
             int frontDistance = Integer.parseInt(frontInfo[0]);
             int rearDistance = Integer.parseInt(rearInfo[0]);
-            if(frontDistance<100){
+            if(frontDistance < Constants.DISTANCE_THRESHOLD_DANGER){
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
-            }else if(frontDistance<500){
+            }else if(frontDistance < Constants.DISTANCE_THRESHOLD_SAFE){
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
                 mFrontVehicleTxt.setTextColor(Color.BLACK);
             }else{
@@ -465,10 +464,10 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
             mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\t" + frontInfo[1]);
-            if(rearDistance<100){
+            if(rearDistance < Constants.DISTANCE_THRESHOLD_DANGER){
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
-            }else if(rearDistance<500){
+            }else if(rearDistance < Constants.DISTANCE_THRESHOLD_SAFE){
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
                 mRearVehicleTxt.setTextColor(Color.BLACK);
             }else{
@@ -477,41 +476,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             }
             mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\t" + rearInfo[1]);
         }
-    }
-
-    /**
-     * trigger Google Distance Matrix Api and parse 'meter' and 'miniute' from front & rear vehicle location
-     * @param lat
-     * @param lon
-     */
-    private void updateDistances(double lat, double lon){
-        String[] frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
-        String[] rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
-
-        int frontDistance = Integer.parseInt(frontInfo[0]);
-        int rearDistance = Integer.parseInt(rearInfo[0]);
-        if(frontDistance<100){
-            mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
-            mFrontVehicleTxt.setTextColor(Color.WHITE);
-        }else if(frontDistance<500){
-            mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
-            mFrontVehicleTxt.setTextColor(Color.BLACK);
-        }else{
-            mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
-            mFrontVehicleTxt.setTextColor(Color.WHITE);
-        }
-        mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\t" + frontInfo[1]);
-        if(rearDistance<100){
-            mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
-            mRearVehicleTxt.setTextColor(Color.WHITE);
-        }else if(rearDistance<500){
-            mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
-            mRearVehicleTxt.setTextColor(Color.BLACK);
-        }else{
-            mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
-            mRearVehicleTxt.setTextColor(Color.WHITE);
-        }
-        mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\t" + rearInfo[1]);
     }
 
 
@@ -531,44 +495,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        vehicleRef.setValue(mTrip);
 //        Log.d(LOG_TAG, mTrip.toString());
     }
-
-    /**
-     * Keep current location in MainActivity
-     * @param lat
-     * @param lon
-     */
-    private void updateCurrentLocation(double lat, double lon){
-        mMainActivity.setCurrentLat(lat);
-        mMainActivity.setCurrentLon(lon);
-    }
-
-//    private void updateVehicles() {
-//        int front = MDCUtils.getRandomNumberInRange(10, 1000);
-//        int rear = MDCUtils.getRandomNumberInRange(10, 1000);
-//        if(front<100){
-//            mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
-//            mFrontVehicleTxt.setTextColor(Color.WHITE);
-//        }else if(front<500){
-//            mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
-//            mFrontVehicleTxt.setTextColor(Color.BLACK);
-//        }else{
-//            mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
-//            mFrontVehicleTxt.setTextColor(Color.WHITE);
-//        }
-//        mFrontVehicleTxt.setText(front + " m");
-//        if(rear<100){
-//            mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
-//            mRearVehicleTxt.setTextColor(Color.WHITE);
-//        }else if(rear<500){
-//            mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
-//            mRearVehicleTxt.setTextColor(Color.BLACK);
-//        }else{
-//            mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
-//            mRearVehicleTxt.setTextColor(Color.WHITE);
-//        }
-//        mRearVehicleTxt.setText(rear + " m");
-//
-//    }
 
     private PendingIntent getGeofencePendingIntent(){
         Intent intent = new Intent(getActivity(), GeofenceService.class);
@@ -685,7 +611,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     private void showGeofences(){
         for (Map.Entry<String, LatLng> entry : LANDMARKS.entrySet()) {
             mGoogleMap.addMarker(new MarkerOptions()
-                .position((LatLng) entry.getValue())
+                    .position((LatLng) entry.getValue())
             );
         }
 
