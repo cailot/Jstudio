@@ -2,9 +2,7 @@ package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -30,7 +28,6 @@ import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -47,9 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.geofencing.GeofenceService;
 import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.VehicleVO;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
@@ -60,8 +55,6 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
  * Created by jinseo on 2016. 6. 25..
  */
 public class TripOnFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
-
-// implements OnMapReadyCallback, LocationListener, ResultCallback<Status> {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOnFragment.class);
 
@@ -105,7 +98,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private Firebase mFirebase;
 
-    private MDCMainActivity mMainActivity;
+//    private MDCMainActivity mMainActivity;
 
     int mGpsCount;
 
@@ -114,7 +107,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
         mContext = container.getContext();
-        mMainActivity = (MDCMainActivity) getActivity();
+//        mMainActivity = (MDCMainActivity) getActivity();
 
         // build UI
         initialiseUI(savedInstanceState, view);
@@ -253,21 +246,21 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
 
-    /**
-     * Check whether current tab is selected or not
-     * @param isVisibleToUser
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(this.isVisible()){
-            if(isVisibleToUser){
-                Log.d(LOG_TAG, "TripOnFragment is visible");
-            }else{
-                Log.d(LOG_TAG, "TripOnFragment is not visible");
-            }
-        }
-    }
+//    /**
+//     * Check whether current tab is selected or not
+//     * @param isVisibleToUser
+//     */
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if(this.isVisible()){
+//            if(isVisibleToUser){
+//                Log.d(LOG_TAG, "TripOnFragment is visible");
+//            }else{
+//                Log.d(LOG_TAG, "TripOnFragment is not visible");
+//            }
+//        }
+//    }
 
     @Override
     public void onStop() {
@@ -463,7 +456,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
-            mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\t" + frontInfo[1]);
+            mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\n" + frontInfo[1]);
             if(rearDistance < Constants.DISTANCE_THRESHOLD_DANGER){
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
@@ -474,7 +467,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             }
-            mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\t" + rearInfo[1]);
+            mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\n" + rearInfo[1]);
         }
     }
 
@@ -496,35 +489,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        Log.d(LOG_TAG, mTrip.toString());
     }
 
-    private PendingIntent getGeofencePendingIntent(){
-        Intent intent = new Intent(getActivity(), GeofenceService.class);
-        return PendingIntent.getService(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
-
-    private GeofencingRequest getGeofencingRequest(){
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofences(mGeofences);
-        return builder.build();
-    }
-
-//    private void registerGeofences() {
-//        if(mGoogleApiClient==null || !mGoogleApiClient.isConnected()){
-//            Log.e(LOG_TAG, getString(R.string.not_connected));
-//            Toast.makeText(getActivity(), getString(R.string.not_connected), Toast.LENGTH_LONG).show();
-//            return;
-//        }
-//        try{
-//            LocationServices.GeofencingApi.addGeofences(
-//                    mGoogleApiClient,
-//                    getGeofencingRequest(),
-//                    getGeofencePendingIntent()
-//            ).setResultCallback(this);
-//        }catch (SecurityException e){
-//            Log.e(LOG_TAG, e.getMessage());
-//        }
-//    }
 
     protected synchronized void buildGoogleApiClient(){
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
@@ -533,11 +497,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 .addApi(LocationServices.API)
                 .build();
     }
-
-
-
-
-
 
     public String getValue(String key, String dftValue) {
         SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);

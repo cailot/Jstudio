@@ -16,16 +16,6 @@
         android:weightSum="3"
         >
 
-<!--
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/bus_background_normal"
-            android:id="@+id/trip_on_front_img"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray" />
--->
-
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -41,7 +31,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/bus_background_danger"
+                android:src="@drawable/bus_background_safe"
                 android:layout_margin="10dp" />
 
             <TextView
@@ -49,12 +39,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"
                 android:textSize="20dp"
-                android:text="7 m"
                 android:textColor="@android:color/white" />
-
 
         </RelativeLayout>
 
@@ -70,21 +58,13 @@
             android:background="@android:color/darker_gray"
             android:textColor="@android:color/white"
             android:minLines="5"
+            android:textSize="20dp"
             android:gravity="center"
             android:layout_weight="1"
             />
 
 
 
-        <!--
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/bus_background_safe"
-            android:id="@+id/trip_on_rear_img"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray" />
-        -->
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"
@@ -108,10 +88,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"
                 android:textSize="20dp"
-                android:text="23 m"
                 android:textColor="@android:color/white" />
         </RelativeLayout>
     </LinearLayout>

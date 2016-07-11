@@ -129,15 +129,9 @@ public interface Constants {
 
     public static final String BROADCAST_SERVICE = PACKAGE_NAME + ".BROADCAST";
 
-    public static final String GEO_UPDATE_INTENT_SERVICE = "geo_update_intent_service";
+    public static final String GEOFENCE_INTENT_MESSAGE = "geofence_intent_message";
 
-    public static final String GEOFIRE_INTENT_SERVICE = "geofire_intent_service";
-
-    public static final String GEO_LOCATION_LATITUDE = "geo_location_latitude";
-
-    public static final String GEO_LOCATION_LONGITUDE = "geo_location_longitude";
-
-
+    public static final String GEOFENCE_INTENT_ACTION = "geofence_intent_action";
 
 
 

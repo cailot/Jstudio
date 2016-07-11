@@ -141,8 +141,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     private void getClosestStop() {
         // 1. get current GPS
-        double lat = mMainActivity.getCurrentLat();
-        double lon = mMainActivity.getCurrentLon();
+//        double lat = mMainActivity.getCurrentLat();
+//        double lon = mMainActivity.getCurrentLon();
+        double lat = -37.8414952;
+        double lon = 144.9759511;
         double[] gps = new double[mStops.length];
         // 2. calculate distance
         int i = 0;

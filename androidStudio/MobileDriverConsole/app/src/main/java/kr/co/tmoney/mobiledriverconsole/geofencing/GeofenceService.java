@@ -1,24 +1,18 @@
 package kr.co.tmoney.mobiledriverconsole.geofencing;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -41,41 +35,38 @@ public class GeofenceService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-//        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-//        if(geofencingEvent.hasError()){
-//            String errorMessage = ErrorMessage.getErrorMessage(this, geofencingEvent.getErrorCode());
-//            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG).show();
-//            Log.e(LOG_TAG, errorMessage);
-//            return;
-//        }
-//        // check Transition type
-//        int transition = geofencingEvent.getGeofenceTransition();
-//        String details = "";
-//        if(transition== Geofence.GEOFENCE_TRANSITION_ENTER || transition==Geofence.GEOFENCE_TRANSITION_EXIT){
-//            List<Geofence> geofences = geofencingEvent.getTriggeringGeofences();
-//            details = getGeofenceTransitionDetails(this, transition, geofences);
-//            Toast.makeText(getApplicationContext(), details, Toast.LENGTH_LONG).show();
-//            //sendNotification(details);
-//            Log.d(LOG_TAG, details);
-//        }else{
-//            Toast.makeText(getApplicationContext(), "Error happen !!", Toast.LENGTH_LONG).show();
-//
-//            Log.e(LOG_TAG, getString(R.string.geofence_transition_invalid_type, transition));
-//        }
 
-        String details = "";
-        try {
-            Thread.sleep(10*1000);
-            details = "10 sec later.....";
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+        if (geofencingEvent.hasError()) {
+            Log.e(LOG_TAG, "알수 없는 에러가 발생하였습니다.");
+            return;
         }
-        Intent backIntent = new Intent(Constants.BROADCAST_SERVICE);
-        backIntent.putExtra(Constants.GEO_UPDATE_INTENT_SERVICE, details);
-        // broadcast the intent to receiver
-        LocalBroadcastManager.getInstance(this).sendBroadcast(backIntent);
 
-        Log.e(LOG_TAG, "GeofenceService done");
+        String geofenceTransitionDetails = "";
+        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            geofenceTransitionDetails = getGeofenceTransitionDetails(
+                    this,
+                    geofenceTransition,
+                    triggeringGeofences
+            );
+
+            Log.i(LOG_TAG, geofenceTransitionDetails);
+        } else { // 위에 언급된 상수이외 다른 상수는 제공하지 않는다.
+            Log.e(LOG_TAG, "잘못된 메시지입니다.");
+        }
+
+        Intent localIntent = new Intent(Constants.BROADCAST_SERVICE)
+                // add status into the Intent
+                .putExtra(Constants.GEOFENCE_INTENT_ACTION, geofenceTransition)
+                .putExtra(Constants.GEOFENCE_INTENT_MESSAGE, geofenceTransitionDetails);
+
+        // Broadcasts the Intent to receivers in this app.
+        LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
+
 
     }
 
@@ -119,48 +110,5 @@ public class GeofenceService extends IntentService {
             default:
                 return getString(R.string.unknown_geofence_transition);
         }
-    }
-
-    private void sendNotification(String notificationDetails) {
-        // Create an explicit content Intent that starts the main Activity.
-        Intent notificationIntent = new Intent(getApplicationContext(), MDCMainActivity.class);
-
-        // Construct a task stack.
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this
-        );
-
-        // Add the main Activity to the task stack as the parent.
-        stackBuilder.addParentStack(MDCMainActivity.class);
-
-        // Push the content Intent onto the stack.
-        stackBuilder.addNextIntent(notificationIntent);
-
-        // Get a PendingIntent containing the entire back stack.
-        PendingIntent notificationPendingIntent =
-                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Get a notification builder that's compatible with platform versions >= 4
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-        // Define the notification settings.
-        builder.setSmallIcon(R.mipmap.ic_launcher)
-                // In a real app, you may want to use a library like Volley
-                // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.mipmap.ic_launcher))
-                .setColor(Color.RED)
-                .setContentTitle(notificationDetails)
-                .setContentText(getString(R.string.geofence_transition_notification_text))
-                .setContentIntent(notificationPendingIntent);
-
-        // Dismiss notification once the user touches it.
-        builder.setAutoCancel(true);
-
-        // Get an instance of the Notification manager
-        NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Issue the notification
-        mNotificationManager.notify(0, builder.build());
     }
 }
