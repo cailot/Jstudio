@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.model.vo.RouteVO;
+import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.RouteDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.VehicleDialog;
@@ -46,6 +47,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     String[] mVehicles;
 
     StopVO[] mStops;
+
+    StopGroupVO[] mStopGroups;
+
+    String mFares;
 
     private String mRouteId; // ex> 554R
 
@@ -138,15 +143,15 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 showRouteDialog();
                 break;
             case R.id.trip_off_vehicle_txt :
-                Log.d(LOG_TAG, "Vehicle Event");
+//                Log.d(LOG_TAG, "Vehicle Event");
                 showVehicleDialog();
                 break;
             case R.id.trip_off_logout_btn :
-                Log.d(LOG_TAG, "Logout Event");
+//                Log.d(LOG_TAG, "Logout Event");
                 logout();
                 break;
             case R.id.trip_off_tripon_btn :
-                Log.d(LOG_TAG, "TripOn Event");
+//                Log.d(LOG_TAG, "TripOn Event");
                 turnOnTripOn();
                 break;
         }
@@ -162,7 +167,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void turnOnTripOn() {
 //        // save stop details into SharedPreferences
-        saveStopsDetail();
+//        saveStopsDetail();
         // save vehicle name into SharedPreferences
         mVehicleId = mVehicleTxt.getText().toString();
         put(Constants.VEHICLE_NAME, mVehicleId);
@@ -180,6 +185,20 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void saveStopsDetail() {
         put(Constants.STOPS_IN_ROUTE, mStops);
+    }
+
+    /**
+     * save stop groups information into SharedPreference by Gson
+     */
+    private void saveStopGroupsDetail() {
+        put(Constants.STOP_GROUPS_IN_ROUTE, mStopGroups);
+    }
+
+    /**
+     * save all fares information into SharedPreference by Gson
+     */
+    private void saveFaresDetail() {
+        put(Constants.FARES_IN_ROUTE, MDCUtils.getStopGroups(mFares));
     }
 
 
@@ -210,6 +229,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         searchFrontVehicle();
         // get stops detail in route
         getStopsDetail();
+        // get stop groups detail in route
+        getStopGroupsDetail();
+        // get fares detail in route
+        getFaresDetail();
     }
 
 
@@ -221,6 +244,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     public void sendVehicleName(String routeName) {
         // save stop details into SharedPreferences
         saveStopsDetail();
+        // save stop groups into SharedPreferences
+        saveStopGroupsDetail();
+        // save fares into SharedPreferences
+        saveFaresDetail();
         // update selected vehicle info in TextView
         mVehicleTxt.setText(routeName);
     }
@@ -394,7 +421,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     }
 
-
     /**
      * Bring stops info from firebase and save into Arraylist
      */
@@ -414,6 +440,50 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 }
                 mStops = new StopVO[list.size()];
                 mStops = list.toArray(mStops);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    /**
+     * Bring stop groups info - fareStops - from firebase and save into Arraylist
+     */
+    private void getStopGroupsDetail(){
+        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareStops");
+        Query queryRef = ref.orderByKey();
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<StopGroupVO> list = new ArrayList<StopGroupVO>();
+                for(DataSnapshot shot : dataSnapshot.getChildren()){
+                    list.add(new StopGroupVO(Integer.parseInt(shot.getKey()), shot.getValue()+""));
+                }
+                mStopGroups = new StopGroupVO[list.size()];
+                mStopGroups = list.toArray(mStopGroups);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+
+    /**
+     * Bring fares info - fares/{route_ID}/fareSets/CASH/ADULT/fare - from firebase and save into Arraylist
+     */
+    private void getFaresDetail(){
+        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/ADULT");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mFares = (String) dataSnapshot.child("fare").getValue();
+//                Log.e(LOG_TAG, mFares);
             }
 
             @Override

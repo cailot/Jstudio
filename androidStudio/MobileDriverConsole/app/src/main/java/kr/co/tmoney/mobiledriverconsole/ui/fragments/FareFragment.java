@@ -1,9 +1,8 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,13 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.apache.commons.lang3.StringUtils;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.BluetoothMatchingDeviceClickListener;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.BluetoothMatchingDeviceDialogFragment;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
@@ -28,7 +28,7 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -36,16 +36,18 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     Context mContext;
 
+    private StopVO[] mStops;
+
     private String[] mNames;
 
-    private String[] mTypes;
+    private StopGroupVO[] groups;
 
-    private StopVO[] mStops;
+    private String[] mStopGroups;
+
+    private String[] mFares;
 
 
     private MDCMainActivity mMainActivity;
-
-    private PrinterManager mPrinterManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -56,28 +58,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // build UI
         initialiseUI(view);
         // load Stops info
-        initialiseStopDetails();
+        initialiseInfo();
         // set up bluetooth printer
-        mPrinterManager = new PrinterManager(this);
-        // printerManager.connectBluetooth(bluetoothDevice); - do I need ??
 
         return view;
-    }
-
-    /**
-     * set up bluetooth
-     */
-    private void enableBluetooth() {
-        BluetoothAdapter adpater = BluetoothAdapter.getDefaultAdapter();
-        if (adpater == null) {
-            // Device does not support Bluetooth
-        }
-        if (!adpater.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, Constants.REQUEST_ENABLE_BT);
-        }else{
-
-        }
     }
 
     @Override
@@ -87,9 +71,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     }
     
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        mPrinterManager.stopConnection();
     }
     
     /**
@@ -124,7 +107,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPaymentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendPrintCommand();
+//                sendPrintCommand();
             }
         });
 
@@ -134,18 +117,70 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     /**
      * Retrieve stops info from MDCMainActivity
      */
-    private void initialiseStopDetails(){
+    private void initialiseInfo(){
 
         mStops = mMainActivity.getStops();
+
+        groups = getStopGroupsInfo();
+
         mNames = new String[mStops.length];
-        mTypes = new String[mStops.length];
+        mStopGroups = new String[mStops.length];
         int i = 0;
         for(StopVO stop : mStops){
             mNames[i] = stop.getName();
-            mTypes[i] = stop.getType();
-//            Log.d(LOG_TAG, stop.toString());
+            mStopGroups[i] = getGroup(stop.getFareStopTag());
             i++;
         }
+        mFares = getFareInfo();
+    }
+
+    /**
+     * Get group name by using fareStopTag in StopVO
+     * @param index
+     * @return
+     */
+    private String getGroup(int index){
+        String group = "";
+        for(int i=0; i<groups.length; i++){
+            if(index==groups[i].getIndex())
+            {
+                group = groups[i].getName();
+                break;
+            }
+        }
+        return group;
+    }
+
+    /**
+     * Get fareStopTag by using name in StopVO
+     * @param name
+     * @return
+     */
+    private int getStopTag(String name){
+        int tag = 0;
+        for(int i=0; i<mStops.length; i++){
+            if(name.equalsIgnoreCase(mStops[i].getName()))
+            {
+                tag = mStops[i].getFareStopTag();
+                break;
+            }
+        }
+        return tag;
+    }
+
+    /**
+     * Calculate fare based on origin & destination
+     * @param origin
+     * @param destination
+     * @return
+     */
+    private int calculateFare(String origin, String destination){
+        int price = 0;
+        String originLine = mFares[getStopTag(origin)];
+        String[] destinations = StringUtils.split(originLine, ",");
+        price = Integer.parseInt(destinations[getStopTag(destination)]);
+        int num = Integer.parseInt(mPassengerCountTxt.getText().toString());
+        return price * num;
     }
 
 
@@ -171,7 +206,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for origin stop
      */
     private void showOriginDialog() {
-        StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_ORIGIN_REQUEST);
+        StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_ORIGIN_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.ORIGIN_DIALOG_TAG);
@@ -182,7 +217,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for destination stop
      */
     private void showDestinationDialog() {
-        StopDialog stopsDialog = new StopDialog(mNames, mTypes, Constants.FARE_DESTINATION_REQUEST);
+        StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_DESTINATION_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
@@ -198,13 +233,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
     }
     
-    /**
-     * 
-     */
-    private void sendPrintCommand(){
-        mPrinterManager.fullCut();
-    }
-
 
     // /**
     //  * Pop up dialog for bluetooth printer
@@ -244,23 +272,25 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPriceTxt.setText(" ฿ " + Integer.parseInt(StringUtils.defaultString(name, "0"))* Constants.ADULT_FARE);
     }
 
-      //===============================================
-    //View Action
-    //===============================================
-    @Override
-    public void showConnected() {
-        // btConnect.setVisibility(View.GONE);
-        // btDisConnect.setVisibility(View.VISIBLE);
-        // ivStatus.setBackgroundColor(ContextCompat.getColor(this, R.color.green600));
-        // glPrint.setVisibility(View.VISIBLE);
+    /**
+     * Retreive stop groups info under route
+     * @return
+     */
+    public StopGroupVO[] getStopGroupsInfo() {
+        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        String json = pref.getString(Constants.STOP_GROUPS_IN_ROUTE, null);
+        StopGroupVO[] stopGroups = new Gson().fromJson(json, StopGroupVO[].class);
+        return stopGroups;
     }
 
-    @Override
-    public void showFailed() {
-        // btConnect.setVisibility(View.VISIBLE);
-        // btDisConnect.setVisibility(View.GONE);
-        // ivStatus.setBackgroundColor(ContextCompat.getColor(this, R.color.red600));
-        // glPrint.setVisibility(View.GONE);
-        // Toast.makeText(this, "Can't connect, please try again", Toast.LENGTH_SHORT);
+    /**
+     * Retreive fares info under route
+     * @return
+     */
+    public String[] getFareInfo() {
+        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        String json = pref.getString(Constants.FARES_IN_ROUTE, null);
+        String[] fares = new Gson().fromJson(json, String[].class);
+        return fares;
     }
 }

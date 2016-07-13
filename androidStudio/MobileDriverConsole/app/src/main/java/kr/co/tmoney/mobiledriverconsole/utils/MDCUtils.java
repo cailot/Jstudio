@@ -74,8 +74,6 @@ public class MDCUtils {
     public static String[] convertStringToStringArray(String list){
         String[] value = StringUtils.splitByWholeSeparator(list, Constants.STRING_ARRAY_SEPARATOR);
         return value!=null ? value : new String[]{};
-
-
     }
 
     /**
@@ -236,6 +234,21 @@ public class MDCUtils {
             info = digit + " m";
         }
         return info;
+    }
+
+    /**
+     * Bring up Stop groups per interval as String array
+     * @param data
+     * @return
+     */
+    public static String[] getStopGroups(String data){
+        String[] stops = null;
+        if(data!=null && data.length()>0){
+            String start = StringUtils.stripStart(data, "[[");
+            String end = StringUtils.stripEnd(start, "]]");
+            stops = StringUtils.splitByWholeSeparator(end, "],[");
+        }
+        return stops;
     }
 
 

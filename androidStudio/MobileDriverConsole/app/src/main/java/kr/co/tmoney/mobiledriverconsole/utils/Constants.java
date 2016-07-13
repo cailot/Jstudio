@@ -30,9 +30,9 @@ public interface Constants {
 
     public static final String STOPS_IN_ROUTE = "stops_id";
 
-    public static final String STOPS_NAME_IN_ROUTE = "stops_name";
+    public static final String FARES_IN_ROUTE = "fares_in_route";
 
-    public static final String STOPS_TYPE_IN_ROUTE = "stops_type";
+    public static final String STOP_GROUPS_IN_ROUTE = "stop_groups_in_route";
 
     public static final String STOPS_LATITUDE_IN_ROUTE = "stops_latitude";
 
