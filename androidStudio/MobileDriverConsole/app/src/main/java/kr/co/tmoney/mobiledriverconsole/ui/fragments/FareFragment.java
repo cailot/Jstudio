@@ -59,6 +59,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         initialiseStopDetails();
         // set up bluetooth printer
         mPrinterManager = new PrinterManager(this);
+        // printerManager.connectBluetooth(bluetoothDevice); - do I need ??
 
         return view;
     }
@@ -84,7 +85,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         super.onStart();
         mOriginTxt.setText("Current Stop : " + MDCMainActivity.currentStopName);
     }
-
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinterManager.stopConnection();
+    }
+    
     /**
      * build up UI components
      * @param view
