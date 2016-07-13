@@ -3,12 +3,12 @@ package kr.co.tmoney.mobiledriverconsole;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,8 +39,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOffActivity.class);
 
-    private TextView mRouteTxt, mVehicleTxt;
-    private Button mLogoutBtn, mTripOnBtn;
+    private TextView mRouteTxt, mVehicleTxt, mLogoutTxt, mTripOnTxt;
 
     String[] mRouteIds;
     String[] mRouteNames;
@@ -61,6 +60,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_off_activity);
+        // change status bar color
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorNavy));
+        }
 
         // loading Splash
         startActivity(new Intent(this, SplashActivity.class));
@@ -93,15 +96,15 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 tripOffEvents(view);
             }
         });
-        mLogoutBtn = (Button) findViewById(R.id.trip_off_logout_btn);
-        mLogoutBtn.setOnClickListener(new View.OnClickListener() {
+        mLogoutTxt = (TextView) findViewById(R.id.trip_off_logout_btn);
+        mLogoutTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tripOffEvents(view);
             }
         });
-        mTripOnBtn = (Button) findViewById(R.id.trip_off_tripon_btn);
-        mTripOnBtn.setOnClickListener(new View.OnClickListener() {
+        mTripOnTxt = (TextView) findViewById(R.id.trip_off_tripon_btn);
+        mTripOnTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 tripOffEvents(view);

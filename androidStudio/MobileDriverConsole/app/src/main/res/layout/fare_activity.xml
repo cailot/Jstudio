@@ -2,6 +2,8 @@
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
 android:stretchColumns="1"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
     android:background="@color/colorNavy">
 
 <!-- Row 1 -->
@@ -60,7 +62,7 @@ android:stretchColumns="1"
 
     <!-- just draw a red line -->
 <View
-    android:layout_height="25dip"
+    android:layout_height="15dip"
     android:background="@color/colorNavy" />
 <!-- Row 4 -->
 <TableRow>
@@ -75,11 +77,12 @@ android:stretchColumns="1"
         android:textAlignment="center"
         android:gravity="center_vertical"
         android:background="@drawable/bg_navy_rounded_corners"
-        android:layout_margin="3dip"
-        android:minLines="3"
-        android:textColor="@color/colorWhite" />
+        android:layout_margin="5dip"
+        android:minLines="4"
+        android:textColor="@color/colorWhite"
+        android:allowUndo="false" />
 
-    <!-- Column 3 -->
+    <!-- Column 2 -->
     <TextView
         android:id="@+id/fare_payment_txt"
         android:layout_width="0dip"

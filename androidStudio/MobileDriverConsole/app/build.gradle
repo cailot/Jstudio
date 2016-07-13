@@ -71,4 +71,6 @@ dependencies {
     //compile '/libs/rtdriver.jar'
     compile files('libs/rtdriver.jar')
 
+    //compile 'com.jakewharton:butterknife:8.2.1'
+
 }

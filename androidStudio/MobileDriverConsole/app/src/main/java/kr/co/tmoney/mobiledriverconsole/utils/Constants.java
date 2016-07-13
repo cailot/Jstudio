@@ -69,13 +69,17 @@ public interface Constants {
 
 
 
-    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/TH_PMB/";
+//    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/TH_PMB/";
+
+    public static final String FIREBASE_HOME = "https://tmoney-260ba.firebaseio.com/Thai_Private/development/";
 
     public static final String FIREBASE_ROUTE_LIST_PATH = "routes";
 
     public static final String FIREBASE_VEHICLE_LIST_PATH = "vehicles";
 
-    public static final String FIREBASE_TRIP_LIST_PATH = "trips2";
+    public static final String FIREBASE_FARE_LIST_PATH = "fares";
+
+    public static final String FIREBASE_TRIP_LIST_PATH = "trips";
 
 
 
