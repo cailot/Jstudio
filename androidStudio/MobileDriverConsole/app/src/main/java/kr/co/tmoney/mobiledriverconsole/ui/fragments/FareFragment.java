@@ -28,7 +28,7 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, BluetoothMatchingDeviceClickListener {//}, PrinterViewAction {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -45,6 +45,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private MDCMainActivity mMainActivity;
 
+    private PrinterManager mPrinterManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -57,7 +58,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // load Stops info
         initialiseStopDetails();
         // set up bluetooth printer
-        enableBluetooth();
+        mPrinterManager = new PrinterManager(this);
 
         return view;
     }
@@ -116,7 +117,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPaymentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBluetoothDialog();
+                sendPrintCommand();
             }
         });
 
@@ -189,15 +190,22 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
         passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
     }
-
-
+    
     /**
-     * Pop up dialog for bluetooth printer
+     * 
      */
-    private void showBluetoothDialog() {
-        BluetoothMatchingDeviceDialogFragment dialog = new BluetoothMatchingDeviceDialogFragment();
-        dialog.show(getFragmentManager(), BluetoothMatchingDeviceDialogFragment.class.getName());
+    private void sendPrintCommand(){
+        mPrinterManager.fullCut();
     }
+
+
+    // /**
+    //  * Pop up dialog for bluetooth printer
+    //  */
+    // private void showBluetoothDialog() {
+    //     BluetoothMatchingDeviceDialogFragment dialog = new BluetoothMatchingDeviceDialogFragment();
+    //     dialog.show(getFragmentManager(), BluetoothMatchingDeviceDialogFragment.class.getName());
+    // }
 
     /**
      * check whether update will happen either origin or destination
@@ -229,8 +237,23 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPriceTxt.setText(" ฿ " + Integer.parseInt(StringUtils.defaultString(name, "0"))* Constants.ADULT_FARE);
     }
 
+      //===============================================
+    //View Action
+    //===============================================
     @Override
-    public void onChoose(BluetoothDevice device) {
+    public void showConnected() {
+        // btConnect.setVisibility(View.GONE);
+        // btDisConnect.setVisibility(View.VISIBLE);
+        // ivStatus.setBackgroundColor(ContextCompat.getColor(this, R.color.green600));
+        // glPrint.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    public void showFailed() {
+        // btConnect.setVisibility(View.VISIBLE);
+        // btDisConnect.setVisibility(View.GONE);
+        // ivStatus.setBackgroundColor(ContextCompat.getColor(this, R.color.red600));
+        // glPrint.setVisibility(View.GONE);
+        // Toast.makeText(this, "Can't connect, please try again", Toast.LENGTH_SHORT);
     }
 }
