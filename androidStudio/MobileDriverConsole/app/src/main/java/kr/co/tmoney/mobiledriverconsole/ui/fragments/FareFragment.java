@@ -1,6 +1,7 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,16 +16,19 @@ import org.apache.commons.lang3.StringUtils;
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.BluetoothMatchingDeviceClickListener;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.BluetoothMatchingDeviceDialogFragment;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
+
+
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, BluetoothMatchingDeviceClickListener {//}, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -223,5 +227,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     public void sendPassengerCount(String name) {
         mPassengerCountTxt.setText(name);
         mPriceTxt.setText(" ฿ " + Integer.parseInt(StringUtils.defaultString(name, "0"))* Constants.ADULT_FARE);
+    }
+
+    @Override
+    public void onChoose(BluetoothDevice device) {
+
     }
 }
