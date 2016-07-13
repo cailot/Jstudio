@@ -176,7 +176,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      * save all stops information into SharedPreference by Gson
      */
     private void saveStopsDetail() {
-        put(Constants.STOPS_ID_IN_ROUTE, mStops);
+        put(Constants.STOPS_IN_ROUTE, mStops);
     }
 
 
@@ -404,7 +404,10 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 List<StopVO> list = new ArrayList<StopVO>();
                 for(DataSnapshot shot : dataSnapshot.getChildren()){
                     StopVO stopVO = shot.getValue(StopVO.class);
-                    list.add(stopVO);
+                    // only store 'stop'
+                    if(Constants.STOPS_TYPE.equalsIgnoreCase(stopVO.getType())) {
+                        list.add(stopVO);
+                    }
                 }
                 mStops = new StopVO[list.size()];
                 mStops = list.toArray(mStops);

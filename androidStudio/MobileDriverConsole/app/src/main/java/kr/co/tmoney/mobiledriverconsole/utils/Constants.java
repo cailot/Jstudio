@@ -22,13 +22,13 @@ public interface Constants {
 
     public static final String ROUTE_ID = "route_id";
 
-    public static final String STOPS_IN_ROUTE = "stops_in_route";
+    public static final String STOPS_TYPE = "stop";
 
     public static final String STRING_ARRAY_SEPARATOR = " *$#@^! ";
 
     public static final String STOPS_DETAIL_IN_ROUTE = "stops_detail";
 
-    public static final String STOPS_ID_IN_ROUTE = "stops_id";
+    public static final String STOPS_IN_ROUTE = "stops_id";
 
     public static final String STOPS_NAME_IN_ROUTE = "stops_name";
 
@@ -96,6 +96,12 @@ public interface Constants {
 
     public static final int FARE_DESTINATION_REQUEST = STATUS_BASE + 5;
 
+    public static final int REQUEST_ENABLE_BT = STATUS_BASE + 6;
+
+
+
+
+
     public static final int GPS_PERMISSION_GRANT = 6;
 
     public static final int GPS_UPDATE_VEHICLES_INTERVAL = 10;
@@ -120,6 +126,8 @@ public interface Constants {
 
     public static final String DESTINATION_DIALOG_TAG = "Destination Dialog";
 
+    public static final String PASSENGER_DIALOG_TAG = "Passenger Dialog";
+
 
     ////////////////////////////////
     //
@@ -132,6 +140,8 @@ public interface Constants {
     public static final String GEOFENCE_INTENT_MESSAGE = "geofence_intent_message";
 
     public static final String GEOFENCE_INTENT_ACTION = "geofence_intent_action";
+
+    public static final String GEOFENCE_INTENT_STOP = "geofence_intent_stop";
 
 
 
@@ -175,6 +185,10 @@ public interface Constants {
     public static final long GEOFENCE_EXPIRATION = 5 * 60 * 60 * 1000;
 
     public static final float GEOFENCE_RADIUS_IN_METERS = 150;
+
+
+    ///////////////////////////// Bluetooth Printer ///////////////////////////////
+
 
 
 

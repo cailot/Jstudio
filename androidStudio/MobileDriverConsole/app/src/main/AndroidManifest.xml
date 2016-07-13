@@ -11,13 +11,9 @@
     <uses-permission android:name="kr.co.tmoney.mobiledriverconsole.locationapi.maps.permission.MAPS_RECEIVE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
-
-
-
-
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
 
     <application
         android:allowBackup="true"

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.VehicleVO;
@@ -115,12 +116,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         // set up googleApi
         buildGoogleApiClient();
 
-
         // set up basic info
         initialiseTripInfo();
-
-        // inflate dummy Geofence list
-        populateGeofenceList();
 
         return view;
     }
@@ -175,10 +172,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
         // Android SDK 23
         requestLocationUpdate();
-
-
-        // activate Geofences
-//        activateGeofences();
     }
 
     /**
@@ -246,22 +239,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     }
 
 
-//    /**
-//     * Check whether current tab is selected or not
-//     * @param isVisibleToUser
-//     */
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if(this.isVisible()){
-//            if(isVisibleToUser){
-//                Log.d(LOG_TAG, "TripOnFragment is visible");
-//            }else{
-//                Log.d(LOG_TAG, "TripOnFragment is not visible");
-//            }
-//        }
-//    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -299,9 +276,10 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_marker));
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
-
+        mGoogleMap.setTrafficEnabled(true);
         // update current vehicle Info
         String msg = mVehicleId + "\n";
+        msg += "Heading to " + MDCMainActivity.nextStopName + "\n";
         if (location.hasSpeed()) {
             msg += "Speed : " + String.format( "%.2f", location.getSpeed() * 3600 / 1000) + " km/h" + "\n";
         }
@@ -413,64 +391,97 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             double lat = doubles[0];
             double lon = doubles[1];
 
-            // update GPS on current vehicle
+//            // update GPS on current vehicle
             Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
             Map<String, Object> currentTripOn = new HashMap<String, Object>();
             currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
             currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
             currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
             currentVehicle.updateChildren(currentTripOn);
-
-            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
+//
+//            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
             Map<String, String[]> distances = new HashMap<String, String[]>();
-            String[] frontInfo = new String[]{"0","0"};
-            String[] rearInfo = new String[]{"0","0"};
-            if(mFrontVehicle==null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon()==0.0){
-                // no need to subscribe
-            }else {
-                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
-            }
-            if(mRearVehicle==null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon()==0.0){
-                // no need to subscribe
-            }else {
-                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
-            }
+
+            String[] frontInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
+            String[] rearInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
+//            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
+//                // no need to subscribe
+//            } else {
+//                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+//            }
+//            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
+//                // no need to subscribe
+//            } else {
+//                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+//            }
             distances.put(Constants.VEHICLE_FRONT, frontInfo);
             distances.put(Constants.VEHICLE_REAR, rearInfo);
             return distances;
         }
 
+//        protected Map doInBackground(Double... doubles) {
+//
+//            double lat = doubles[0];
+//            double lon = doubles[1];
+//
+//            // update GPS on current vehicle
+//            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+//            Map<String, Object> currentTripOn = new HashMap<String, Object>();
+//            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
+//            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
+//            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+//            currentVehicle.updateChildren(currentTripOn);
+//
+//            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
+//            Map<String, String[]> distances = new HashMap<String, String[]>();
+//            String[] frontInfo = new String[]{"0", "0"};
+//            String[] rearInfo = new String[]{"0", "0"};
+//            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
+//                // no need to subscribe
+//            } else {
+//                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+//            }
+//            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
+//                // no need to subscribe
+//            } else {
+//                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+//            }
+//            distances.put(Constants.VEHICLE_FRONT, frontInfo);
+//            distances.put(Constants.VEHICLE_REAR, rearInfo);
+//            return distances;
+//        }
+
         @Override
-        protected void onPostExecute(Map info) {
-            String[] frontInfo = (String[])info.get(Constants.VEHICLE_FRONT);
-            String[] rearInfo = (String[])info.get(Constants.VEHICLE_REAR);
+        protected void onPostExecute(Map info) {// dummy data
+            String[] frontInfo = (String[]) info.get(Constants.VEHICLE_FRONT);
+            String[] rearInfo = (String[]) info.get(Constants.VEHICLE_REAR);
             int frontDistance = Integer.parseInt(frontInfo[0]);
             int rearDistance = Integer.parseInt(rearInfo[0]);
-            if(frontDistance < Constants.DISTANCE_THRESHOLD_DANGER){
+            if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
-            }else if(frontDistance < Constants.DISTANCE_THRESHOLD_SAFE){
+            } else if (frontDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
                 mFrontVehicleTxt.setTextColor(Color.BLACK);
-            }else{
+            } else {
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
-            mFrontVehicleTxt.setText(MDCUtils.getDistanceFormat(frontDistance) + "\n" + frontInfo[1]);
-            if(rearDistance < Constants.DISTANCE_THRESHOLD_DANGER){
+            mFrontVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
+            if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
-            }else if(rearDistance < Constants.DISTANCE_THRESHOLD_SAFE){
+            } else if (rearDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
                 mRearVehicleTxt.setTextColor(Color.BLACK);
-            }else{
+            } else {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             }
-            mRearVehicleTxt.setText(MDCUtils.getDistanceFormat(rearDistance) + "\n" + rearInfo[1]);
+            mRearVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
         }
-    }
 
+    }
 
     /**
      * Insert transaction record into Firebase
@@ -508,90 +519,5 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-    //////////////////////////////////////////////////
-
-    private void populateGeofenceList() {
-        mGeofences = new ArrayList<Geofence>();
-        mGeofences.add(new Geofence.Builder()
-                .setRequestId("Flinders")
-                .setCircularRegion(-37.8210934,144.9686004, Constants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-        );
-        mGeofences.add(new Geofence.Builder()
-                .setRequestId("Bourke Street")
-                .setCircularRegion(-37.813471,144.9655192, Constants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-        );
-        mGeofences.add(new Geofence.Builder()
-                .setRequestId("Around DHHS")
-                .setCircularRegion(-37.8098068,144.9656684, Constants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-        );
-        mGeofences.add(new Geofence.Builder()
-                .setRequestId("Domain Interchage")
-                .setCircularRegion(-37.8339319,144.9714436, Constants.GEOFENCE_RADIUS_IN_METERS)
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build()
-        );
-    }
-
-
-
-    public static final HashMap<String, LatLng> LANDMARKS = new HashMap<String, LatLng>();
-
-    static {
-        LANDMARKS.put("Domain Interchange", new LatLng(-37.8339319,144.9714436));
-
-        LANDMARKS.put("Around DHHS", new LatLng(-37.8098068,144.9656684));
-
-        LANDMARKS.put("Flinders Station", new LatLng(-37.8210934,144.9686004));
-
-        LANDMARKS.put("Bourke Malls", new LatLng(-37.813471,144.9655192));
-    }
-
-    private void showGeofences(){
-        for (Map.Entry<String, LatLng> entry : LANDMARKS.entrySet()) {
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .position((LatLng) entry.getValue())
-            );
-        }
-
-    }
-
-//    public void activateGeofences() {
-//        if (!mGoogleApiClient.isConnected()) {
-//            Toast.makeText(getContext(), "Google API Client not connected!", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        try {
-//            LocationServices.GeofencingApi.addGeofences(
-//                    mGoogleApiClient,
-//                    getGeofencingRequest(),
-//                    getGeofencePendingIntent()
-//            ).setResultCallback(this); // Result processed in onResult().
-//        } catch (SecurityException securityException) {
-//            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-//        }
-//    }
-
 
 }

@@ -25,6 +25,8 @@ public class GeofenceService extends IntentService {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(GeofenceService.class);
 
+    private String mEventStop = "";
+
     public GeofenceService(String name) {
         super(name);
     }
@@ -38,7 +40,7 @@ public class GeofenceService extends IntentService {
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
-            Log.e(LOG_TAG, "알수 없는 에러가 발생하였습니다.");
+            Log.e(LOG_TAG, "Unknown error happens");
             return;
         }
 
@@ -55,14 +57,15 @@ public class GeofenceService extends IntentService {
             );
 
             Log.i(LOG_TAG, geofenceTransitionDetails);
-        } else { // 위에 언급된 상수이외 다른 상수는 제공하지 않는다.
-            Log.e(LOG_TAG, "잘못된 메시지입니다.");
+        } else {
+            Log.e(LOG_TAG, "Wrong event passed");
         }
 
         Intent localIntent = new Intent(Constants.BROADCAST_SERVICE)
                 // add status into the Intent
                 .putExtra(Constants.GEOFENCE_INTENT_ACTION, geofenceTransition)
-                .putExtra(Constants.GEOFENCE_INTENT_MESSAGE, geofenceTransitionDetails);
+                .putExtra(Constants.GEOFENCE_INTENT_MESSAGE, geofenceTransitionDetails)
+                .putExtra(Constants.GEOFENCE_INTENT_STOP, mEventStop);
 
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
@@ -94,7 +97,8 @@ public class GeofenceService extends IntentService {
         // Get the Ids of each geofence that was triggered.
         ArrayList triggeringGeofencesIdsList = new ArrayList();
         for (Geofence geofence : triggeringGeofences) {
-            triggeringGeofencesIdsList.add(geofence.getRequestId());
+            mEventStop = geofence.getRequestId();
+            triggeringGeofencesIdsList.add(mEventStop);
         }
         String triggeringGeofencesIdsString = TextUtils.join(", ", triggeringGeofencesIdsList);
 

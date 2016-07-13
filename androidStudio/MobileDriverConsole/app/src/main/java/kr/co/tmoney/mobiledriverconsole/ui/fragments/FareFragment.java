@@ -1,19 +1,22 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.NumberPicker;
 import android.widget.TextView;
+
+import org.apache.commons.lang3.StringUtils;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.BluetoothMatchingDeviceDialogFragment;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -21,15 +24,11 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener{
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
-    private Button mPaymentBtn;
-
-    private NumberPicker mNumberPicker;
-
-    private TextView mPriceTxt, mOriginTxt, mDestinationTxt;
+    private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mPassengerCountTxt, mPaymentTxt;
 
     Context mContext;
 
@@ -39,7 +38,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private StopVO[] mStops;
 
-    private StopVO mClosestStop;
 
     private MDCMainActivity mMainActivity;
 
@@ -54,7 +52,32 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         initialiseUI(view);
         // load Stops info
         initialiseStopDetails();
+        // set up bluetooth printer
+        enableBluetooth();
+
         return view;
+    }
+
+    /**
+     * set up bluetooth
+     */
+    private void enableBluetooth() {
+        BluetoothAdapter adpater = BluetoothAdapter.getDefaultAdapter();
+        if (adpater == null) {
+            // Device does not support Bluetooth
+        }
+        if (!adpater.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, Constants.REQUEST_ENABLE_BT);
+        }else{
+
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mOriginTxt.setText("Current Stop : " + MDCMainActivity.currentStopName);
     }
 
     /**
@@ -77,28 +100,24 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 showDestinationDialog();
             }
         });
-        mPaymentBtn = (Button) view.findViewById(R.id.fare_payment_btn);
-        mPaymentBtn.setOnClickListener(new View.OnClickListener() {
+        mPassengerCountTxt = (TextView) view.findViewById(R.id.fare_passenger_cout_txt);
+        mPassengerCountTxt.setOnClickListener(new View.OnClickListener(){
+
             @Override
             public void onClick(View view) {
-//                showOriginDialog();
+                showPassengerCountDialog();
             }
         });
-        mNumberPicker = (NumberPicker) view.findViewById(R.id.fare_number_picker);
-        // set the minimum value of NumberPicker
-        mNumberPicker.setMinValue(0);
-        // set the maximum value of NumberPicker
-        mNumberPicker.setMaxValue(10);
-        // get whether the selector wheel wraps when reaching the min/max value
-        mNumberPicker.setWrapSelectorWheel(true);
-        // event listener for NumberPicker
-        mNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        mPaymentTxt = (TextView) view.findViewById(R.id.fare_payment_txt);
+        mPaymentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onValueChange(NumberPicker numberPicker, int old, int recent) {
-                mPriceTxt.setText(" ฿ " + recent* Constants.ADULT_FARE);
+            public void onClick(View view) {
+                showBluetoothDialog();
             }
         });
+
     }
+
 
     /**
      * Retrieve stops info from MDCMainActivity
@@ -118,49 +137,22 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     }
 
 
-    /**
-     * Check whether current tab is selected or not
-     * @param isVisibleToUser
-     */
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(this.isVisible()){
-            if(isVisibleToUser){
-                getClosestStop();
-                Log.d(LOG_TAG, "FareFragment is visible");
-            }else{
-                Log.d(LOG_TAG, "FareFragment is not visible");
-            }
-        }
-    }
-
-
-    /**
-     * Search and get closest stop info
-     */
-    private void getClosestStop() {
-        // 1. get current GPS
-//        double lat = mMainActivity.getCurrentLat();
-//        double lon = mMainActivity.getCurrentLon();
-        double lat = -37.8414952;
-        double lon = 144.9759511;
-        double[] gps = new double[mStops.length];
-        // 2. calculate distance
-        int i = 0;
-        for(StopVO stop : mStops){
-            //13.8577,100.626699
-             double distance = MDCUtils.getDistanceMeters(lat, lon, stop.getLat(), stop.getLon());
-            //double distance = MDCUtils.getDistanceMeters(13.8577,100.626699, stop.getLat(), stop.getLon());
-            Log.e(LOG_TAG, stop.getId() + " : " + distance);
-            gps[i] = distance;
-            i++;
-        }
-        int index = MDCUtils.getMinDistanceIndex(gps);
-        mClosestStop = mStops[index];
-        // auto select closest stop in Origin
-        mOriginTxt.setText(mClosestStop.getName() + " : " + mClosestStop.getType());
-    }
+//    /**
+//     * Check whether current tab is selected or not
+//     * @param isVisibleToUser
+//     */
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if(this.isVisible()){
+//            if(isVisibleToUser){
+//                getClosestStop();
+//                Log.d(LOG_TAG, "FareFragment is visible");
+//            }else{
+//                Log.d(LOG_TAG, "FareFragment is not visible");
+//            }
+//        }
+//    }
 
 
     /**
@@ -184,6 +176,24 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
     }
 
+    /**
+     * Pop up dialog for passenger count
+     */
+    private void showPassengerCountDialog() {
+        PassengerDialog passengerDialog = new PassengerDialog();
+        // link itself to be updated via 'PassValueFromPassengerDialogListener.sendPassengerCount()'
+        passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
+        passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
+    }
+
+
+    /**
+     * Pop up dialog for bluetooth printer
+     */
+    private void showBluetoothDialog() {
+        BluetoothMatchingDeviceDialogFragment dialog = new BluetoothMatchingDeviceDialogFragment();
+        dialog.show(getFragmentManager(), BluetoothMatchingDeviceDialogFragment.class.getName());
+    }
 
     /**
      * check whether update will happen either origin or destination
@@ -204,4 +214,14 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         }
     }
 
+    /**
+     * 1. update user's selection on passenger count
+     * 2. update Fare Textview
+     * @param name
+     */
+    @Override
+    public void sendPassengerCount(String name) {
+        mPassengerCountTxt.setText(name);
+        mPriceTxt.setText(" ฿ " + Integer.parseInt(StringUtils.defaultString(name, "0"))* Constants.ADULT_FARE);
+    }
 }

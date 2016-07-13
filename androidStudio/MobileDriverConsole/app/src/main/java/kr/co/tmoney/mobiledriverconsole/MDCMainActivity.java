@@ -66,9 +66,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private ArrayList<Geofence> mGeofenceList;
 
-    public GoogleApiClient getGoogleApiClient() {
-        return mGoogleApiClient;
-    }
+    public static String currentStopName = "โรงพยาบาลสินแพทย์";
+
+    public static String nextStopName = "ด่านทับช้าง";
 
 
     @Override
@@ -90,7 +90,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mTabLayout.setupWithViewPager(mViewPager);
 
         mVehicleId = getVehicleId(Constants.VEHICLE_NAME);
-        mStops = getStopsInfo(Constants.STOPS_ID_IN_ROUTE);
+        mStops = getStopsInfo(Constants.STOPS_IN_ROUTE);
 
         buildGoogleApiClient();
 
@@ -156,10 +156,13 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         @Override
         public void onReceive(Context context, Intent intent) {
             String msg = StringUtils.defaultString(intent.getStringExtra(Constants.GEOFENCE_INTENT_MESSAGE));
+            String stop = StringUtils.defaultString(intent.getStringExtra(Constants.GEOFENCE_INTENT_STOP));
             int action = intent.getIntExtra(Constants.GEOFENCE_INTENT_ACTION, Constants.NO_VALUE);
             Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
             switch (action){
                 case Geofence.GEOFENCE_TRANSITION_ENTER :
+                    // update current/Next stop
+                    updateStopNames(stop);
                     switchTabSelection(Constants.FARE_FRAGMENT_TAB);
                     break;
                 case Geofence.GEOFENCE_TRANSITION_EXIT :
@@ -242,7 +245,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     private void startIntentService() {
         String message;
         if (!mGoogleApiClient.isConnected()) {
-            message = "구글 플레이 서비스에 연결되지 않았습니다.";
+            message = "Google Api Clilent is not connected";
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -257,23 +260,23 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 public void onResult(Status status) {
                     String message="";
                     if (status.isSuccess()) {
-                        message = "Geofence에 추가되었습니다.";
+                        message = "Geofences Added";
                     } else {
                         switch (status.getStatusCode()) {
                             case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
-                                message = "Geonfence에서 거부되었습니다.";
+                                message = "Geonfence not available";
                                 break;
                             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
-                                message = "Geonfence를 너무 많이 등록하였습니다.";
+                                message = "Too many Geonfences registered";
                                 break;
                             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
-                                message = "Geonfence를 너무 많은 펜딩인텐트를 등록하였습니다.";
+                                message = "Too many PendingIntents for Geonfence";
                                 break;
                             default:
-                                message = "알수 없는 에러가 발생하였습니다.";
+                                message = "Unknowkn Error";
                         }
                     }
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             }); // Result processed in onResult().
         } catch (SecurityException en) {
@@ -286,7 +289,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     private void stopIntentService() {
         if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, "구글 플레이 서비스에 연결되지 않았습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Google Api Client is not connected", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -298,9 +301,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 public void onResult(Status status) {
                     String message;
                     if (status.isSuccess()) {
-                        message = "Geofence에서 제거되었습니다.";
+                        message = "Geofence removed";
                     } else {
-                        message = "Geonfence에서 거부되었습니다." + status.getStatusCode();
+                        message = "Geonfence denied : " + status.getStatusCode();
                     }
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
@@ -421,6 +424,27 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     private PendingIntent getGeofencePendingIntent() {
         Intent intent = new Intent(this, GeofenceService.class);
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }
+
+
+    /**
+     * Update current / next stop name when Geofencing event happens (ENTERED)
+     */
+    private void updateStopNames(String stopName) {
+        currentStopName = stopName;
+        int index = 0;
+        if(mStops!=null || mStops.length>0){
+            for(int i=0; i<mStops.length; i++){
+                if(mStops[i].getName().equalsIgnoreCase(stopName)){
+                    index = i;
+                }
+            }
+        }
+        if((index+1) >= mStops.length){ // current stop is last one
+            nextStopName = "";
+        }else {
+            nextStopName = mStops[index + 1].getName();
+        }
     }
 
 

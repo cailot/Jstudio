@@ -1,11 +1,8 @@
-
-
-
-
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="fill_parent"
 android:layout_height="fill_parent"
-android:stretchColumns="1">
+android:stretchColumns="1"
+    android:background="@color/colorNavy">
 
 <!-- Row 1 -->
 <TableRow>
@@ -18,10 +15,11 @@ android:stretchColumns="1">
         android:layout_margin="4dip"
         android:layout_weight="1"
         android:text="Current Stop Name"
-        android:background="@color/bright_foreground_disabled_material_light"
-        android:textColor="@android:color/background_light"
-        android:minLines="3"
-        android:gravity="center" />
+        android:background="@drawable/bg_grey_rounded_corners"
+        android:textColor="@color/colorWhite"
+        android:minLines="2"
+        android:gravity="center"
+        android:textSize="@dimen/abc_floating_window_z" />
 </TableRow>
 
 <!-- Row 2 -->
@@ -31,69 +29,42 @@ android:stretchColumns="1">
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:padding="10dip"
-        android:layout_margin="4dip"
+        android:layout_margin="3dip"
         android:layout_weight="1"
         android:text="Destination Stop or Zone"
-        android:background="@color/bright_foreground_disabled_material_light"
-        android:textColor="@android:color/background_light"
-        android:minLines="3"
-        android:gravity="center" />
+        android:background="@drawable/bg_grey_rounded_corners"
+        android:textColor="@color/colorWhite"
+        android:minLines="2"
+        android:gravity="center"
+        android:textSize="@dimen/abc_floating_window_z" />
 
 </TableRow>
 
-<!-- just draw a red line -->
-    <!--
-<View
-    android:layout_height="2dip"
-    android:background="#FF0000" />
--->
+
 <!-- Row 3 -->
 <TableRow>
-    <!-- Column 1 -->
     <TextView
+        android:id="@+id/fare_passenger_cout_txt"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:padding="10dip"
+        android:layout_margin="3dip"
         android:layout_weight="1"
-        android:text="Passenger"
-        android:background="@color/button_material_light"
-        android:gravity="center" />
-
-    <!-- Column 2 -->
-    <TextView
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:padding="10dip"
-        android:layout_weight="1"
-        android:text="Fare"
-        android:textAlignment="center"
-        android:background="@color/button_material_light"
-        android:gravity="center" />
-
-    <!-- Column 3 -->
-    <TextView
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:padding="10dip"
-        android:layout_weight="1"
-        android:text=""
-        android:background="@color/button_material_light" />
+        android:text="Select Fare Info"
+        android:background="@drawable/bg_grey_rounded_corners"
+        android:textColor="@color/colorWhite"
+        android:minLines="2"
+        android:gravity="center"
+        android:textSize="@dimen/abc_floating_window_z" />
 </TableRow>
 
+    <!-- just draw a red line -->
+<View
+    android:layout_height="25dip"
+    android:background="@color/colorNavy" />
 <!-- Row 4 -->
 <TableRow>
     <!-- Column 1 -->
-
-    <NumberPicker
-        android:id="@+id/fare_number_picker"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:padding="10dip"
-        android:layout_margin="4dip"
-        android:layout_weight="1"
-        />
-
-    <!-- Column 2 -->
     <TextView
         android:id="@+id/fare_price_txt"
         android:layout_width="0dip"
@@ -103,16 +74,24 @@ android:stretchColumns="1">
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textAlignment="center"
         android:gravity="center_vertical"
-        android:background="@color/button_material_light" />
+        android:background="@drawable/bg_navy_rounded_corners"
+        android:layout_margin="3dip"
+        android:minLines="3"
+        android:textColor="@color/colorWhite" />
 
     <!-- Column 3 -->
-    <Button
-        android:text="Payment"
-        android:id="@+id/fare_payment_btn"
+    <TextView
+        android:id="@+id/fare_payment_txt"
         android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:padding="10dip"
+        android:layout_weight="1"
+        android:text="Payment"
         android:layout_margin="4dip"
-        android:layout_weight="1" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_navy_rounded_corners"
+        android:minLines="3"
+        android:textColor="@color/colorWhite" />
 </TableRow>
 </TableLayout>
