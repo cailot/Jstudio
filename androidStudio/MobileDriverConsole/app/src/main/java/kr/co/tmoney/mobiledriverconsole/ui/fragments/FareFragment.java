@@ -176,10 +176,25 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     private int calculateFare(String origin, String destination){
         int price = 0;
-        String originLine = mFares[getStopTag(origin)];
-        String[] destinations = StringUtils.split(originLine, ",");
-        price = Integer.parseInt(destinations[getStopTag(destination)]);
+        // 1. get origin group index
+        int originGroup = getStopTag(origin);
+        // 2. get destination group index
+        int destinationGroup = getStopTag(destination);
+        // 3. get fare info by using origin index
+        String originLine = mFares[originGroup];
+        // 4. make fare info to array
+        String[] fares = StringUtils.split(originLine, ",");
+        // 5. calculate difference from destination to origin, destination index should be greater than or equal to origin index
+        int difference = destinationGroup - originGroup;
+        // Exceptional case >>> such as driving backward for some reason, we will apply minimum fare for customer's convineince
+        if(difference<0){
+            difference = 0;
+        }
+        // 6. calculate final fare per person
+        price = Integer.parseInt(fares[difference]);
+        // 7. check how many passengers need the fare
         int num = Integer.parseInt(mPassengerCountTxt.getText().toString());
+        // 8. return fare in total
         return price * num;
     }
 
