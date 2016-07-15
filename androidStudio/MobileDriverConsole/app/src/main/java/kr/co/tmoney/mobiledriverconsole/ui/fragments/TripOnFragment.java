@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,9 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
@@ -313,14 +310,14 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        headingS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 10, 0);
 //        spannable.append(headingS);
 //        spannable.append("\t");
-
-        Drawable driver = getResources().getDrawable(R.drawable.driver);
-        driver.setBounds(0, 0, mTripOnTxt.getLineHeight(), mTripOnTxt.getLineHeight());
-        ImageSpan imageSpan = new ImageSpan(driver, ImageSpan.ALIGN_BASELINE);
-        SpannableString headingS = new SpannableString(" ");
-        headingS.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        headingS.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, 0);
-        spannable.append(headingS);
+//
+//        Drawable driver = getResources().getDrawable(R.drawable.driver);
+//        driver.setBounds(0, 0, mTripOnTxt.getLineHeight(), mTripOnTxt.getLineHeight());
+//        ImageSpan imageSpan = new ImageSpan(driver, ImageSpan.ALIGN_BASELINE);
+//        SpannableString headingS = new SpannableString(" ");
+//        headingS.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        headingS.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, 0);
+//        spannable.append(headingS);
         spannable.append("\t" + MDCMainActivity.nextStopName);
         spannable.append("\n");
 
