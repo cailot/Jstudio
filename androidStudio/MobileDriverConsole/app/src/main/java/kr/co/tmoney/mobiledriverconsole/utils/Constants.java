@@ -52,6 +52,8 @@ public interface Constants {
 
     public static final String VEHICLE_FRONT = "frontVehicle";
 
+    public static final String VEHICLE_PASSENGERS = "passengers";
+
     public static final String VEHICLE_LATITUDE = "lat";
 
     public static final String VEHICLE_LONGITUDE = "lon";
@@ -193,10 +195,10 @@ public interface Constants {
 
     ///////////////////////////// Bluetooth Printer ///////////////////////////////
     public static final int FLAG_STATE_CHANGE = 32;
-    
+
     public static final int FLAG_FAIL_CONNECT = 33;
-    
-    public static final int FLAG_SUCCESS_CONNECT = 34
+
+    public static final int FLAG_SUCCESS_CONNECT = 34;
 
     public static final String BLUETOOTH_PRINTER = "820USEB";
 

@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/splash_image"
-        android:src="@drawable/intropage_blue"
+        android:src="@mipmap/screen"
+        android:background="@color/colorNavy"
         android:scaleType="fitXY" />
 
     <TextView

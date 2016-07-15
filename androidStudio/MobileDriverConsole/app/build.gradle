@@ -35,39 +35,29 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
-
     // Firebase config
     //
     compile 'com.firebase:firebase-client-android:2.5.2+'
-
     /* For Google Play Services */
     //compile 'com.google.android.gms:play-services-safetynet:8.3.0'
     //compile 'com.google.android.gms:play-services-auth:8.3.0'
     compile 'com.google.android.gms:play-services-safetynet:9.2.0'
     compile 'com.google.android.gms:play-services-auth:9.2.0'
-
     /* Google Clinet API for Map*/
-    //compile 'com.google.android.gms:play-services:8+'
     compile 'com.google.android.gms:play-services-maps:9.2.0'
-
     compile 'com.google.android.gms:play-services-location:9.2.0'
-
     /* StringUtils from apache common library */
     compile 'org.apache.commons:commons-lang3:3.4'
-
-    /* GeoFire */
-    compile 'com.firebase:geofire:1.1.0+'
-
     compile 'com.android.support:multidex:1.0.0'
-
     compile 'com.google.code.gson:gson:2.6.2'
-
+    /*  Google distance matrix */
     compile 'com.squareup.okhttp:okhttp:2.1.0'
-
     compile 'com.squareup.okio:okio:1.9.0'
-
-    compile "com.googlecode.json-simple:json-simple:1.1"
-
-
- //   compile files('../libs/rtdriver.jar')
+    /*  Json parser*/
+    compile 'com.googlecode.json-simple:json-simple:1.1'
+    /* Printer libary */
+    compile files('libs/rtdriver.jar')
+    /*  Log out into file system */
+    compile 'log4j:log4j:1.2+'
+    compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
 }

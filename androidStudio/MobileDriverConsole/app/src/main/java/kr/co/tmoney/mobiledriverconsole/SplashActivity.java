@@ -33,6 +33,6 @@ public class SplashActivity extends Activity {
                 finish();
             }
         };
-        handler.sendEmptyMessageDelayed(0, 10000); // disappear in 5 sesc
+        handler.sendEmptyMessageDelayed(0, 5000); // disappear in 5 sesc
     }
 }

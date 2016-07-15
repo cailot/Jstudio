@@ -15,8 +15,12 @@
         android:id="@+id/route_grid_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:horizontalSpacing="@dimen/abc_edit_text_inset_top_material"
+        android:verticalSpacing="@dimen/abc_edit_text_inset_top_material"
+        android:padding="@dimen/abc_edit_text_inset_top_material"
         android:numColumns="2"
-        android:background="@android:color/background_light">
+        android:background="@color/colorNavy"
+        >
 
     </GridView>
 

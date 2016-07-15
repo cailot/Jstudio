@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -154,9 +164,9 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        LatLng melbourne = new LatLng(-37.835909, 144.981128);
+//        LatLng melbourne = new LatLng(-37.835909, 144.981128);
         mMarkerOptions = new MarkerOptions();
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, Constants.GOOGLE_MAP_ZOOM_LEVEL));
+//        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         mGoogleMap.setTrafficEnabled(true);
         // temporary showing geofences
 //        showGeofences();
@@ -278,13 +288,57 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         mGoogleMap.setTrafficEnabled(true);
         // update current vehicle Info
-        String msg = mVehicleId + "\n";
-        msg += "Heading to " + MDCMainActivity.nextStopName + "\n";
-        if (location.hasSpeed()) {
-            msg += "Speed : " + String.format( "%.2f", location.getSpeed() * 3600 / 1000) + " km/h" + "\n";
-        }
-        msg += "Passenger : " + "0"; // will subscribe passenger count in future....
-        mTripOnTxt.setText(msg);
+//        String msg = mVehicleId + "\n";
+//        msg += "Heading to " + MDCMainActivity.nextStopName + "\n";
+//        if (location.hasSpeed()) {
+//            msg += "Speed : " + String.format( "%.2f", location.getSpeed() * 3600 / 1000) + " km/h" + "\n";
+//        }
+//        msg += "Passenger : " + "0"; // will subscribe passenger count in future....
+//mTripOnTxt.setText(msg);
+
+        // Decorate Info
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+
+        String vehicleInfo = mVehicleId;
+        SpannableString vehicleS = new SpannableString(vehicleInfo);
+        vehicleS.setSpan(new RelativeSizeSpan(1.2f), 0, vehicleInfo.length(), 0);
+        vehicleS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, vehicleInfo.length(), 0);
+        vehicleS.setSpan(new UnderlineSpan(), 0, vehicleInfo.length(), 0);
+        spannable.append(vehicleS);
+        spannable.append("\n");
+
+//        String headingInfo = "Heading to " + MDCMainActivity.nextStopName;
+//        SpannableString headingS = new SpannableString(headingInfo);
+//        headingS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 10, 0);
+//        headingS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 10, 0);
+//        spannable.append(headingS);
+//        spannable.append("\t");
+
+        Drawable driver = getResources().getDrawable(R.drawable.driver);
+        driver.setBounds(0, 0, mTripOnTxt.getLineHeight(), mTripOnTxt.getLineHeight());
+        ImageSpan imageSpan = new ImageSpan(driver, ImageSpan.ALIGN_BASELINE);
+        SpannableString headingS = new SpannableString(" ");
+        headingS.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        headingS.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, 0);
+        spannable.append(headingS);
+        spannable.append("\t" + MDCMainActivity.nextStopName);
+        spannable.append("\n");
+
+
+        String speedInfo = "Speed : " + String.format( "%.1f", location.getSpeed() * 3600 / 1000) + " km/h";
+        SpannableString speedS = new SpannableString(speedInfo);
+        speedS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 7, 0);
+        speedS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 7, 0);
+        spannable.append(speedS);
+        spannable.append("\n");
+
+        String passegerInfo = "Passenger : " + MDCMainActivity.passengerCount;
+        SpannableString passengerS = new SpannableString(passegerInfo);
+        passengerS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 11, 0);
+        passengerS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 11, 0);
+        spannable.append(passengerS);
+
+        mTripOnTxt.setText(spannable);
 
         if(mGpsCount%Constants.GPS_UPDATE_VEHICLES_INTERVAL ==0) { // runs every 10 seconds
             new SubscribeDistanceTask().execute(location.getLatitude(), location.getLongitude());
@@ -394,6 +448,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            // update GPS on current vehicle
             Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
             Map<String, Object> currentTripOn = new HashMap<String, Object>();
+            currentTripOn.put(Constants.VEHICLE_PASSENGERS, MDCMainActivity.passengerCount);
             currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
             currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
             currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
@@ -467,7 +522,16 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
-            mFrontVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
+            //mFrontVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
+            SpannableStringBuilder spannableFront = new SpannableStringBuilder();
+            String front = "SV580003";
+            SpannableString frontS = new SpannableString(front);
+            frontS.setSpan(new UnderlineSpan(), 0, front.length(), 0);
+            frontS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, front.length(), 0);
+            spannableFront.append(frontS);
+            spannableFront.append("\n");
+            spannableFront.append("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
+            mFrontVehicleTxt.setText(spannableFront);
             if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
@@ -478,7 +542,16 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             }
-            mRearVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
+//            mRearVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
+            String rear = "SV580005";
+            SpannableStringBuilder spannableRear = new SpannableStringBuilder();
+            SpannableString rearS = new SpannableString(rear);
+            rearS.setSpan(new UnderlineSpan(), 0, rear.length(), 0);
+            rearS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, rear.length(), 0);
+            spannableRear.append(rearS);
+            spannableRear.append("\n");
+            spannableRear.append("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
+            mRearVehicleTxt.setText(spannableRear);
         }
 
     }

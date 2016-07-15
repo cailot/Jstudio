@@ -70,6 +70,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     public static String nextStopName = "ด่านทับช้าง";
 
+    public static int passengerCount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +104,12 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
         // Firebase set up
         Firebase.setAndroidContext(this);
+
+
+        // Dummy data for presentation purpose
+        MDCMainActivity.currentStopName = mStops[3].getName();
+        MDCMainActivity.nextStopName = mStops[4].getName();
+
     }
 
     /**

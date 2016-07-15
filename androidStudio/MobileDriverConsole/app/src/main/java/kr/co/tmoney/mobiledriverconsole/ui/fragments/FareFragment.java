@@ -1,10 +1,19 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +31,14 @@ import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
-
+import kr.co.tmoney.mobiledriverconsole.utils.PrinterAdapter;
+import kr.co.tmoney.mobiledriverconsole.utils.PrinterViewAction;
 
 
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -36,18 +46,25 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     Context mContext;
 
-    private StopVO[] mStops;
+    private StopVO[] mStops; // all stops info as array
 
-    private String[] mNames;
+    private StopGroupVO[] mGroups; // all stop groups info as array
 
-    private StopGroupVO[] groups;
+    private String[] mNames; // stop names to pop up dialog
 
-    private String[] mStopGroups;
+    private String[] mStopGroups; // group names to pop up dialog
 
-    private String[] mFares;
+    private String[] mFares; // all fare info as array
 
+    private String mOriginStop; // original stop
 
-    private MDCMainActivity mMainActivity;
+    private String mDestinationStop; // destination stop
+
+    private int mPassengerCount; // passenger count
+
+    private MDCMainActivity mMainActivity; // MainActivity to get current stop when start
+
+    private PrinterAdapter mPrinterAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -55,21 +72,54 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         View view = inflater.inflate(R.layout.fare_activity, null);
         mContext = container.getContext();
         mMainActivity = (MDCMainActivity)getActivity();
+//        mOriginStop = MDCMainActivity.currentStopName.trim();
         // build UI
         initialiseUI(view);
         // load Stops info
         initialiseInfo();
         // set up bluetooth printer
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
 
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mOriginTxt.setText("Current Stop : " + MDCMainActivity.currentStopName);
+
+    /**
+     * clean & reset all field
+     */
+    private void resetData() {
+        mOriginStop = MDCMainActivity.currentStopName.trim();
+        int index = getStopTag(mOriginStop);
+
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+
+        String legendO = "Origin : ";
+        SpannableString legendSO = new SpannableString(legendO);
+        legendSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendO.length(), 0);
+        legendSO.setSpan(new StyleSpan(Typeface.BOLD), 0, legendO.length(), 0);
+        spannable.append(legendSO);
+        spannable.append("\t");
+
+        SpannableString nameSO = new SpannableString(mOriginStop);
+        nameSO.setSpan(new ForegroundColorSpan(Color.WHITE), 0, mOriginStop.length(), 0);
+        nameSO.setSpan(new StyleSpan(Typeface.BOLD), 0, mOriginStop.length(), 0);
+        spannable.append(nameSO);
+        spannable.append("\t\t");
+
+        String type = mStopGroups[index];
+        SpannableString groupSO = new SpannableString(type);
+        groupSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, type.length(), 0);
+        groupSO.setSpan(new StyleSpan(Typeface.BOLD), 0, type.length(), 0);
+        spannable.append(groupSO);
+
+        mOriginTxt.setText(spannable);
+
+        mDestinationTxt.setText(getResources().getString(R.string.fare_destination_description));
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -95,7 +145,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 showDestinationDialog();
             }
         });
-        mPassengerCountTxt = (TextView) view.findViewById(R.id.fare_passenger_cout_txt);
+        mPassengerCountTxt = (TextView) view.findViewById(R.id.fare_passenger_count_txt);
         mPassengerCountTxt.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -107,9 +157,25 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPaymentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sendPrintCommand();
+                sendPrintCommand();
             }
         });
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPrinterAdapter.stopConnection();
+    }
+
+    /**
+     * Send print command to bluetooth printer
+     */
+    private void sendPrintCommand() {
+        // increase total passenger count
+        Log.d(LOG_TAG, mPassengerCount + "");
+        MDCMainActivity.passengerCount += mPassengerCount;
 
     }
 
@@ -121,7 +187,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
         mStops = mMainActivity.getStops();
 
-        groups = getStopGroupsInfo();
+        mGroups = getStopGroupsInfo();
 
         mNames = new String[mStops.length];
         mStopGroups = new String[mStops.length];
@@ -141,10 +207,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     private String getGroup(int index){
         String group = "";
-        for(int i=0; i<groups.length; i++){
-            if(index==groups[i].getIndex())
+        for(int i=0; i<mGroups.length; i++){
+            if(index==mGroups[i].getIndex())
             {
-                group = groups[i].getName();
+                group = mGroups[i].getName();
                 break;
             }
         }
@@ -170,16 +236,22 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     /**
      * Calculate fare based on origin & destination
-     * @param origin
-     * @param destination
      * @return
      */
-    private int calculateFare(String origin, String destination){
+    private int calculateFare(){
         int price = 0;
         // 1. get origin group index
-        int originGroup = getStopTag(origin);
+        int originGroup = getStopTag(mOriginStop);
         // 2. get destination group index
-        int destinationGroup = getStopTag(destination);
+        int destinationGroup = getStopTag(mDestinationStop);
+
+        // this will not happen in real life but just to avoid NPE in testing data
+        if(originGroup>=mFares.length){
+            originGroup = mFares.length-1;
+        }
+        if(destinationGroup>=mFares.length){
+            destinationGroup = mFares.length-1;
+        }
         // 3. get fare info by using origin index
         String originLine = mFares[originGroup];
         // 4. make fare info to array
@@ -191,31 +263,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        price = Integer.parseInt(fares[difference]);
+        price = Integer.parseInt(fares[difference].trim());
+
+//        Log.e(LOG_TAG, "price ==> " + price);
         // 7. check how many passengers need the fare
-        int num = Integer.parseInt(mPassengerCountTxt.getText().toString());
         // 8. return fare in total
-        return price * num;
+        return price * mPassengerCount;
     }
-
-
-//    /**
-//     * Check whether current tab is selected or not
-//     * @param isVisibleToUser
-//     */
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//        if(this.isVisible()){
-//            if(isVisibleToUser){
-//                getClosestStop();
-//                Log.d(LOG_TAG, "FareFragment is visible");
-//            }else{
-//                Log.d(LOG_TAG, "FareFragment is not visible");
-//            }
-//        }
-//    }
-
 
     /**
      * Pop up dialog for origin stop
@@ -225,7 +279,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.ORIGIN_DIALOG_TAG);
-
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
     }
 
     /**
@@ -236,6 +291,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
     }
 
     /**
@@ -249,14 +306,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     }
     
 
-    // /**
-    //  * Pop up dialog for bluetooth printer
-    //  */
-    // private void showBluetoothDialog() {
-    //     BluetoothMatchingDeviceDialogFragment dialog = new BluetoothMatchingDeviceDialogFragment();
-    //     dialog.show(getFragmentManager(), BluetoothMatchingDeviceDialogFragment.class.getName());
-    // }
-
     /**
      * check whether update will happen either origin or destination
      * @param name
@@ -265,13 +314,61 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     @Override
     public void sendStopName(String name, String type, int request) {
+
+//        String message = "";
+        SpannableStringBuilder  spannable = new SpannableStringBuilder();
         // update stop info into TextView
         switch (request){
             case Constants.FARE_ORIGIN_REQUEST :
-                mOriginTxt.setText(name + " : " + type);
+                mOriginStop = name;
+
+                String legendO = "Origin : ";
+                SpannableString legendSO = new SpannableString(legendO);
+                legendSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendO.length(), 0);
+                legendSO.setSpan(new StyleSpan(Typeface.BOLD), 0, legendO.length(), 0);
+                spannable.append(legendSO);
+                spannable.append("\t");
+
+                SpannableString nameSO = new SpannableString(name);
+                nameSO.setSpan(new ForegroundColorSpan(Color.WHITE), 0, name.length(), 0);
+                nameSO.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(), 0);
+                spannable.append(nameSO);
+                spannable.append("\t\t");
+
+                SpannableString groupSO = new SpannableString(type);
+                groupSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, type.length(), 0);
+                groupSO.setSpan(new StyleSpan(Typeface.BOLD), 0, type.length(), 0);
+                spannable.append(groupSO);
+
+                mOriginTxt.setText(spannable);
                 break;
             case Constants.FARE_DESTINATION_REQUEST:
-                mDestinationTxt.setText(name + " : " + type);
+//                mDestinationTxt.setText(name + " : " + type);
+                mDestinationStop = name;
+//                message = "Destination : " + name + "\t\t" + type;
+//                text = new SpannableString(message);
+//                text.setSpan(new RelativeSizeSpan(1f), 0, 13, 0);
+//                text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 13, 0);
+//                text.setSpan(new StyleSpan(Typeface.BOLD), 0, 13, 0);
+                String legendD = "Destination : ";
+                SpannableString legendSD = new SpannableString(legendD);
+                legendSD.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendD.length(), 0);
+                legendSD.setSpan(new StyleSpan(Typeface.BOLD), 0, legendD.length(), 0);
+                spannable.append(legendSD);
+                spannable.append("\t");
+
+                SpannableString nameSD = new SpannableString(name);
+                nameSD.setSpan(new ForegroundColorSpan(Color.WHITE), 0, name.length(), 0);
+                nameSD.setSpan(new StyleSpan(Typeface.BOLD), 0, name.length(), 0);
+                spannable.append(nameSD);
+                spannable.append("\t\t");
+
+                SpannableString groupSD = new SpannableString(type);
+                groupSD.setSpan(new ForegroundColorSpan(Color.BLACK), 0, type.length(), 0);
+                groupSD.setSpan(new StyleSpan(Typeface.BOLD), 0, type.length(), 0);
+                spannable.append(groupSD);
+
+                mDestinationTxt.setText(spannable);
                 break;
         }
     }
@@ -283,8 +380,19 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     @Override
     public void sendPassengerCount(String name) {
-        mPassengerCountTxt.setText(name);
-        mPriceTxt.setText(" ฿ " + Integer.parseInt(StringUtils.defaultString(name, "0"))* Constants.ADULT_FARE);
+        mPassengerCount = Integer.parseInt(name);
+        String message = "Passenger Count : " + name;
+        SpannableString text = new SpannableString(message);
+        text.setSpan(new RelativeSizeSpan(1f), 0, 17, 0);
+        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 17, 0);
+        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 17, 0);
+        mPassengerCountTxt.setText(text);
+//        mPassengerCountTxt.setText("Passenger Count " + name);
+        String price = " ฿ " + calculateFare()+"";
+        SpannableString fare = new SpannableString(price);
+        fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
+        fare.setSpan(new StyleSpan(Typeface.BOLD), 0, price.length(), 0);
+        mPriceTxt.setText(fare);
     }
 
     /**
@@ -307,5 +415,32 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         String json = pref.getString(Constants.FARES_IN_ROUTE, null);
         String[] fares = new Gson().fromJson(json, String[].class);
         return fares;
+    }
+
+    @Override
+    public void showConnected() {
+        Log.d(LOG_TAG, "Printer connected");
+    }
+
+    @Override
+    public void showFailed() {
+        Log.d(LOG_TAG, "Printer connection fails");
+    }
+
+        /**
+     * Check whether current tab is selected or not
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(this.isVisible()){
+            if(isVisibleToUser){
+                resetData();
+                Log.d(LOG_TAG, "FareFragment is visible");
+            }else{
+                Log.d(LOG_TAG, "FareFragment is not visible");
+            }
+        }
     }
 }

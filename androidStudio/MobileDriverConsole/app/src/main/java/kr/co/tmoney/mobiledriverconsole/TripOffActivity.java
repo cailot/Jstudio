@@ -3,10 +3,16 @@ package kr.co.tmoney.mobiledriverconsole;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -60,6 +66,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     Firebase mFirebase;
 
+//    private SpannableStringBuilder mRouteMessage;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,17 +76,28 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // change status bar color
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorNavy));
+//            mRouteMessage = new SpannableStringBuilder();
+//            mRouteMessage.append("Select Route ")
+//                    .append(" ", new ImageSpan(getApplicationContext(), R.drawable.ic_search_dialog), 0)
+        }else{
+//            mRouteMessage = new SpannableStringBuilder();
+//            mRouteMessage.append("Select Route ").append(" ");
+//            mRouteMessage.setSpan(new ImageSpan(getApplicationContext(), R.drawable.ic_search_dialog), mRouteMessage.length()-1, mRouteMessage.length(), 0);
         }
+
+
+        // setup Firebase on Android
+        Firebase.setAndroidContext(this);
+        mFirebase = new Firebase(Constants.FIREBASE_HOME);
+        // bring up all routes & vehicles list to save up time
+        getRouteList();
+        getVehicleList();
 
         // loading Splash
         startActivity(new Intent(this, SplashActivity.class));
 
         // build UI
         initialiseUI();
-
-        // setup Firebase on Android
-        Firebase.setAndroidContext(this);
-        mFirebase = new Firebase(Constants.FIREBASE_HOME);
 
     }
 
@@ -88,6 +107,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void initialiseUI() {
         mRouteTxt = (TextView) findViewById(R.id.trip_off_route_txt);
+//        mRouteTxt.setText(mRouteMessage);
         mRouteTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +121,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 tripOffEvents(view);
             }
         });
+
         mLogoutTxt = (TextView) findViewById(R.id.trip_off_logout_btn);
         mLogoutTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,9 +142,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     @Override
     protected void onStart() {
         super.onStart();
-        // bring up all routes & vehicles list to save up time
-        getRouteList();
-        getVehicleList();
     }
 
     @Override
@@ -169,7 +187,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 //        // save stop details into SharedPreferences
 //        saveStopsDetail();
         // save vehicle name into SharedPreferences
-        mVehicleId = mVehicleTxt.getText().toString();
         put(Constants.VEHICLE_NAME, mVehicleId);
 
         // update DB to indicate starting
@@ -224,7 +241,34 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // save routeId into SharedPreferences
         put(Constants.ROUTE_ID, mRouteId);
         // update selected route info in TextView
-        mRouteTxt.setText(id + " : " + name);
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+        String legend = "Route : ";
+        SpannableString legendS= new SpannableString(legend);
+        legendS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legend.length(), 0);
+        legendS.setSpan(new StyleSpan(Typeface.BOLD), 0, legend.length(), 0);
+        spannable.append(legendS);
+        spannable.append("\t");
+
+        SpannableString idS = new SpannableString(id);
+        idS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, id.length(), 0);
+        idS.setSpan(new StyleSpan(Typeface.BOLD), 0, id.length(), 0);
+        spannable.append(idS);
+        spannable.append("\t\t");
+
+        SpannableString nameS = new SpannableString(name);
+        nameS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, name.length(), 0);
+        spannable.append(nameS);
+
+        mRouteTxt.setText(spannable);
+
+
+//        String message = "Route : " + id + "\t\t" + name;
+//        SpannableString text = new SpannableString(message);
+//        text.setSpan(new RelativeSizeSpan(1f), 0, 7, 0);
+//        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 7, 0);
+//        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+//        mRouteTxt.setText(text);
+
         // get the front vehicle info & index to prepare updating vehicle
         searchFrontVehicle();
         // get stops detail in route
@@ -248,8 +292,30 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         saveStopGroupsDetail();
         // save fares into SharedPreferences
         saveFaresDetail();
+        // assign vehicle name to mVehicleId
+        mVehicleId = routeName;
         // update selected vehicle info in TextView
-        mVehicleTxt.setText(routeName);
+//        String message = "Vehicle : " + routeName;
+//        SpannableString text = new SpannableString(message);
+//        text.setSpan(new RelativeSizeSpan(1f), 0, 9, 0);
+//        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 9, 0);
+//        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 9, 0);
+
+
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+        String legend = "Vehicle : ";
+        SpannableString legendS= new SpannableString(legend);
+        legendS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legend.length(), 0);
+        legendS.setSpan(new StyleSpan(Typeface.BOLD), 0, legend.length(), 0);
+        spannable.append(legendS);
+        spannable.append("\t\t");
+
+        SpannableString routeS = new SpannableString(routeName);
+        routeS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, routeName.length(), 0);
+        routeS.setSpan(new StyleSpan(Typeface.BOLD), 0, routeName.length(), 0);
+        spannable.append(routeS);
+
+        mVehicleTxt.setText(spannable);
     }
 
 
