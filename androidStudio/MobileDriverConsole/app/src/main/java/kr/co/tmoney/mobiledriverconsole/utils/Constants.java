@@ -192,7 +192,11 @@ public interface Constants {
 
 
     ///////////////////////////// Bluetooth Printer ///////////////////////////////
-
+    public int FLAG_STATE_CHANGE = 32;
+    
+    public int FLAG_FAIL_CONNECT = 33;
+    
+    public int FLAG_SUCCESS_CONNECT = 34
 
 
 
