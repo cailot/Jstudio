@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 
 /**
@@ -18,8 +17,6 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
  * one of the sections/tabs/pages.
  */
 public class TabAdapter extends FragmentPagerAdapter{
-
-    private final String LOG_TAG = MDCUtils.getLogTag(TabAdapter.class);
 
     Context mContext;
 

@@ -1,5 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -7,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +34,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -43,6 +47,8 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 public class MDCMainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(MDCMainActivity.class);
+
+    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TabAdapter mTabAdapter;
 
@@ -66,11 +72,15 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private ArrayList<Geofence> mGeofenceList;
 
+    IntentFilter mIntentFilter;
+
     public static String currentStopName = "โรงพยาบาลสินแพทย์";
 
     public static String nextStopName = "ด่านทับช้าง";
 
     public static int passengerCount;
+
+    public static int fareTransactionId = 1;
 
 
     @Override
@@ -97,20 +107,61 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         buildGoogleApiClient();
 
         // Register Receiver
-        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_SERVICE);
+        mIntentFilter = new IntentFilter(Constants.BROADCAST_SERVICE);
         mGeoReceiver = new GeoReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, intentFilter);
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, intentFilter);
 
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+                // permission granted
+                LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
+
+            }else {
+                // need permission to proceed
+                if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                    Toast.makeText(this, "GPS permission is needed to proceed service", Toast.LENGTH_SHORT).show();
+                }
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
+            }
+        }
 
         // Firebase set up
         Firebase.setAndroidContext(this);
-
 
         // Dummy data for presentation purpose
         MDCMainActivity.currentStopName = mStops[3].getName();
         MDCMainActivity.nextStopName = mStops[4].getName();
 
     }
+
+
+
+    /**
+     * GPS permission handles - Android SDK 23
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d(LOG_TAG, "Request code : " + requestCode);
+
+        if (requestCode == Constants.GPS_PERMISSION_GRANT) {
+            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
+
+                logger.debug("User grants GPS permission");
+            } else {
+                logger.error("User should grant a permission to proceed");
+            }
+
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 
     /**
      * switch tab's selection as per user's choice
@@ -131,14 +182,14 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         super.onStart();
         if(!mGoogleApiClient.isConnecting()||!mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            Log.d(LOG_TAG, "GoogleApiClient is now connected");
+            logger.debug("GoogleApiClient is now connected");
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop()");
+        logger.debug("onStop()");
     }
 
     @Override
@@ -149,7 +200,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             mGoogleApiClient.disconnect();
         }
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy()");
+        logger.debug("onDestroy()");
     }
 
 
@@ -220,7 +271,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(LOG_TAG, "onConnected()");
+        logger.debug("onConnected()");
         startIntentService();
     }
 
@@ -288,7 +339,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             }); // Result processed in onResult().
         } catch (SecurityException en) {
-            Log.e(LOG_TAG, en.getMessage());
+            logger.debug( en.getMessage());
         }
     }
 
@@ -317,7 +368,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             });
         } catch (SecurityException securityException) {
-            Log.e(LOG_TAG, securityException.getMessage());
+            logger.debug( securityException.getMessage());
         }
     }
 

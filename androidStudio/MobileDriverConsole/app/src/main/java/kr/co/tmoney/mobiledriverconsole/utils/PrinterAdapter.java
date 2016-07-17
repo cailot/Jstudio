@@ -5,7 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
+
+import org.apache.log4j.Logger;
 
 import java.util.Set;
 
@@ -18,6 +19,10 @@ import driver.HsBluetoothPrintDriver;
  */
 public class PrinterAdapter {
 
+    private static final String LOG_TAG = MDCUtils.getLogTag(PrinterAdapter.class);
+
+    private Logger logger = Logger.getLogger(LOG_TAG);
+
     PrinterViewAction viewAction;
 
     BluetoothAdapter bluetoothAdapter;
@@ -29,7 +34,7 @@ public class PrinterAdapter {
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         for(BluetoothDevice device : devices){
-            Log.d("****", device.getName() + "\t" + device.getAddress());
+            logger.debug(device.getName() + "\t" + device.getAddress());
             if(device.getName().equalsIgnoreCase("820USEB")){
                 connectBluetooth(device);
                 return;
@@ -67,6 +72,10 @@ public class PrinterAdapter {
 
     public void printCodeBar(String code) {
         HsBluetoothPrintDriver.getInstance().CODEBAR(code);
+    }
+
+    public void print(String msg) {
+        HsBluetoothPrintDriver.getInstance().printString(msg);
     }
 
     public void printQRCode(String code) {

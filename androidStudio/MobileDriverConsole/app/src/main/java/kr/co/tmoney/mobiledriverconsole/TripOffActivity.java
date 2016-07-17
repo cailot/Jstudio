@@ -13,7 +13,6 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +24,8 @@ import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 import com.google.gson.Gson;
+
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,8 @@ import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 public class TripOffActivity extends AppCompatActivity implements RouteDialog.PassValueFromRouteDialogListener, VehicleDialog.PassValueFromVehicleDialogListener {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOffActivity.class);
+
+    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TextView mRouteTxt, mVehicleTxt, mLogoutTxt, mTripOnTxt;
 
@@ -76,15 +79,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // change status bar color
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorNavy));
-//            mRouteMessage = new SpannableStringBuilder();
-//            mRouteMessage.append("Select Route ")
-//                    .append(" ", new ImageSpan(getApplicationContext(), R.drawable.ic_search_dialog), 0)
         }else{
-//            mRouteMessage = new SpannableStringBuilder();
-//            mRouteMessage.append("Select Route ").append(" ");
-//            mRouteMessage.setSpan(new ImageSpan(getApplicationContext(), R.drawable.ic_search_dialog), mRouteMessage.length()-1, mRouteMessage.length(), 0);
         }
-
 
         // setup Firebase on Android
         Firebase.setAndroidContext(this);
@@ -107,7 +103,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void initialiseUI() {
         mRouteTxt = (TextView) findViewById(R.id.trip_off_route_txt);
-//        mRouteTxt.setText(mRouteMessage);
         mRouteTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,18 +153,22 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         switch(view.getId()){
             case R.id.trip_off_route_txt :
 //                Log.d(LOG_TAG, "Route Event");
+                logger.debug("Route Event");
                 showRouteDialog();
                 break;
             case R.id.trip_off_vehicle_txt :
 //                Log.d(LOG_TAG, "Vehicle Event");
+                logger.debug("Vehicle Event");
                 showVehicleDialog();
                 break;
             case R.id.trip_off_logout_btn :
 //                Log.d(LOG_TAG, "Logout Event");
+                logger.debug("Logout Event");
                 logout();
                 break;
             case R.id.trip_off_tripon_btn :
 //                Log.d(LOG_TAG, "TripOn Event");
+                logger.debug("TripOn Event");
                 turnOnTripOn();
                 break;
         }
@@ -178,14 +177,11 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     /**
      * Just about to leave this activity so set up data for next activities
-     * 1. save stops information under route
-     * 2. save vehicleId
-     * 3. change tripOn to true
-     * 4. startIntent
+     * 1. save vehicleId
+     * 2. change tripOn to true
+     * 3. startIntent
      */
     private void turnOnTripOn() {
-//        // save stop details into SharedPreferences
-//        saveStopsDetail();
         // save vehicle name into SharedPreferences
         put(Constants.VEHICLE_NAME, mVehicleId);
 
@@ -261,14 +257,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
         mRouteTxt.setText(spannable);
 
-
-//        String message = "Route : " + id + "\t\t" + name;
-//        SpannableString text = new SpannableString(message);
-//        text.setSpan(new RelativeSizeSpan(1f), 0, 7, 0);
-//        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 7, 0);
-//        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-//        mRouteTxt.setText(text);
-
         // get the front vehicle info & index to prepare updating vehicle
         searchFrontVehicle();
         // get stops detail in route
@@ -295,12 +283,6 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // assign vehicle name to mVehicleId
         mVehicleId = routeName;
         // update selected vehicle info in TextView
-//        String message = "Vehicle : " + routeName;
-//        SpannableString text = new SpannableString(message);
-//        text.setSpan(new RelativeSizeSpan(1f), 0, 9, 0);
-//        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 9, 0);
-//        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 9, 0);
-
 
         SpannableStringBuilder spannable = new SpannableStringBuilder();
         String legend = "Vehicle : ";
@@ -372,7 +354,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e(LOG_TAG, "Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
             }
         });
     }
@@ -403,7 +385,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e(LOG_TAG, "Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
             }
         });
     }
@@ -466,7 +448,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 String front = "";
                 String index = "0";
                 if(snapshot.getValue()==null){
-                    Log.d(LOG_TAG, "You are the first");
+//                    Log.d(LOG_TAG, "You are the first");
                 }else {
                     // get highest index
                     for(DataSnapshot shot : snapshot.getChildren()){
@@ -474,14 +456,14 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                         index = shot.child("index").getValue().toString();
 //                        Log.d(LOG_TAG, "child...." + shot.getKey() + " ===> "+ shot.child("index").getValue().toString());
                     }
-                    Log.d(LOG_TAG, front + " ==> " + index);
+//                    Log.d(LOG_TAG, front + " ==> " + index);
                 }
                 mFrontVehicleInfo.put(Constants.FRONT_VEHICLE_ID, front);
                 mFrontVehicleInfo.put(Constants.FRONT_VEHICLE_INDEX, index);
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e(LOG_TAG, "Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
             }
         });
 
@@ -576,7 +558,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         String json = new Gson().toJson(value);
         editor.putString(key, json);
         editor.commit();
-        Log.d(LOG_TAG, "saved object to sharedpreferences : " + json);
+        logger.debug(json);
     }
 
 }

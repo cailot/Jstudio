@@ -1,8 +1,5 @@
 package kr.co.tmoney.mobiledriverconsole.utils;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -31,12 +28,6 @@ public class MDCUtils {
 
     private MDCUtils(){}
 
-    public static String getValueFromSharedPreferences(Context context, String key){
-        String value = "";
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        value = preferences.getString(key, "");
-        return value;
-    }
 
     /**
      * Generate LOG_TAG per each class
@@ -229,9 +220,9 @@ public class MDCUtils {
         String info = "";
         if(digit > 1000){
             double d = digit/1000.0;
-            info = String.format( "%.1f", d) + " Km";
+            info = String.format( "%.1f", d) ;
         }else{
-            info = digit + " m";
+            info = Integer.toString(digit);
         }
         return info;
     }

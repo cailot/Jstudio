@@ -19,13 +19,12 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -47,6 +46,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +67,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOnFragment.class);
 
+    private Logger logger = Logger.getLogger(LOG_TAG);
+
     Context mContext;
 
     private MapView mMapView;
@@ -80,7 +83,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private ImageView mFrontVehicleImg, mRearVehicleImg;
 
-    private TextView mFrontVehicleTxt, mRearVehicleTxt;
+    private TextView mFrontVehicleTxt, mRearVehicleTxt, mFrontVehicleIdTxt, mRearVehicleIdTxt, mCurrentVehicleIdTxt;
 
 
     // From MDCMainActivity
@@ -106,8 +109,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private Firebase mFirebase;
 
-//    private MDCMainActivity mMainActivity;
-
     int mGpsCount;
 
 
@@ -115,7 +116,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
         mContext = container.getContext();
-//        mMainActivity = (MDCMainActivity) getActivity();
 
         // build UI
         initialiseUI(savedInstanceState, view);
@@ -137,7 +137,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      */
     private void initialiseUI(Bundle savedInstanceState, View view) {
         mTripOnTxt = (TextView) view.findViewById(R.id.trip_on_txt);
-//        mTripOnTxt.setText(mVehicleId);
         mTripOnTxt.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -150,6 +149,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mRearVehicleImg = (ImageView) view.findViewById(R.id.trip_on_rear_img);
         mFrontVehicleTxt = (TextView) view.findViewById(R.id.trip_on_front_info);
         mRearVehicleTxt = (TextView) view.findViewById(R.id.trip_on_rear_info);
+        mFrontVehicleIdTxt = (TextView) view.findViewById(R.id.trip_on_front_vehicle_name);
+        mRearVehicleIdTxt = (TextView) view.findViewById(R.id.trip_on_rear_vehicle_name);
 
         mMapView = (MapView) view.findViewById(R.id.trip_on_map);
         mMapView.onCreate(savedInstanceState);
@@ -172,36 +173,52 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnected");
+        logger.debug("GoogleApiClient onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
-
         // Android SDK 23
         requestLocationUpdate();
     }
 
-    /**
-     * GPS permission handles - Android SDK 23
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Constants.GPS_PERMISSION_GRANT: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    requestLocationUpdate();
-                    Log.e(LOG_TAG, "User grants GPS permission");
-                } else {
-                    Log.e(LOG_TAG, "User should grant a permission to proceed");
-                }
-                return;
-            }
-        }
-    }
+//    /**
+//     * GPS permission handles - Android SDK 23
+//     * @param requestCode
+//     * @param permissions
+//     * @param grantResults
+//     */
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        Log.d(LOG_TAG, "Request code : " + requestCode);
+//
+//        if(requestCode == Constants.GPS_PERMISSION_GRANT){
+//            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                requestLocationUpdate();
+//                Log.e(LOG_TAG, "User grants GPS permission");
+//            }else{
+//                Log.e(LOG_TAG, "User should grant a permission to proceed");
+//            }
+//
+//        }else{
+//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        }
+
+//
+//
+//        switch (requestCode) {
+//            case Constants.GPS_PERMISSION_GRANT: {
+//                Log.d(LOG_TAG, "User permission grant");
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    requestLocationUpdate();
+//                    Log.e(LOG_TAG, "User grants GPS permission");
+//                } else {
+//                    Log.e(LOG_TAG, "User should grant a permission to proceed");
+//                }
+//                return;
+//            }
+//        }
+//    }
 
 
     /**
@@ -210,13 +227,10 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      */
     private void requestLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                Toast.makeText(mContext, "GPS permission is needed to show the map", Toast.LENGTH_SHORT).show();
+            }
+            // request GPS permission
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
         }else{
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -227,13 +241,13 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnectionSuspended");
+        logger.debug("GoogleApiClient onConnectionSuspended");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnectionFailed");
+        logger.debug("GoogleApiClient onConnectionFailed");
     }
 
     @Override
@@ -241,7 +255,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         super.onStart();
         if(!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            Log.d(LOG_TAG, "GoogleApiClient is now connected");
+            logger.debug("GoogleApiClient is now connected");
         }
     }
 
@@ -284,25 +298,15 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         mGoogleMap.setTrafficEnabled(true);
-        // update current vehicle Info
-//        String msg = mVehicleId + "\n";
-//        msg += "Heading to " + MDCMainActivity.nextStopName + "\n";
-//        if (location.hasSpeed()) {
-//            msg += "Speed : " + String.format( "%.2f", location.getSpeed() * 3600 / 1000) + " km/h" + "\n";
-//        }
-//        msg += "Passenger : " + "0"; // will subscribe passenger count in future....
-//mTripOnTxt.setText(msg);
 
         // Decorate Info
         SpannableStringBuilder spannable = new SpannableStringBuilder();
 
-        String vehicleInfo = mVehicleId;
-        SpannableString vehicleS = new SpannableString(vehicleInfo);
-        vehicleS.setSpan(new RelativeSizeSpan(1.2f), 0, vehicleInfo.length(), 0);
-        vehicleS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, vehicleInfo.length(), 0);
-        vehicleS.setSpan(new UnderlineSpan(), 0, vehicleInfo.length(), 0);
-        spannable.append(vehicleS);
-        spannable.append("\n");
+//        String vehicleInfo = mVehicleId;
+//        SpannableString vehicleS = new SpannableString(vehicleInfo);
+//        vehicleS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, vehicleInfo.length(), 0);
+//        vehicleS.setSpan(new UnderlineSpan(), 0, vehicleInfo.length(), 0);
+//        mCurrentVehicleIdTxt.setText(vehicleS);
 
 //        String headingInfo = "Heading to " + MDCMainActivity.nextStopName;
 //        SpannableString headingS = new SpannableString(headingInfo);
@@ -318,22 +322,23 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        headingS.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        headingS.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, 0);
 //        spannable.append(headingS);
-        spannable.append("\t" + MDCMainActivity.nextStopName);
-        spannable.append("\n");
 
-
-        String speedInfo = "Speed : " + String.format( "%.1f", location.getSpeed() * 3600 / 1000) + " km/h";
-        SpannableString speedS = new SpannableString(speedInfo);
-        speedS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 7, 0);
-        speedS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 7, 0);
+        String speed = String.format( "%.1f", location.getSpeed() * 3600 / 1000);// + " km/h";
+        SpannableString speedS = new SpannableString(speed);
+        speedS.setSpan(new RelativeSizeSpan(3f), 0, speed.length(), 0);
+        speedS.setSpan(new StyleSpan(Typeface.BOLD), 0, speed.length(), 0);
         spannable.append(speedS);
+        String km = " Km/h";
+        spannable.append(km);
         spannable.append("\n");
 
-        String passegerInfo = "Passenger : " + MDCMainActivity.passengerCount;
-        SpannableString passengerS = new SpannableString(passegerInfo);
-        passengerS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 11, 0);
-        passengerS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 11, 0);
-        spannable.append(passengerS);
+        spannable.append(MDCMainActivity.nextStopName);
+        spannable.append("\n\n");
+
+        SpannableString currentVehicle = new SpannableString(mVehicleId);
+        currentVehicle.setSpan(new ForegroundColorSpan(Color.BLACK), 0, mVehicleId.length(), 0);
+        currentVehicle.setSpan(new StyleSpan(Typeface.BOLD), 0, mVehicleId.length(), 0);
+        spannable.append(currentVehicle);
 
         mTripOnTxt.setText(spannable);
 
@@ -370,7 +375,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 if(dataSnapshot.child(Constants.VEHICLE_REAR).getValue()!=null){
                     mRearVehicle.setId(dataSnapshot.child(Constants.VEHICLE_REAR).getValue().toString());
                 }
-                Log.d(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+                logger.debug("Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -387,7 +392,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
         if(mFrontVehicle.getId()!=null && !mFrontVehicle.getId().equalsIgnoreCase("")) {
             Firebase frontRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mFrontVehicle.getId());
-            Log.d(LOG_TAG,"Front - path : " + frontRef.getPath());
+//            Log.d(LOG_TAG,"Front - path : " + frontRef.getPath());
             frontRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -397,7 +402,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mFrontVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
+//                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
                 }
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -419,7 +424,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mRearVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
+//                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
                 }
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -509,6 +514,18 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             String[] rearInfo = (String[]) info.get(Constants.VEHICLE_REAR);
             int frontDistance = Integer.parseInt(frontInfo[0]);
             int rearDistance = Integer.parseInt(rearInfo[0]);
+
+
+            String front = "\tSV580003";
+            SpannableString frontS = new SpannableString(front);
+            frontS.setSpan(new StyleSpan(Typeface.BOLD), 0, front.length(), 0);
+            mFrontVehicleIdTxt.setText(frontS);
+
+            String rear = "\tSV580005";
+            SpannableString rearS = new SpannableString(rear);
+            rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);
+            mRearVehicleIdTxt.setText(rearS);
+
             if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
@@ -519,16 +536,10 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
-            //mFrontVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
-            SpannableStringBuilder spannableFront = new SpannableStringBuilder();
-            String front = "SV580003";
-            SpannableString frontS = new SpannableString(front);
-            frontS.setSpan(new UnderlineSpan(), 0, front.length(), 0);
-            frontS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, front.length(), 0);
-            spannableFront.append(frontS);
-            spannableFront.append("\n");
-            spannableFront.append("\t\t" + MDCUtils.getDistanceFormat(frontDistance) + "\n" + "\t" + frontInfo[1] + " mins");
-            mFrontVehicleTxt.setText(spannableFront);
+            mFrontVehicleTxt.setText(getDrivingInfo(frontInfo));
+
+
+
             if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
@@ -539,16 +550,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             }
-//            mRearVehicleTxt.setText("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
-            String rear = "SV580005";
-            SpannableStringBuilder spannableRear = new SpannableStringBuilder();
-            SpannableString rearS = new SpannableString(rear);
-            rearS.setSpan(new UnderlineSpan(), 0, rear.length(), 0);
-            rearS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, rear.length(), 0);
-            spannableRear.append(rearS);
-            spannableRear.append("\n");
-            spannableRear.append("\t\t" + MDCUtils.getDistanceFormat(rearDistance) + "\n" + "\t" + rearInfo[1] + " mins");
-            mRearVehicleTxt.setText(spannableRear);
+            mRearVehicleTxt.setText(getDrivingInfo(rearInfo));
         }
 
     }
@@ -570,6 +572,34 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        Log.d(LOG_TAG, mTrip.toString());
     }
 
+
+    public SpannableStringBuilder getDrivingInfo(String[] info){
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        SpannableString durationS = new SpannableString(info[1]);
+        durationS.setSpan(new RelativeSizeSpan(2f), 0, info[1].length(), 0);
+        durationS.setSpan(new StyleSpan(Typeface.BOLD), 0, info[1].length(), 0);
+        spannableStringBuilder.append(durationS);
+        String time = " mins";
+        SpannableString timeS = new SpannableString(time);
+//        timeS.setSpan(new RelativeSizeSpan(0.7f), 0, time.length(), 0);
+        spannableStringBuilder.append(timeS);
+        spannableStringBuilder.append("\t\t");
+
+        String speed = MDCUtils.getDistanceFormat(Integer.parseInt(info[0]));
+        String meter = " m";
+        if(Integer.parseInt(info[0]) > 1000){
+            meter = " km";
+        }
+        SpannableString speedS = new SpannableString(speed);
+        speedS.setSpan(new RelativeSizeSpan(1.5f), 0, speed.length(), 0);
+        speedS.setSpan(new StyleSpan(Typeface.BOLD), 0, speed.length(), 0);
+        SpannableString meterS = new SpannableString(meter);
+//        meterS.setSpan(new RelativeSizeSpan(0.7f), 0, meterS.length(), 0);
+        spannableStringBuilder.append(speedS);
+        spannableStringBuilder.append(meterS);
+        return spannableStringBuilder;
+    }
 
     protected synchronized void buildGoogleApiClient(){
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())

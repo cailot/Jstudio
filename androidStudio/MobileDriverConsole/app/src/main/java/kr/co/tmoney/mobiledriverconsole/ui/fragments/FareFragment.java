@@ -22,12 +22,17 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.PrintConfirmationDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -41,6 +46,8 @@ import kr.co.tmoney.mobiledriverconsole.utils.PrinterViewAction;
 public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
+
+    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mPassengerCountTxt, mPaymentTxt;
 
@@ -60,7 +67,15 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private String mDestinationStop; // destination stop
 
+    private int mPrice; // price per each adult
+
     private int mPassengerCount; // passenger count
+
+    private int mTotalFare;
+
+    private String mRouteId; // need it for printing
+
+    private String mVehicleId; // need it for printing
 
     private MDCMainActivity mMainActivity; // MainActivity to get current stop when start
 
@@ -72,7 +87,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         View view = inflater.inflate(R.layout.fare_activity, null);
         mContext = container.getContext();
         mMainActivity = (MDCMainActivity)getActivity();
-//        mOriginStop = MDCMainActivity.currentStopName.trim();
+
+        mRouteId = getValue(Constants.ROUTE_ID, "No Route Info");
+        mVehicleId = getValue(Constants.VEHICLE_NAME, "No Vehicle Info");
+
         // build UI
         initialiseUI(view);
         // load Stops info
@@ -118,6 +136,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mDestinationTxt.setText(getResources().getString(R.string.fare_destination_description));
         mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
         mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
+        mPassengerCount = 0;
+        mTotalFare = 0;
     }
 
     @Override
@@ -174,8 +194,14 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     private void sendPrintCommand() {
         // increase total passenger count
-        Log.d(LOG_TAG, mPassengerCount + "");
         MDCMainActivity.passengerCount += mPassengerCount;
+        // simple test printing
+        String printInfo = printMessage();
+//        SpannableStringBuilder stringBuilder = getPrintMessage();
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(printInfo);
+        PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, mPassengerCount);
+        printConfirmationDialog.show();
+        logger.debug(stringBuilder.toString());
 
     }
 
@@ -239,7 +265,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * @return
      */
     private int calculateFare(){
-        int price = 0;
+        mPrice = 0;
         // 1. get origin group index
         int originGroup = getStopTag(mOriginStop);
         // 2. get destination group index
@@ -263,12 +289,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        price = Integer.parseInt(fares[difference].trim());
+        mPrice = Integer.parseInt(fares[difference].trim());
 
 //        Log.e(LOG_TAG, "price ==> " + price);
         // 7. check how many passengers need the fare
         // 8. return fare in total
-        return price * mPassengerCount;
+        mTotalFare = mPrice * mPassengerCount;
+        return mTotalFare;
     }
 
     /**
@@ -387,7 +414,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 17, 0);
         text.setSpan(new StyleSpan(Typeface.BOLD), 0, 17, 0);
         mPassengerCountTxt.setText(text);
-//        mPassengerCountTxt.setText("Passenger Count " + name);
         String price = " ฿ " + calculateFare()+"";
         SpannableString fare = new SpannableString(price);
         fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
@@ -419,12 +445,12 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     @Override
     public void showConnected() {
-        Log.d(LOG_TAG, "Printer connected");
+        logger.debug("Printer connected");
     }
 
     @Override
     public void showFailed() {
-        Log.d(LOG_TAG, "Printer connection fails");
+        logger.debug("Printer connection fails");
     }
 
         /**
@@ -437,10 +463,88 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         if(this.isVisible()){
             if(isVisibleToUser){
                 resetData();
-                Log.d(LOG_TAG, "FareFragment is visible");
+                logger.debug("FareFragment is visible");
             }else{
-                Log.d(LOG_TAG, "FareFragment is not visible");
+                logger.debug("FareFragment is not visible");
             }
         }
+    }
+
+    public String printMessage(){
+        String msg = "";
+        msg = "หมายเลขตั๋ว : " + StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0") + "\t วันเวลา : " + getTimestamp() + "\n"
+                + "สาย : " + mRouteId + "\t   หมายเลขรถ : " + mVehicleId + "\n"
+                + "ต้นทาง : " + mOriginStop +"\t   ปลายทาง : " + mDestinationStop + "\n"
+                + "จำนวน : " + mPassengerCount + "\t ราคาต่อคน : " + mPrice + "\t ราคารวม : " + mTotalFare + "\n"
+                + "      ขอบคุณที่ใช้บริการ";
+
+        return msg;
+    }
+
+
+    public SpannableStringBuilder getPrintMessage(){
+        SpannableStringBuilder spannable = new SpannableStringBuilder();
+
+//        String msg = "หมายเลขตั๋ว : " + StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0") + "\t วันเวลา : " + getTimestamp() + "\n"
+//                + "สาย : " + mRouteId + "\t   หมายเลขรถ : " + mVehicleId + "\n"
+//                + "ต้นทาง : " + mOriginStop +"\t   ปลายทาง : " + mDestinationStop + "\n"
+//                + "จำนวน : " + mPassengerCount + "\t ราคาต่อคน : " + mPrice + "\t ราคารวม : " + mTotalFare + "\n"
+//                + "      ขอบคุณที่ใช้บริการ";
+
+        spannable.append("หมายเลขตั๋ว : ");
+        spannable.append(getSpannableString(StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0")));
+        spannable.append("\t");
+        spannable.append(" วันเวลา : " );
+        spannable.append(getSpannableString(getTimestamp()));
+        spannable.append("\n");
+        spannable.append("สาย : ");
+        spannable.append(getSpannableString(mRouteId));
+        spannable.append("\t");
+        spannable.append("   หมายเลขรถ : ");
+        spannable.append(getSpannableString(mVehicleId));
+        spannable.append("\n");
+        spannable.append("ต้นทาง : ");
+        spannable.append(getSpannableString(mOriginStop));
+        spannable.append("\t");
+        spannable.append("   ปลายทาง : ");
+        spannable.append(getSpannableString(mDestinationStop));
+        spannable.append("\n");
+        spannable.append("จำนวน : ");
+        spannable.append(getSpannableString(Integer.toString(mPassengerCount)));
+        spannable.append("\t");
+        spannable.append(" ราคาต่อคน : ");
+        spannable.append(getSpannableString(Integer.toString(mPrice)));
+        spannable.append("\t");
+        spannable.append(" ราคารวม : ");
+        spannable.append(getSpannableString(Integer.toString(mTotalFare)));
+        spannable.append("\n");
+        spannable.append("      ขอบคุณที่ใช้บริการ");
+
+        return spannable;
+    }
+
+    public SpannableString getSpannableString(String str){
+        SpannableString spannableString = new SpannableString(str);
+        spannableString.setSpan(new RelativeSizeSpan(1.0f), 0, str.length(), 0);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, str.length(), 0);
+        spannableString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, str.length(), 0);
+        return spannableString;
+    }
+
+    public String getTimestamp(){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH.mm");
+        String format = simpleDateFormat.format(date);
+        return format;
+    }
+
+    public String getValue(String key, String dftValue) {
+        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        try {
+            return pref.getString(key, dftValue);
+        } catch (Exception e) {
+            return dftValue;
+        }
+
     }
 }

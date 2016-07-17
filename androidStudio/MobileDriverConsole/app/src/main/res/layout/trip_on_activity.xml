@@ -38,13 +38,25 @@
                 android:id="@+id/trip_on_front_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="20dp"
+                android:layout_alignParentTop="false"
+                android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true"
-                android:textSize="18dp"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/trip_on_front_vehicle_name"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
+
+
 
 
 
@@ -54,14 +66,15 @@
             android:id="@+id/trip_on_txt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Trip On Info will be here"
             android:background="@color/colorGrey"
             android:textColor="@color/colorWhite"
-            android:minLines="5"
-            android:textSize="18dp"
+            android:minLines="4"
             android:gravity="center"
             android:layout_weight="1"
             />
+
+
+
 
 
 
@@ -88,12 +101,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true"
-                android:textSize="18dp"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentRight="true"
+                android:gravity="right" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/trip_on_rear_vehicle_name"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
     </LinearLayout>
+
+
+
+
+
+
+
+
 
 
     <com.google.android.gms.maps.MapView
