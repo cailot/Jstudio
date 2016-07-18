@@ -90,6 +90,8 @@ public interface Constants {
 
     public static final int FARE_FRAGMENT_TAB = 1;
 
+    public static final int SETTING_FRAGMENT_TAB = 2;
+
     public static final int STATUS_BASE = 2016;
 
     public static final int ON = STATUS_BASE + 1;

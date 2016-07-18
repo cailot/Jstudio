@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 
 
 /**
@@ -24,6 +25,8 @@ public class TabAdapter extends FragmentPagerAdapter{
 
     FareFragment mFareFragment;
 
+    SettingFragment mSettingFragment;
+
     public TabAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -33,6 +36,7 @@ public class TabAdapter extends FragmentPagerAdapter{
         this.mContext = context;
         mTripOnFragment = new TripOnFragment();
         mFareFragment = new FareFragment();
+        mSettingFragment = new SettingFragment();
     }
 
 //    public TabAdapter(FragmentManager fm, Context context, Fragment f1, Fragment f2) {
@@ -49,14 +53,14 @@ public class TabAdapter extends FragmentPagerAdapter{
         // below) with the page number as its lone argument.
         Fragment fragment = null;
         switch(position) {
-            case 0:
-                //fragment = Fragment.instantiate(mContext, TripOnFragment.class.getName());
+            case Constants.TRIP_ON_FRAGMENT_TAB:
                 fragment = mTripOnFragment;
                 break;
-            case 1:
-//                fragment = Fragment.instantiate(mContext, FareFragment.class.getName());
+            case Constants.FARE_FRAGMENT_TAB:
                 fragment = mFareFragment;
                 break;
+            case Constants.SETTING_FRAGMENT_TAB:
+                fragment = mSettingFragment;
             default:
                 break;
         }
@@ -66,16 +70,18 @@ public class TabAdapter extends FragmentPagerAdapter{
     @Override
     public int getCount() {
         // Show 2 total pages.
-        return 2;
+        return 3;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0:
+            case Constants.TRIP_ON_FRAGMENT_TAB:
                 return mContext.getResources().getString(R.string.first_tab_name);
-            case 1:
+            case Constants.FARE_FRAGMENT_TAB:
                 return mContext.getResources().getString(R.string.second_tab_name);
+            case Constants.SETTING_FRAGMENT_TAB:
+                return mContext.getResources().getString(R.string.third_tab_name);
         }
         return null;
     }
