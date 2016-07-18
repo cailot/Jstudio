@@ -186,6 +186,13 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     private void turnOnTripOn() {
         // save vehicle name into SharedPreferences
         put(Constants.VEHICLE_NAME, mVehicleId);
+        
+        // save stop details into SharedPreferences
+        saveStopsDetail();
+        // save stop groups into SharedPreferences
+        saveStopGroupsDetail();
+        // save fares into SharedPreferences
+        saveFaresDetail();
 
         SpannableStringBuilder spannableStringBuilder = makeRouteInfo();
         TripOnConfirmationDialog tripOnConfirmationDialog = new TripOnConfirmationDialog(this, spannableStringBuilder);
