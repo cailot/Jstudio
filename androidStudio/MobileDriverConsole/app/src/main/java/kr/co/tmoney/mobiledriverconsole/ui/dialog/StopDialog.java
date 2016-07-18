@@ -80,7 +80,7 @@ public class StopDialog extends DialogFragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
 //                String stopInfo = names[pos] + " : " + zones[pos];
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromStopDialogListener.sendStopName(mNames[pos], mTypes[pos], mRequestCode);
+                mPassValueFromStopDialogListener.sendStopName(mNames==null ? "" : mNames[pos], mTypes==null ? "" : mTypes[pos], mRequestCode);
                 dismiss();
             }
         });

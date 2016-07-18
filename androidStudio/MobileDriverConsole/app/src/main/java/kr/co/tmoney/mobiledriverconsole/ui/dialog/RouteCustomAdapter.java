@@ -25,12 +25,12 @@ public class RouteCustomAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mNames.length;
+        return mNames==null ? 0 : mNames.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames[i];
+        return mNames==null ? "" :mNames[i];
     }
 
     @Override
@@ -49,8 +49,8 @@ public class RouteCustomAdapter extends BaseAdapter{
         // Get View
         TextView stopName = (TextView) view.findViewById(R.id.route_id_txt);
         TextView stopZone = (TextView) view.findViewById(R.id.route_name_txt);
-        stopName.setText(mNames[i]);
-        stopZone.setText(mTeams[i]);
+        stopName.setText(mNames==null ? "" : mNames[i]);
+        stopZone.setText(mTeams==null ? "" : mTeams[i]);
 
         return view;
     }

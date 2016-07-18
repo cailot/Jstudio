@@ -74,7 +74,7 @@ public class VehicleDialog extends DialogFragment{
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                     // update TexView in FareFragment according to user's choice
-                    mPassValueFromVehicleDialogListener.sendVehicleName(mNames[pos]);
+                    mPassValueFromVehicleDialogListener.sendVehicleName(mNames==null ? "" : mNames[pos]);
                     dismiss();
                 }
             });

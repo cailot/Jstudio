@@ -28,7 +28,7 @@
     -->
     <application
         android:allowBackup="true"
-        android:name=".LogApplication"
+        android:name=".MDCApplication"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"

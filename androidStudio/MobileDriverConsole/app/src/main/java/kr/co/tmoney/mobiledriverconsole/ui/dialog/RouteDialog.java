@@ -77,7 +77,7 @@ public class RouteDialog extends DialogFragment{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromRouteDialogListener.sendRouteName(mRouteIds[pos], mNames[pos]);
+                mPassValueFromRouteDialogListener.sendRouteName(mRouteIds==null ? "" : mRouteIds[pos], mNames==null ? "" : mNames[pos]);
                 dismiss();
             }
         });

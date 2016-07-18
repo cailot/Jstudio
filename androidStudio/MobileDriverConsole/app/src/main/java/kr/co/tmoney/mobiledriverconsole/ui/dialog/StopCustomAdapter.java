@@ -25,12 +25,12 @@ public class StopCustomAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mNames.length;
+        return mNames==null ? 0 : mNames.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames[i];
+        return mNames==null ? "" : mNames[i];
     }
 
     @Override
@@ -49,9 +49,8 @@ public class StopCustomAdapter extends BaseAdapter{
         // Get View
         TextView stopName = (TextView) view.findViewById(R.id.stop_name_txt);
         TextView stopZone = (TextView) view.findViewById(R.id.stop_zone_txt);
-        stopName.setText(mNames[i]);
-        stopZone.setText(mTypes[i]);
-
+        stopName.setText(mNames==null ? "" : mNames[i]);
+        stopZone.setText(mTypes==null ? "" : mTypes[i]);
         return view;
     }
 

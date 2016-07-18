@@ -35,9 +35,6 @@ public class PrintConfirmationDialog extends Dialog {
 
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-
-
-
         mConfirmTxt = (TextView) findViewById(R.id.print_confimation_txt);
         mConfirmTxt.setText(confirm);
 
@@ -46,7 +43,7 @@ public class PrintConfirmationDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 mPrinterAdapter.print(confirm.toString());
-                mPrinterAdapter.fullCut(); // need to check....
+                mPrinterAdapter.fullCut();
                 MDCMainActivity.passengerCount += count;
                 MDCMainActivity.fareTransactionId++;
                 dismiss();

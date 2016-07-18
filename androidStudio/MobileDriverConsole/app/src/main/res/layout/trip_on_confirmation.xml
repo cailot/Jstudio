@@ -8,23 +8,11 @@
     android:background="@color/colorGrey"
     >
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="คุณต้องการที่จะ พิมพ์ ข้อมูล ดังต่อไปนี้ ?"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:minLines="2"
-        android:gravity="center_vertical|center_horizontal"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/print_confimation_txt"
+        android:id="@+id/trip_on_confimation_txt"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:gravity="center_vertical|center_horizontal"
@@ -41,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cancel"
-            android:id="@+id/print_cancel_btn"
+            android:id="@+id/trip_on_cancel_btn"
             android:background="@drawable/bg_navy_rounded_corners"
             android:layout_marginRight="@dimen/abc_action_bar_default_height_material"
             android:textColor="#ffffff"
@@ -53,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Confirm"
-            android:id="@+id/print_confirmation_btn"
+            android:id="@+id/trip_on_confirmation_btn"
             android:background="@drawable/bg_navy_rounded_corners"
             android:textColor="#ffffff"
             android:minWidth="@dimen/abc_search_view_text_min_width"

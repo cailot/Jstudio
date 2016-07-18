@@ -23,12 +23,12 @@ public class VehicleCustomAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mNames.length;
+        return mNames==null ? 0 : mNames.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames[i];
+        return mNames==null ? "" : mNames[i];
     }
 
     @Override
@@ -46,7 +46,7 @@ public class VehicleCustomAdapter extends BaseAdapter{
 
         // Get View
         TextView stopName = (TextView) view.findViewById(R.id.vehicle_name_txt);
-        stopName.setText(mNames[i]);
+        stopName.setText(mNames==null ? "" : mNames[i]);
 
         return view;
     }

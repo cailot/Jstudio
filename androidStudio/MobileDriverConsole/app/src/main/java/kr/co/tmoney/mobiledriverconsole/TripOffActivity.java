@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import kr.co.tmoney.mobiledriverconsole.model.vo.RouteVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.RouteDialog;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.TripOnConfirmationDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.VehicleDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -83,7 +85,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         }
 
         // setup Firebase on Android
-        Firebase.setAndroidContext(this);
+//        Firebase.setAndroidContext(this);
         mFirebase = new Firebase(Constants.FIREBASE_HOME);
         // bring up all routes & vehicles list to save up time
         getRouteList();
@@ -185,32 +187,75 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // save vehicle name into SharedPreferences
         put(Constants.VEHICLE_NAME, mVehicleId);
 
-        // update DB to indicate starting
-        setTripOn();
+        SpannableStringBuilder spannableStringBuilder = makeRouteInfo();
+        TripOnConfirmationDialog tripOnConfirmationDialog = new TripOnConfirmationDialog(this, spannableStringBuilder);
+//        tripOnConfirmationDialog.show();
+        tripOnConfirmationDialog.show(getFragmentManager(), Constants.ROUTE_DIALOG_TAG);
+
+//        // save stop details into SharedPreferences
+//        saveStopsDetail();
+//        // save stop groups into SharedPreferences
+//        saveStopGroupsDetail();
+//        // save fares into SharedPreferences
+//        saveFaresDetail();
+//
+//        // update DB to indicate starting
+//        setTripOn();
 
         // switch to TripOn
-        Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
-        startActivity(i);
+//        Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
+//        startActivity(i);
+    }
+
+    private SpannableStringBuilder makeRouteInfo() {
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
+        //String title = "Do you want to start driving ?";
+        String title="คุณต้องการ ที่จะเริ่มต้น การขับรถ ?";
+        SpannableString titleS = new SpannableString(title);
+        titleS.setSpan(new RelativeSizeSpan(1.0f), 0, title.length(), 0);
+        titleS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, title.length(), 0);
+        titleS.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
+        spannableStringBuilder.append(titleS);
+        spannableStringBuilder.append("\n\n");
+        spannableStringBuilder.append("Route : ");
+        SpannableString routeS = new SpannableString(mRouteId);
+        routeS.setSpan(new RelativeSizeSpan(1.5f), 0, mRouteId.length(), 0);
+        routeS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, mRouteId.length(), 0);
+        routeS.setSpan(new StyleSpan(Typeface.BOLD), 0, mRouteId.length(), 0);
+        spannableStringBuilder.append(routeS);
+        spannableStringBuilder.append("\n\n");
+        spannableStringBuilder.append("Vehicle : ");
+        SpannableString vehicleS = new SpannableString(mVehicleId);
+        vehicleS.setSpan(new RelativeSizeSpan(1.5f), 0, mVehicleId.length(), 0);
+        vehicleS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, mVehicleId.length(), 0);
+        vehicleS.setSpan(new StyleSpan(Typeface.BOLD), 0, mVehicleId.length(), 0);
+        spannableStringBuilder.append(vehicleS);
+
+
+
+        return spannableStringBuilder;
+
     }
 
     /**
      * save all stops information into SharedPreference by Gson
      */
-    private void saveStopsDetail() {
+    public void saveStopsDetail() {
         put(Constants.STOPS_IN_ROUTE, mStops);
     }
 
     /**
      * save stop groups information into SharedPreference by Gson
      */
-    private void saveStopGroupsDetail() {
+    public void saveStopGroupsDetail() {
         put(Constants.STOP_GROUPS_IN_ROUTE, mStopGroups);
     }
 
     /**
      * save all fares information into SharedPreference by Gson
      */
-    private void saveFaresDetail() {
+    public void saveFaresDetail() {
         put(Constants.FARES_IN_ROUTE, MDCUtils.getStopGroups(mFares));
     }
 
@@ -274,12 +319,12 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     @Override
     public void sendVehicleName(String routeName) {
-        // save stop details into SharedPreferences
-        saveStopsDetail();
-        // save stop groups into SharedPreferences
-        saveStopGroupsDetail();
-        // save fares into SharedPreferences
-        saveFaresDetail();
+        // // save stop details into SharedPreferences
+        // saveStopsDetail();
+        // // save stop groups into SharedPreferences
+        // saveStopGroupsDetail();
+        // // save fares into SharedPreferences
+        // saveFaresDetail();
         // assign vehicle name to mVehicleId
         mVehicleId = routeName;
         // update selected vehicle info in TextView
@@ -397,7 +442,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      * 2. update front Vehicle's rearVehicle value
      * 3. register vehicle name under 'routes'/vehicles
     */
-    private void setTripOn() {
+    public void setTripOn() {
 
         String frontCar = (String) mFrontVehicleInfo.get(Constants.FRONT_VEHICLE_ID);
         String frontIndex = (String) mFrontVehicleInfo.get(Constants.FRONT_VEHICLE_INDEX);

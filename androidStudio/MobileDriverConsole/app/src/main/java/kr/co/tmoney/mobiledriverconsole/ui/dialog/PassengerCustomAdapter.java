@@ -23,12 +23,12 @@ public class PassengerCustomAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return mNames.length;
+        return mNames==null ? 0 :mNames.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames[i];
+        return mNames==null ? "" : mNames[i];
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PassengerCustomAdapter extends BaseAdapter{
 
         // Get View
         TextView passengerCount = (TextView) view.findViewById(R.id.passenger_count_txt);
-        passengerCount.setText(mNames[i]);
+        passengerCount.setText(mNames==null ? "" : mNames[i]);
 
         return view;
     }

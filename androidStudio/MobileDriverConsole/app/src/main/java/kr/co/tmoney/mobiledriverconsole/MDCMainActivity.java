@@ -21,7 +21,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -128,7 +127,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
 
         // Firebase set up
-        Firebase.setAndroidContext(this);
+//        Firebase.setAndroidContext(this);
 
         // Dummy data for presentation purpose
         MDCMainActivity.currentStopName = mStops[3].getName();
