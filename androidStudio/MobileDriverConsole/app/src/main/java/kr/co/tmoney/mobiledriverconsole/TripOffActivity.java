@@ -184,6 +184,13 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     private void turnOnTripOn() {
         // save vehicle name into SharedPreferences
         put(Constants.VEHICLE_NAME, mVehicleId);
+        
+        // save stop details into SharedPreferences
+        saveStopsDetail();
+        // save stop groups into SharedPreferences
+        saveStopGroupsDetail();
+        // save fares into SharedPreferences
+        saveFaresDetail();
 
         // update DB to indicate starting
         setTripOn();
@@ -274,12 +281,12 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     @Override
     public void sendVehicleName(String routeName) {
-        // save stop details into SharedPreferences
-        saveStopsDetail();
-        // save stop groups into SharedPreferences
-        saveStopGroupsDetail();
-        // save fares into SharedPreferences
-        saveFaresDetail();
+        // // save stop details into SharedPreferences
+        // saveStopsDetail();
+        // // save stop groups into SharedPreferences
+        // saveStopGroupsDetail();
+        // // save fares into SharedPreferences
+        // saveFaresDetail();
         // assign vehicle name to mVehicleId
         mVehicleId = routeName;
         // update selected vehicle info in TextView
