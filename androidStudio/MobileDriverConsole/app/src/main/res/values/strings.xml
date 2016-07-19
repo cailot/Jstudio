@@ -6,18 +6,6 @@
     <string name="third_tab_name">Setting              </string>
 
 
-    <!-- TripOff UI strings -->
-    <string name="trip_off_route_txt_description">Please Select Route</string>
-    <string name="trip_off_vehicle_txt_description">Please Select Vehicle</string>
-    <string name="trip_off_logout_btn_description">LOG OUT</string>
-    <string name="trip_off_tripon_btn_description">TRIP ON</string>
-
-    <!-- Fare UI strings -->
-    <string name="fare_origin_description">Please Select Origin Stop</string>
-    <string name="fare_destination_description">Please Select Destination Stop</string>
-    <string name="fare_passenger_count_description">Please Select Passenger Count</string>
-    <string name="fare_price_description">Fare</string>
-
     <!-- Transition type strings -->
     <string name="geofence_transition_entered">Entered</string>
     <string name="geofence_transition_exited">Exited</string>
@@ -36,11 +24,15 @@
     <string name="geofence_transition_invalid_type">
         Geofence transition error: invalid transition type %1$d
     </string>
-    <string name="geofence_transition_notification_text">Click notification to return to app</string>
+
+    <string name="null_avoid_text">Please try again</string>
+    <string name="no_route_found">No available Route Found</string>
+    <string name="no_vehicle_found">No available vehicle on the Route</string>
+    <string name="error_route_list">Error happens while getting Route list : </string>
 
     <!-- Bluetooth Printer -->
-    <string name="connected">Connected</string>
-    <string name="unconnected">Unconnected</string>
+    <string name="printer_connected">Connected</string>
+    <string name="printer_unconnected">Unconnected</string>
     <string name="section_type">Section</string>
     <string name="device_type">Device</string>
     <string name="pair">Pair</string>
@@ -52,8 +44,17 @@
     <string name="trip_off_vechicle_legend">Vehicle : </string>
     <string name="trip_off_route_title">Please Select Route</string>
     <string name="trip_off_vehicle_title">Please Select Vehicle</string>
+    <string name="trip_off_wait">Please Wait...</string>
     <string name="trip_off_log_out">LOG OUT</string>
     <string name="trip_off_trip_on">TRIP ON</string>
+
+    <!-- MDC Main -->
+    <string name="gps_permission_check">GPS permission is needed to proceed service</string>
+    <string name="gps_permission_grant">User grants GPS permission</string>
+    <string name="gps_permission_reject">User should grant a permission to proceed</string>
+    <string name="geofence_removed">Geofence Removed</string>
+    <string name="geofence_denied">Geofence Denied</string>
+
 
     <!-- Fare Tab -->
     <string name="fare_origin_legend">Origin : </string>

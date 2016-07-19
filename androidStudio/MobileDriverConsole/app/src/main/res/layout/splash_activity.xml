@@ -35,7 +35,8 @@
         android:shadowRadius="1.6"
         android:textAllCaps="true"
         android:paddingLeft="@android:dimen/thumbnail_height"
-        android:paddingBottom="@dimen/abc_config_prefDialogWidth" />
+        android:paddingBottom="@dimen/abc_config_prefDialogWidth"
+        android:layout_marginTop="5dp" />
 
 
 

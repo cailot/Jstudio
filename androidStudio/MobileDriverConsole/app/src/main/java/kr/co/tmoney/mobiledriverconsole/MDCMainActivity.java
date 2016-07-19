@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -51,7 +53,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private TabAdapter mTabAdapter;
 
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
 
     private GeoReceiver mGeoReceiver;
 
@@ -97,6 +99,36 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mTabAdapter);
 
+
+
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Fragment fragment = ((TabAdapter) mViewPager.getAdapter()).getFragment(position);
+                if(position==Constants.FARE_FRAGMENT_TAB && fragment !=null){
+                    fragment.onResume();
+                    logger.error("I called onResume()....");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
+
+
+
+
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
 
@@ -120,7 +152,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             }else {
                 // need permission to proceed
                 if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
-                    Toast.makeText(this, "GPS permission is needed to proceed service", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.gps_permission_check), Toast.LENGTH_SHORT).show();
                 }
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
             }
@@ -151,9 +183,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
 
-                logger.debug("User grants GPS permission");
+                logger.debug(getString(R.string.gps_permission_grant));
             } else {
-                logger.error("User should grant a permission to proceed");
+                logger.error(getString(R.string.gps_permission_reject));
             }
 
         } else {
@@ -172,6 +204,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 break;
             case Constants.TRIP_ON_FRAGMENT_TAB :
                 mTabLayout.getTabAt(Constants.TRIP_ON_FRAGMENT_TAB).select();
+                break;
+            case Constants.SETTING_FRAGMENT_TAB :
+                mTabLayout.getTabAt(Constants.SETTING_FRAGMENT_TAB).select();
                 break;
         }
     }
@@ -227,7 +262,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     switchTabSelection(Constants.TRIP_ON_FRAGMENT_TAB);
                     break;
                 default :
-                    Toast.makeText(context, "Unknow action received", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.unknown_geofence_transition), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -252,7 +287,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     public String getVehicleId(String key) {
         SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        String id = pref.getString(key, "No available vehicle");
+        String id = pref.getString(key, getString(R.string.no_vehicle_found));
         return id;
     }
 
@@ -322,16 +357,16 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     } else {
                         switch (status.getStatusCode()) {
                             case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
-                                message = "Geonfence not available";
+                                message = getString(R.string.geofence_not_available);
                                 break;
                             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
-                                message = "Too many Geonfences registered";
+                                message = getString(R.string.geofence_too_many_geofences);
                                 break;
                             case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
-                                message = "Too many PendingIntents for Geonfence";
+                                message = getString(R.string.geofence_too_many_pending_intents);
                                 break;
                             default:
-                                message = "Unknowkn Error";
+                                message = getString(R.string.unknown_geofence_transition);
                         }
                     }
 //                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
@@ -359,9 +394,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 public void onResult(Status status) {
                     String message;
                     if (status.isSuccess()) {
-                        message = "Geofence removed";
+                        message = getString(R.string.geofence_removed);
                     } else {
-                        message = "Geonfence denied : " + status.getStatusCode();
+                        message = getString(R.string.geofence_denied) + status.getStatusCode();
                     }
                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
@@ -505,5 +540,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        logger.error("onConfigurationChanged");
+    }
 }

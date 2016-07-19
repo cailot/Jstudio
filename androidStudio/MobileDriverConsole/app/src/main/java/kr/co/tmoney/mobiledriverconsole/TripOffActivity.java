@@ -3,8 +3,10 @@ package kr.co.tmoney.mobiledriverconsole;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.model.vo.RouteVO;
@@ -40,6 +44,7 @@ import kr.co.tmoney.mobiledriverconsole.ui.dialog.RouteDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.TripOnConfirmationDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.VehicleDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
+import kr.co.tmoney.mobiledriverconsole.utils.LocaleHelper;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
@@ -84,18 +89,36 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         }else{
         }
 
+
+
+
+        Locale l = getResources().getConfiguration().locale;
+
+        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+
+        String saved =  pref.getString(Constants.SELECTED_LANGUAGE, "");
+
+        Log.e(LOG_TAG, i+ "\t\t" +  l.getLanguage() + "\t saved - "  + saved);
+
+
+
+
+
         // setup Firebase on Android
-//        Firebase.setAndroidContext(this);
         mFirebase = new Firebase(Constants.FIREBASE_HOME);
         // bring up all routes & vehicles list to save up time
         getRouteList();
         getVehicleList();
+
+
 
         // loading Splash
         startActivity(new Intent(this, SplashActivity.class));
 
         // build UI
         initialiseUI();
+
+        new CheckRouteNVehicleTask().execute();
 
     }
 
@@ -105,6 +128,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void initialiseUI() {
         mRouteTxt = (TextView) findViewById(R.id.trip_off_route_txt);
+        mRouteTxt.setEnabled(false);
+        mRouteTxt.setTextColor(Color.BLACK);
         mRouteTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +143,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 tripOffEvents(view);
             }
         });
+        mVehicleTxt.setEnabled(false);
+        mVehicleTxt.setTextColor(Color.BLACK);
 
         mLogoutTxt = (TextView) findViewById(R.id.trip_off_logout_btn);
         mLogoutTxt.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +160,8 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 tripOffEvents(view);
             }
         });
-
+        mTripOnTxt.setEnabled(false);
+        mTripOnTxt.setTextColor(Color.BLACK);
     }
 
     @Override
@@ -176,6 +204,11 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        logger.error("onConfigurationChanged");
+    }
 
     /**
      * Just about to leave this activity so set up data for next activities
@@ -187,12 +220,12 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // save vehicle name into SharedPreferences
         put(Constants.VEHICLE_NAME, mVehicleId);
         
-        // save stop details into SharedPreferences
-        saveStopsDetail();
-        // save stop groups into SharedPreferences
-        saveStopGroupsDetail();
-        // save fares into SharedPreferences
-        saveFaresDetail();
+//        // save stop details into SharedPreferences
+//        saveStopsDetail();
+//        // save stop groups into SharedPreferences
+//        saveStopGroupsDetail();
+//        // save fares into SharedPreferences
+//        saveFaresDetail();
 
         SpannableStringBuilder spannableStringBuilder = makeRouteInfo();
         TripOnConfirmationDialog tripOnConfirmationDialog = new TripOnConfirmationDialog(this, spannableStringBuilder);
@@ -225,21 +258,19 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         titleS.setSpan(new StyleSpan(Typeface.BOLD), 0, title.length(), 0);
         spannableStringBuilder.append(titleS);
         spannableStringBuilder.append("\n\n");
-        spannableStringBuilder.append("Route : ");
+        spannableStringBuilder.append(getString(R.string.trip_off_route_legend));
         SpannableString routeS = new SpannableString(mRouteId);
         routeS.setSpan(new RelativeSizeSpan(1.5f), 0, mRouteId.length(), 0);
         routeS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, mRouteId.length(), 0);
         routeS.setSpan(new StyleSpan(Typeface.BOLD), 0, mRouteId.length(), 0);
         spannableStringBuilder.append(routeS);
         spannableStringBuilder.append("\n\n");
-        spannableStringBuilder.append("Vehicle : ");
+        spannableStringBuilder.append(getString(R.string.trip_off_vechicle_legend));
         SpannableString vehicleS = new SpannableString(mVehicleId);
         vehicleS.setSpan(new RelativeSizeSpan(1.5f), 0, mVehicleId.length(), 0);
         vehicleS.setSpan(new ForegroundColorSpan(Color.WHITE), 0, mVehicleId.length(), 0);
         vehicleS.setSpan(new StyleSpan(Typeface.BOLD), 0, mVehicleId.length(), 0);
         spannableStringBuilder.append(vehicleS);
-
-
 
         return spannableStringBuilder;
 
@@ -271,8 +302,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      *  logout
      */
     private void logout(){
-//        searchFrontVehicle();
-//        setTripOn();
+        switchLanguage();
     }
 
 
@@ -290,7 +320,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         put(Constants.ROUTE_ID, mRouteId);
         // update selected route info in TextView
         SpannableStringBuilder spannable = new SpannableStringBuilder();
-        String legend = "Route : ";
+        String legend = getString(R.string.trip_off_route_legend);
         SpannableString legendS= new SpannableString(legend);
         legendS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legend.length(), 0);
         legendS.setSpan(new StyleSpan(Typeface.BOLD), 0, legend.length(), 0);
@@ -317,6 +347,13 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         getStopGroupsDetail();
         // get fares detail in route
         getFaresDetail();
+
+        // enable Trip On button after getting all stop & fare info
+        new CheckStopNFareTask().execute();
+        // enable Vehicle Txt
+        mVehicleTxt.setEnabled(true);
+        mVehicleTxt.setTextColor(Color.WHITE);
+
     }
 
 
@@ -326,18 +363,12 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     @Override
     public void sendVehicleName(String routeName) {
-        // // save stop details into SharedPreferences
-        // saveStopsDetail();
-        // // save stop groups into SharedPreferences
-        // saveStopGroupsDetail();
-        // // save fares into SharedPreferences
-        // saveFaresDetail();
         // assign vehicle name to mVehicleId
         mVehicleId = routeName;
         // update selected vehicle info in TextView
 
         SpannableStringBuilder spannable = new SpannableStringBuilder();
-        String legend = "Vehicle : ";
+        String legend = getString(R.string.trip_off_vechicle_legend);
         SpannableString legendS= new SpannableString(legend);
         legendS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legend.length(), 0);
         legendS.setSpan(new StyleSpan(Typeface.BOLD), 0, legend.length(), 0);
@@ -350,6 +381,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         spannable.append(routeS);
 
         mVehicleTxt.setText(spannable);
+
+        // change color of Trip On button
+        mTripOnTxt.setTextColor(Color.WHITE);
     }
 
 
@@ -363,7 +397,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         routeDialog.setPassValueFromRouteDialogListener(TripOffActivity.this);
         routeDialog.show(getFragmentManager(), Constants.ROUTE_DIALOG_TAG);
         // rollback original message to Vehicle TextView
-        mVehicleTxt.setText(getString(R.string.trip_off_vehicle_txt_description));
+        mVehicleTxt.setText(getString(R.string.trip_off_vehicle_title));
     }
 
     /**
@@ -372,9 +406,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     private void showVehicleDialog() {
         if(mVehicles.length==0){
             // show warning message
-            Toast.makeText(getApplicationContext(), "No available vehicle on the Route", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_vehicle_found), Toast.LENGTH_SHORT).show();
             // update TextView
-            mVehicleTxt.setText(getString(R.string.trip_off_vehicle_txt_description));
+            mVehicleTxt.setText(getString(R.string.trip_off_vehicle_title));
             return;
         }
         VehicleDialog vehicleDialog = new VehicleDialog(mVehicles);
@@ -406,7 +440,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
     }
@@ -425,7 +459,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
                 for (DataSnapshot shot : snapshot.getChildren()) {
                     // bring only available vehicles
                     boolean isTrip = (boolean) shot.child(Constants.VEHICLE_TRIP_ON).getValue();
-//                    if(!isTrip) for testing purpose
+                    if(!isTrip)
                     {
                         vehicles.add(shot.getKey());
                     }
@@ -437,7 +471,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
     }
@@ -484,6 +518,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         }
         routeVehicle.updateChildren(routeUpdate);
 
+        // turn on 'Trip On'
+        put(Constants.VEHICLE_TRIP_ON, true);
+
     }
 
     /**
@@ -515,7 +552,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error("Error happens while getting Route list : " + firebaseError.getMessage());
+                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
 
@@ -604,6 +641,13 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         editor.commit();
     }
 
+    public void put(String key, boolean value){
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
     public void put(String key, Object value) {
         SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -611,6 +655,126 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         editor.putString(key, json);
         editor.commit();
         logger.debug(json);
+    }
+
+
+    /**
+     * This task make sure Route text becomes available after populating Route & Vehicle data
+     */
+    public class CheckRouteNVehicleTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            boolean isDone = false;
+            // check whether information is updated and ready to go
+            while(!isDone){
+                if(mRouteIds!=null && mRouteIds.length > 0 && mRouteNames!=null && mRouteNames.length > 0 && mVehicles!=null && mVehicles.length > 0){
+                    isDone = true;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mRouteTxt.setEnabled(true);
+            mRouteTxt.setTextColor(Color.WHITE);
+        }
+    }
+
+
+    /**
+     * This task make sure Route text becomes available after populating Route & Vehicle data
+     */
+    public class CheckStopNFareTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            boolean isDone = false;
+            // check whether information is updated and ready to go
+            while(!isDone){
+                if(mStops!=null && mStops.length > 0 && mStopGroups!=null && mStopGroups.length > 0 && mFares!=null && mFares.length() > 0){
+                    isDone = true;
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mTripOnTxt.setEnabled(true);
+//            mTripOnTxt.setTextColor(Color.WHITE);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    int i = 0;
+    public void switchLanguage() {
+        i++;
+
+        Locale l = getResources().getConfiguration().locale;
+        Log.e(LOG_TAG, i+ "\t\t" +  l.getLanguage() + "\t Ko - " + Locale.KOREA + "\t En - " + Locale.US);
+
+        // change Locale
+        Locale locale = null;
+        if(i%2==0) {
+            locale = Locale.KOREAN;
+            LocaleHelper.setLocale(getApplicationContext(), "ko");
+        }else{
+            locale = Locale.ENGLISH;
+            LocaleHelper.setLocale(getApplicationContext(), "en");
+        }
+
+//        // save language setting to SharedPreferences
+//        put(Constants.SELECTED_LANGUAGE, locale);
+
+        Log.e(LOG_TAG, "current " + locale);
+
+//        // change language on UI
+//        Locale.setDefault(locale);
+//        //Configuration config = new Configuration();
+//        Configuration config = getBaseContext().getResources().getConfiguration();
+//        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+////        Intent refresh = new Intent(this, TripOffActivity.class);
+////        refresh.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////        startActivity(refresh);
+//
+//
+//
+//        initialiseUI();
+        Log.e(LOG_TAG, getString(R.string.trip_off_log_out));
+        applyLanguageSetting();
+    }
+
+
+    private void applyLanguageSetting(){
+        mLogoutTxt.setText(R.string.trip_off_log_out);
+        mTripOnTxt.setText(R.string.trip_off_trip_on);
     }
 
 }

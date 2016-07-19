@@ -8,6 +8,10 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
@@ -20,6 +24,10 @@ import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 public class TabAdapter extends FragmentPagerAdapter{
 
     Context mContext;
+
+    Map<Integer, String> mTags;
+
+    FragmentManager mFragementManager;
 
     TripOnFragment mTripOnFragment;
 
@@ -34,17 +42,31 @@ public class TabAdapter extends FragmentPagerAdapter{
     public TabAdapter(FragmentManager fm, Context context) {
         super(fm);
         this.mContext = context;
+        mFragementManager = fm;
         mTripOnFragment = new TripOnFragment();
         mFareFragment = new FareFragment();
         mSettingFragment = new SettingFragment();
+        mTags = new HashMap<Integer, String>();
     }
 
-//    public TabAdapter(FragmentManager fm, Context context, Fragment f1, Fragment f2) {
-//        super(fm);
-//        this.mContext = context;
-//        mTripOnFragment = (TripOnFragment) f1;
-//        mFareFragment = (FareFragment) f2;
-//    }
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Object object = super.instantiateItem(container, position);
+        if(object instanceof Fragment){
+            Fragment fragment = (Fragment) object;
+            String tag = fragment.getTag();
+            mTags.put(position, tag);
+        }
+        return object;
+    }
+
+    public Fragment getFragment(int positon){
+        String tag = mTags.get(positon);
+        if(tag==null){
+            return null;
+        }
+        return mFragementManager.findFragmentByTag(tag);
+    }
 
     @Override
     public Fragment getItem(int position) {

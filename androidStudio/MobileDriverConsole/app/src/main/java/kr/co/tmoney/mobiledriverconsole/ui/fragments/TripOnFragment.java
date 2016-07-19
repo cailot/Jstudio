@@ -228,7 +228,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     private void requestLocationUpdate() {
         if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
-                Toast.makeText(mContext, "GPS permission is needed to show the map", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getString(R.string.gps_permission_check), Toast.LENGTH_SHORT).show();
             }
             // request GPS permission
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
@@ -315,13 +315,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //        spannable.append(headingS);
 //        spannable.append("\t");
 //
-//        Drawable driver = getResources().getDrawable(R.drawable.driver);
-//        driver.setBounds(0, 0, mTripOnTxt.getLineHeight(), mTripOnTxt.getLineHeight());
-//        ImageSpan imageSpan = new ImageSpan(driver, ImageSpan.ALIGN_BASELINE);
-//        SpannableString headingS = new SpannableString(" ");
-//        headingS.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        headingS.setSpan(new StyleSpan(Typeface.BOLD), 0, 1, 0);
-//        spannable.append(headingS);
 
         String speed = String.format( "%.1f", location.getSpeed() * 3600 / 1000);// + " km/h";
         SpannableString speedS = new SpannableString(speed);
@@ -361,8 +354,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mRearVehicle = new VehicleVO();
 
         mFirebase = new Firebase(Constants.FIREBASE_HOME);
-        mRouteId = getValue(Constants.ROUTE_ID, "No avaiable route");
-        mVehicleId = getValue(Constants.VEHICLE_NAME, "No available vehicle");
+        mRouteId = getValue(Constants.ROUTE_ID, getString(R.string.no_route_found));
+        mVehicleId = getValue(Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
 
         // get front/rear car info
         Firebase vehicleRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
@@ -375,7 +368,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 if(dataSnapshot.child(Constants.VEHICLE_REAR).getValue()!=null){
                     mRearVehicle.setId(dataSnapshot.child(Constants.VEHICLE_REAR).getValue().toString());
                 }
-                logger.debug("Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+//                logger.debug("Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {

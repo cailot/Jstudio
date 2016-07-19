@@ -158,8 +158,6 @@ public interface Constants {
 
     public static final int GOOGLE_MAP_POLLING_INTERVAL = 1000; // every second GPS update
 
-    public static final double ADULT_FARE = 25.0;
-
 
     public static final String PRE_LOG_ENTRY = "###\t";
 
@@ -203,6 +201,16 @@ public interface Constants {
     public static final int FLAG_SUCCESS_CONNECT = 34;
 
     public static final String BLUETOOTH_PRINTER = "820USEB";
+
+
+
+    //////////////////////////// Language Setting /////////////////////////////////////
+
+    public static final String SELECTED_LANGUAGE = "selected_language";
+
+    public static final String LANGUAGE_KOREAN = "ko";
+
+    public static final String LANGUAGE_ENGLISH = "en";
 
 
 }

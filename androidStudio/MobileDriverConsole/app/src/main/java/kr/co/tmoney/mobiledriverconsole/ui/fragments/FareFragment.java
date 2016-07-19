@@ -13,7 +13,6 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,8 +87,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mContext = container.getContext();
         mMainActivity = (MDCMainActivity)getActivity();
 
-        mRouteId = getValue(Constants.ROUTE_ID, "No Route Info");
-        mVehicleId = getValue(Constants.VEHICLE_NAME, "No Vehicle Info");
+        mRouteId = getValue(Constants.ROUTE_ID, getString(R.string.no_route_found));
+        mVehicleId = getValue(Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
 
         // build UI
         initialiseUI(view);
@@ -112,7 +111,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
         SpannableStringBuilder spannable = new SpannableStringBuilder();
 
-        String legendO = "Origin : ";
+        String legendO = getString(R.string.fare_origin_legend);
         SpannableString legendSO = new SpannableString(legendO);
         legendSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendO.length(), 0);
         legendSO.setSpan(new StyleSpan(Typeface.BOLD), 0, legendO.length(), 0);
@@ -133,9 +132,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
         mOriginTxt.setText(spannable);
 
-        mDestinationTxt.setText(getResources().getString(R.string.fare_destination_description));
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
-        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
+        mDestinationTxt.setText(getResources().getString(R.string.fare_destination_title));
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
         mPassengerCount = 0;
         mTotalFare = 0;
     }
@@ -306,8 +305,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.ORIGIN_DIALOG_TAG);
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
-        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
     }
 
     /**
@@ -318,8 +317,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_count_description));
-        mPriceTxt.setText(getResources().getString(R.string.fare_price_description));
+        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
     }
 
     /**
@@ -349,7 +348,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             case Constants.FARE_ORIGIN_REQUEST :
                 mOriginStop = name;
 
-                String legendO = "Origin : ";
+                String legendO = getString(R.string.fare_origin_legend);
                 SpannableString legendSO = new SpannableString(legendO);
                 legendSO.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendO.length(), 0);
                 legendSO.setSpan(new StyleSpan(Typeface.BOLD), 0, legendO.length(), 0);
@@ -377,7 +376,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 //                text.setSpan(new RelativeSizeSpan(1f), 0, 13, 0);
 //                text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 13, 0);
 //                text.setSpan(new StyleSpan(Typeface.BOLD), 0, 13, 0);
-                String legendD = "Destination : ";
+                String legendD = getString(R.string.fare_destination_legend);
                 SpannableString legendSD = new SpannableString(legendD);
                 legendSD.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendD.length(), 0);
                 legendSD.setSpan(new StyleSpan(Typeface.BOLD), 0, legendD.length(), 0);
@@ -408,12 +407,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     @Override
     public void sendPassengerCount(String name) {
         mPassengerCount = Integer.parseInt(name);
-        String message = "Passenger Count : " + name;
+        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
+        String message = getString(R.string.fare_passenger_legend);// + name;
         SpannableString text = new SpannableString(message);
-        text.setSpan(new RelativeSizeSpan(1f), 0, 17, 0);
-        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 17, 0);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 0, 17, 0);
-        mPassengerCountTxt.setText(text);
+        text.setSpan(new RelativeSizeSpan(1f), 0, message.length(), 0);
+        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, message.length(), 0);
+        text.setSpan(new StyleSpan(Typeface.BOLD), 0, message.length(), 0);
+        stringBuilder.append(text);
+        stringBuilder.append("\t");
+        stringBuilder.append(name);
+        mPassengerCountTxt.setText(stringBuilder);
+
         String price = " ฿ " + calculateFare()+"";
         SpannableString fare = new SpannableString(price);
         fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
@@ -461,6 +465,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(this.isVisible()){
+            String lang = getValue(Constants.SELECTED_LANGUAGE, "en");
+
             if(isVisibleToUser){
                 resetData();
                 logger.debug("FareFragment is visible");
@@ -481,6 +487,12 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return msg;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        logger.error("onResume......");
+    }
 
     public SpannableStringBuilder getPrintMessage(){
         SpannableStringBuilder spannable = new SpannableStringBuilder();
