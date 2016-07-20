@@ -15,12 +15,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +41,7 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 
 import kr.co.tmoney.mobiledriverconsole.geofencing.GeofenceService;
+import kr.co.tmoney.mobiledriverconsole.model.MDCViewPager;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
 import kr.co.tmoney.mobiledriverconsole.ui.fragments.TabAdapter;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
@@ -53,7 +55,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private TabAdapter mTabAdapter;
 
-    public ViewPager mViewPager;
+    public MDCViewPager mViewPager;
 
     private GeoReceiver mGeoReceiver;
 
@@ -96,32 +98,14 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
         mTabAdapter = new TabAdapter(getSupportFragmentManager(), getApplicationContext());
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (MDCViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mTabAdapter);
 
 
 
-        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
+        // make sure 3 tabs retained rather than re-creation
+        mViewPager.setOffscreenPageLimit(2);
 
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Fragment fragment = ((TabAdapter) mViewPager.getAdapter()).getFragment(position);
-                if(position==Constants.FARE_FRAGMENT_TAB && fragment !=null){
-                    fragment.onResume();
-                    logger.error("I called onResume()....");
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
 
 
@@ -382,7 +366,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     private void stopIntentService() {
         if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, "Google Api Client is not connected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Google Api Client is not connected", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -398,7 +382,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     } else {
                         message = getString(R.string.geofence_denied) + status.getStatusCode();
                     }
-                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (SecurityException securityException) {
@@ -544,5 +528,55 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         logger.error("onConfigurationChanged");
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////// close methods //////////////////////////////////////
+
+
+    /**
+     * Disable all tab's click and movement
+     */
+    public void disableTabs(){
+        LinearLayout tabStrip = (LinearLayout) mTabLayout.getChildAt(0);
+        for(int i=0; i < tabStrip.getChildCount(); i++){
+            tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener(){
+
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
+        mViewPager.setSwappable(false);
+    }
+
+
+    /**
+     * Release the resource
+     * 1. GoogleApiClient
+     *
+     *
+     */
+    public void closeResources(){
+        stopIntentService();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mGeoReceiver);
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+        }
     }
 }

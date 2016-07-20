@@ -21,11 +21,6 @@ public class MDCApplication extends Application {
             // language switch helper class
             LocaleHelper.onCreate(getBaseContext());
 
-
-
-
-
-
             ConfigureLog4J.configure(getApplicationContext());
             Logger logger = Logger.getLogger(MDCApplication.class);
             logger.info("initialise log file");

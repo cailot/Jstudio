@@ -1,7 +1,11 @@
 package kr.co.tmoney.mobiledriverconsole.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -243,4 +247,44 @@ public class MDCUtils {
     }
 
 
+
+    public static void put(Context context, String key, String value){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
+
+    public static void put(Context context, String key, boolean value){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    public static void put(Context context, String key, Object value) {
+        SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        String json = new Gson().toJson(value);
+        editor.putString(key, json);
+        editor.commit();
+    }
+
+    public static String getValue(Context context, String key, String dftValue) {
+        SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        try {
+            return pref.getString(key, dftValue);
+        } catch (Exception e) {
+            return dftValue;
+        }
+    }
+
+    public static boolean getValue(Context context, String key, boolean dftValue) {
+        SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+        try {
+            return pref.getBoolean(key, dftValue);
+        } catch (Exception e) {
+            return dftValue;
+        }
+    }
 }

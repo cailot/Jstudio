@@ -58,6 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:id="@+id/setting_email"
                     android:text="ap.travel.hotel@gmail.com"
                     android:textColor="@color/colorWhite"
                     android:gravity="center"
@@ -138,12 +139,13 @@
             android:layout_width="@dimen/abc_action_bar_stacked_tab_max_width"
             android:layout_height="wrap_content"
             android:text="@string/setting_log_out"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorBlack"
             android:minLines="3"
             android:gravity="center"
             android:textSize="@dimen/abc_floating_window_z"
             android:background="@drawable/bg_navy_rounded_corners"
-            android:id="@+id/setting_log_out_txt" />
+            android:id="@+id/setting_log_out_txt"
+            android:enabled="false" />
     </LinearLayout>
 
 

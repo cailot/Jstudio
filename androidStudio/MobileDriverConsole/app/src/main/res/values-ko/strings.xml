@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">TMS</string>
     <string name="action_settings">MDC</string>
-    <string name="first_tab_name">운행               </string>
-    <string name="second_tab_name">요금              </string>
-    <string name="third_tab_name">설정              </string>
+    <string name="first_tab_name">Trip               </string>
+    <string name="second_tab_name">Fare              </string>
+    <string name="third_tab_name">Setting              </string>
 
 
     <!-- Transition type strings -->
@@ -38,44 +38,48 @@
     <string name="pair">Pair</string>
     <string name="search">Search</string>
 
+    <!-- Dialog -->
+    <string name="log_off_confirm_title">Do you want to log out ?</string>
+    <string name="log_off_confirm">Confirm</string>
+    <string name="log_off_cancel">Cancel</string>
 
     <!-- Trip Off Tab -->
-    <string name="trip_off_route_legend">노선 : </string>
-    <string name="trip_off_vechicle_legend">차량번호 : </string>
-    <string name="trip_off_route_title">노선을 선택해주세요</string>
-    <string name="trip_off_vehicle_title">차량을 선택해주세요</string>
-    <string name="trip_off_wait">잠시 기다려주세요</string>
-    <string name="trip_off_log_out">로그아웃</string>
-    <string name="trip_off_trip_on">운행시작</string>
+    <string name="trip_off_route_legend">Route : </string>
+    <string name="trip_off_vechicle_legend">Vehicle : </string>
+    <string name="trip_off_route_title">Please Select Route</string>
+    <string name="trip_off_vehicle_title">Please Select Vehicle</string>
+    <string name="trip_off_wait">Please Wait...</string>
+    <string name="trip_off_log_out">LOG OUT</string>
+    <string name="trip_off_trip_on">TRIP ON</string>
 
     <!-- MDC Main -->
     <string name="gps_permission_check">GPS permission is needed to proceed service</string>
     <string name="gps_permission_grant">User grants GPS permission</string>
     <string name="gps_permission_reject">User should grant a permission to proceed</string>
-    <string name="geofence_removed">Geofence Removed</string>
-    <string name="geofence_denied">Geofence Denied</string>
+     <string name="geofence_removed">Geofence Removed</string>
+     <string name="geofence_denied">Geofence Denied</string>
 
 
     <!-- Fare Tab -->
-    <string name="fare_origin_legend">출발 정류장 : </string>
-    <string name="fare_destination_legend">도착 정류장 : </string>
-    <string name="fare_passenger_legend">승객수 : </string>
-    <string name="fare_payment">결재</string>
-    <string name="fare_origin_title">출발 정류장을 선택해주세요</string>
-    <string name="fare_destination_title">도착 정류장을 선택해주세요</string>
-    <string name="fare_passenger_title">승객수를 선택해주세요</string>
-    <string name="fare_price_title">금액</string>
+    <string name="fare_origin_legend">Origin : </string>
+    <string name="fare_destination_legend">Destination : </string>
+    <string name="fare_passenger_legend">Passenger Count : </string>
+    <string name="fare_payment_title">Payment</string>
+    <string name="fare_origin_title">Please Select Origin Stop</string>
+    <string name="fare_destination_title">Please Select Destination Stop</string>
+    <string name="fare_passenger_title">Please Select Passenger Count</string>
+    <string name="fare_price_title">Fare</string>
 
     <!-- Setting Tab -->
-    <string name="setting_thai_language">\t\t태국</string>
-    <string name="setting_english_language">\t\t영어</string>
-    <string name="setting_language_title">언어 변경</string>
-    <string name="setting_user_info">사용자 정보</string>
-    <string name="setting_hand_over">운행 종료</string>
-    <string name="setting_log_out">로그아웃</string>
+    <string name="setting_thai_language">\t\tThai</string>
+    <string name="setting_english_language">\t\tEnglish</string>
+    <string name="setting_language_title">Change Language</string>
+    <string name="setting_user_info">Driver Info</string>
+    <string name="setting_hand_over">Hand Over</string>
+    <string name="setting_log_out">Log Out</string>
 
     <!-- Confirm Dialog -->
-    <string name="dialog_confirm">확인</string>
-    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
 
 </resources>

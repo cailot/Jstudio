@@ -1,8 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -27,24 +25,21 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
-import com.google.gson.Gson;
 
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.model.vo.RouteVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
+import kr.co.tmoney.mobiledriverconsole.ui.dialog.LogOutDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.RouteDialog;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.TripOnConfirmationDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.VehicleDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
-import kr.co.tmoney.mobiledriverconsole.utils.LocaleHelper;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
@@ -92,15 +87,11 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
 
-        Locale l = getResources().getConfiguration().locale;
-
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        String saved =  pref.getString(Constants.SELECTED_LANGUAGE, "");
-
-        Log.e(LOG_TAG, i+ "\t\t" +  l.getLanguage() + "\t saved - "  + saved);
-
-
+//        Locale l = getResources().getConfiguration().locale;
+//
+//        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//
+//        String saved =  pref.getString(Constants.SELECTED_LANGUAGE, "");
 
 
 
@@ -194,7 +185,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             case R.id.trip_off_logout_btn :
 //                Log.d(LOG_TAG, "Logout Event");
                 logger.debug("Logout Event");
-                logout();
+                logOut();
                 break;
             case R.id.trip_off_tripon_btn :
 //                Log.d(LOG_TAG, "TripOn Event");
@@ -218,33 +209,21 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      */
     private void turnOnTripOn() {
         // save vehicle name into SharedPreferences
-        put(Constants.VEHICLE_NAME, mVehicleId);
-        
-//        // save stop details into SharedPreferences
-//        saveStopsDetail();
-//        // save stop groups into SharedPreferences
-//        saveStopGroupsDetail();
-//        // save fares into SharedPreferences
-//        saveFaresDetail();
+        MDCUtils.put(getApplicationContext(), Constants.VEHICLE_NAME, mVehicleId);
 
-        SpannableStringBuilder spannableStringBuilder = makeRouteInfo();
-        TripOnConfirmationDialog tripOnConfirmationDialog = new TripOnConfirmationDialog(this, spannableStringBuilder);
-//        tripOnConfirmationDialog.show();
-        tripOnConfirmationDialog.show(getFragmentManager(), Constants.ROUTE_DIALOG_TAG);
+        // save stop details into SharedPreferences
+        saveStopsDetail();
+        // save stop groups into SharedPreferences
+        saveStopGroupsDetail();
+        // save fares into SharedPreferences
+        saveFaresDetail();
 
-//        // save stop details into SharedPreferences
-//        saveStopsDetail();
-//        // save stop groups into SharedPreferences
-//        saveStopGroupsDetail();
-//        // save fares into SharedPreferences
-//        saveFaresDetail();
-//
-//        // update DB to indicate starting
-//        setTripOn();
+        // update DB to indicate starting
+        setTripOn();
 
         // switch to TripOn
-//        Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
-//        startActivity(i);
+        Intent i = new Intent(getApplicationContext(), MDCMainActivity.class);
+        startActivity(i);
     }
 
     private SpannableStringBuilder makeRouteInfo() {
@@ -280,29 +259,32 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      * save all stops information into SharedPreference by Gson
      */
     public void saveStopsDetail() {
-        put(Constants.STOPS_IN_ROUTE, mStops);
+        MDCUtils.put(getApplicationContext(), Constants.STOPS_IN_ROUTE, mStops);
     }
 
     /**
      * save stop groups information into SharedPreference by Gson
      */
     public void saveStopGroupsDetail() {
-        put(Constants.STOP_GROUPS_IN_ROUTE, mStopGroups);
+        MDCUtils.put(getApplicationContext(), Constants.STOP_GROUPS_IN_ROUTE, mStopGroups);
     }
 
     /**
      * save all fares information into SharedPreference by Gson
      */
     public void saveFaresDetail() {
-        put(Constants.FARES_IN_ROUTE, MDCUtils.getStopGroups(mFares));
+        MDCUtils.put(getApplicationContext(), Constants.FARES_IN_ROUTE, MDCUtils.getStopGroups(mFares));
     }
 
 
     /**
      *  logout
      */
-    private void logout(){
-        switchLanguage();
+    private void logOut(){
+        logger.debug("logOut()");
+        LogOutDialog logOutDialog = new LogOutDialog(this);
+        logOutDialog.show(getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
+//        finishAffinity();
     }
 
 
@@ -317,7 +299,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         // set routeId
         mRouteId = id;
         // save routeId into SharedPreferences
-        put(Constants.ROUTE_ID, mRouteId);
+        MDCUtils.put(getApplicationContext(), Constants.ROUTE_ID, mRouteId);
         // update selected route info in TextView
         SpannableStringBuilder spannable = new SpannableStringBuilder();
         String legend = getString(R.string.trip_off_route_legend);
@@ -519,7 +501,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         routeVehicle.updateChildren(routeUpdate);
 
         // turn on 'Trip On'
-        put(Constants.VEHICLE_TRIP_ON, true);
+        MDCUtils.put(getApplicationContext(), Constants.VEHICLE_TRIP_ON, true);
 
     }
 
@@ -634,28 +616,28 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     /////////////////////////////
     //  SharedPreferences
     /////////////////////////////
-    public void put(String key, String value){
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-
-    public void put(String key, boolean value){
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(key, value);
-        editor.commit();
-    }
-
-    public void put(String key, Object value) {
-        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        String json = new Gson().toJson(value);
-        editor.putString(key, json);
-        editor.commit();
-        logger.debug(json);
-    }
+//    public void put(String key, String value){
+//        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(key, value);
+//        editor.commit();
+//    }
+//
+//    public void put(String key, boolean value){
+//        SharedPreferences sharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putBoolean(key, value);
+//        editor.commit();
+//    }
+//
+//    public void put(String key, Object value) {
+//        SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = pref.edit();
+//        String json = new Gson().toJson(value);
+//        editor.putString(key, json);
+//        editor.commit();
+//        logger.debug(json);
+//    }
 
 
     /**
@@ -720,61 +702,4 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 //            mTripOnTxt.setTextColor(Color.WHITE);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    int i = 0;
-    public void switchLanguage() {
-        i++;
-
-        Locale l = getResources().getConfiguration().locale;
-        Log.e(LOG_TAG, i+ "\t\t" +  l.getLanguage() + "\t Ko - " + Locale.KOREA + "\t En - " + Locale.US);
-
-        // change Locale
-        Locale locale = null;
-        if(i%2==0) {
-            locale = Locale.KOREAN;
-            LocaleHelper.setLocale(getApplicationContext(), "ko");
-        }else{
-            locale = Locale.ENGLISH;
-            LocaleHelper.setLocale(getApplicationContext(), "en");
-        }
-
-//        // save language setting to SharedPreferences
-//        put(Constants.SELECTED_LANGUAGE, locale);
-
-        Log.e(LOG_TAG, "current " + locale);
-
-//        // change language on UI
-//        Locale.setDefault(locale);
-//        //Configuration config = new Configuration();
-//        Configuration config = getBaseContext().getResources().getConfiguration();
-//        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-////        Intent refresh = new Intent(this, TripOffActivity.class);
-////        refresh.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////        startActivity(refresh);
-//
-//
-//
-//        initialiseUI();
-        Log.e(LOG_TAG, getString(R.string.trip_off_log_out));
-        applyLanguageSetting();
-    }
-
-
-    private void applyLanguageSetting(){
-        mLogoutTxt.setText(R.string.trip_off_log_out);
-        mTripOnTxt.setText(R.string.trip_off_trip_on);
-    }
-
 }

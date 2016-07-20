@@ -87,8 +87,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mContext = container.getContext();
         mMainActivity = (MDCMainActivity)getActivity();
 
-        mRouteId = getValue(Constants.ROUTE_ID, getString(R.string.no_route_found));
-        mVehicleId = getValue(Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
+        mRouteId = MDCUtils.getValue(mContext, Constants.ROUTE_ID, getString(R.string.no_route_found));
+        mVehicleId = MDCUtils.getValue(mContext, Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
 
         // build UI
         initialiseUI(view);
@@ -369,13 +369,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 mOriginTxt.setText(spannable);
                 break;
             case Constants.FARE_DESTINATION_REQUEST:
-//                mDestinationTxt.setText(name + " : " + type);
                 mDestinationStop = name;
-//                message = "Destination : " + name + "\t\t" + type;
-//                text = new SpannableString(message);
-//                text.setSpan(new RelativeSizeSpan(1f), 0, 13, 0);
-//                text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 13, 0);
-//                text.setSpan(new StyleSpan(Typeface.BOLD), 0, 13, 0);
                 String legendD = getString(R.string.fare_destination_legend);
                 SpannableString legendSD = new SpannableString(legendD);
                 legendSD.setSpan(new ForegroundColorSpan(Color.BLACK), 0, legendD.length(), 0);
@@ -465,7 +459,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(this.isVisible()){
-            String lang = getValue(Constants.SELECTED_LANGUAGE, "en");
+            String lang = MDCUtils.getValue(mContext, Constants.SELECTED_LANGUAGE, "en");
 
             if(isVisibleToUser){
                 resetData();
@@ -550,13 +544,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return format;
     }
 
-    public String getValue(String key, String dftValue) {
-        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        try {
-            return pref.getString(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-
-    }
+//    public String getValue(String key, String dftValue) {
+//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//        try {
+//            return pref.getString(key, dftValue);
+//        } catch (Exception e) {
+//            return dftValue;
+//        }
+//
+//    }
 }

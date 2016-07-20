@@ -1,9 +1,7 @@
 package kr.co.tmoney.mobiledriverconsole.ui.fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -281,10 +279,23 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      */
     @Override
     public void onLocationChanged(Location location) {
+
+        // Trip Off event updated status from true to false. so release resouces and stop service
+        boolean isKeepOn = MDCUtils.getValue(mContext, Constants.VEHICLE_TRIP_ON, false);
+        if(!isKeepOn){
+            // release resource and exit
+            logger.debug("Release resouces and going to exit");
+            if(mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()){
+                mGoogleApiClient.disconnect();
+            }
+            return;
+        }
+
         mGpsCount++;
         if(mGpsCount > Constants.GPS_UPDATE_MAXIMUM){ // just in case, prevent count going out of int range
             mGpsCount=0;
         }
+        logger.debug(mGpsCount);
         if(mGpsCount==10){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
         }
@@ -301,20 +312,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
         // Decorate Info
         SpannableStringBuilder spannable = new SpannableStringBuilder();
-
-//        String vehicleInfo = mVehicleId;
-//        SpannableString vehicleS = new SpannableString(vehicleInfo);
-//        vehicleS.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 0, vehicleInfo.length(), 0);
-//        vehicleS.setSpan(new UnderlineSpan(), 0, vehicleInfo.length(), 0);
-//        mCurrentVehicleIdTxt.setText(vehicleS);
-
-//        String headingInfo = "Heading to " + MDCMainActivity.nextStopName;
-//        SpannableString headingS = new SpannableString(headingInfo);
-//        headingS.setSpan(new ForegroundColorSpan(Color.BLACK), 0, 10, 0);
-//        headingS.setSpan(new StyleSpan(Typeface.ITALIC), 0, 10, 0);
-//        spannable.append(headingS);
-//        spannable.append("\t");
-//
 
         String speed = String.format( "%.1f", location.getSpeed() * 3600 / 1000);// + " km/h";
         SpannableString speedS = new SpannableString(speed);
@@ -354,8 +351,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         mRearVehicle = new VehicleVO();
 
         mFirebase = new Firebase(Constants.FIREBASE_HOME);
-        mRouteId = getValue(Constants.ROUTE_ID, getString(R.string.no_route_found));
-        mVehicleId = getValue(Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
+        mRouteId = MDCUtils.getValue(mContext, Constants.ROUTE_ID, getString(R.string.no_route_found));
+        mVehicleId = MDCUtils.getValue(mContext, Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
 
         // get front/rear car info
         Firebase vehicleRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
@@ -602,15 +599,24 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 .build();
     }
 
-    public String getValue(String key, String dftValue) {
-        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-
-        try {
-            return pref.getString(key, dftValue);
-        } catch (Exception e) {
-            return dftValue;
-        }
-
-    }
+//    public String getValue(String key, String dftValue) {
+//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//
+//        try {
+//            return pref.getString(key, dftValue);
+//        } catch (Exception e) {
+//            return dftValue;
+//        }
+//    }
+//
+//    public boolean getValue(String key, boolean dftValue) {
+//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
+//
+//        try {
+//            return pref.getBoolean(key, dftValue);
+//        } catch (Exception e) {
+//            return dftValue;
+//        }
+//    }
 
 }

@@ -136,6 +136,8 @@ public interface Constants {
 
     public static final String PASSENGER_DIALOG_TAG = "Passenger Dialog";
 
+    public static final String LOGOUT_DIALOG_TAG = "Logout Dialog";
+
 
     ////////////////////////////////
     //
@@ -211,6 +213,8 @@ public interface Constants {
     public static final String LANGUAGE_KOREAN = "ko";
 
     public static final String LANGUAGE_ENGLISH = "en";
+
+    public static final String LANGUAGE_THAILAND = "th";
 
 
 }
