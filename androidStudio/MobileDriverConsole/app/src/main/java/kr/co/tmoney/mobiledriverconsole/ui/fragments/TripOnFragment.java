@@ -17,6 +17,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOnFragment.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     Context mContext;
 
@@ -171,7 +172,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        logger.debug("GoogleApiClient onConnected");
+        Log.d(LOG_TAG, "GoogleApiClient onConnected");
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
@@ -239,13 +240,13 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-        logger.debug("GoogleApiClient onConnectionSuspended");
+        Log.d(LOG_TAG, "GoogleApiClient onConnectionSuspended");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        logger.debug("GoogleApiClient onConnectionFailed");
+        Log.d(LOG_TAG, "GoogleApiClient onConnectionFailed");
     }
 
     @Override
@@ -253,7 +254,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         super.onStart();
         if(!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            logger.debug("GoogleApiClient is now connected");
+            Log.d(LOG_TAG, "GoogleApiClient is now connected");
         }
     }
 
@@ -284,7 +285,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         boolean isKeepOn = MDCUtils.getValue(mContext, Constants.VEHICLE_TRIP_ON, false);
         if(!isKeepOn){
             // release resource and exit
-            logger.debug("Release resouces and going to exit");
+            Log.d(LOG_TAG, "Release resouces and going to exit");
             if(mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()){
                 mGoogleApiClient.disconnect();
             }
@@ -295,7 +296,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(mGpsCount > Constants.GPS_UPDATE_MAXIMUM){ // just in case, prevent count going out of int range
             mGpsCount=0;
         }
-        logger.debug(mGpsCount);
+        Log.d(LOG_TAG, mGpsCount+"");
         if(mGpsCount==10){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
         }

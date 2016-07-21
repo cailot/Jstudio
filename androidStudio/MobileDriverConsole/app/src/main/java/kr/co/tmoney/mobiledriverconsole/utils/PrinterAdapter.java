@@ -5,14 +5,15 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-
-import org.apache.log4j.Logger;
+import android.util.Log;
 
 import java.util.Set;
 
 import driver.BarcodeType;
 import driver.Contants;
 import driver.HsBluetoothPrintDriver;
+
+//import org.apache.log4j.Logger;
 
 /**
  * Created by js278 on 15/07/2016.
@@ -21,7 +22,7 @@ public class PrinterAdapter {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(PrinterAdapter.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     PrinterViewAction viewAction;
 
@@ -34,7 +35,7 @@ public class PrinterAdapter {
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         for(BluetoothDevice device : devices){
-            logger.debug(device.getName() + "\t" + device.getAddress());
+            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
             if(device.getName().equalsIgnoreCase("820USEB")){
                 connectBluetooth(device);
                 return;

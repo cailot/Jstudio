@@ -53,6 +53,7 @@ public class LogOutDialog extends DialogFragment {
 
         mConfirmTxt = (TextView) view.findViewById(R.id.log_out_confimation_txt);
         mConfirmBtn = (Button) view.findViewById(R.id.log_out_confirmation_btn);
+        mConfirmBtn.setText(getString(R.string.log_off_confirm));
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +62,7 @@ public class LogOutDialog extends DialogFragment {
             }
         });
         mCancelBtn = (Button) view.findViewById(R.id.log_out_cancel_btn);
+        mCancelBtn.setText(getString(R.string.log_off_cancel));
         mCancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

@@ -3,7 +3,7 @@
     <string name="action_settings">MDC</string>
     <string name="first_tab_name">Trip               </string>
     <string name="second_tab_name">Fare              </string>
-    <string name="third_tab_name">Setting              </string>
+    <string name="third_tab_name">Settings              </string>
 
 
     <!-- Transition type strings -->
@@ -15,16 +15,9 @@
     <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
     <string name="geofence_not_available">Geofence service is not available now</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
-    <string name="geofence_too_many_pending_intents">
-        You have provided too many PendingIntents to the addGeofences() call
-    </string>
-    <string name="unknown_geofence_error">
-        Unknown error: the Geofence service is not available now
-    </string>
-    <string name="geofence_transition_invalid_type">
-        Geofence transition error: invalid transition type %1$d
-    </string>
-
+    <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call</string>
+    <string name="unknown_geofence_error">Unknown error: the Geofence service is not available now</string>
+    <string name="geofence_transition_invalid_type">Geofence transition error: invalid transition type %1$d</string>
     <string name="null_avoid_text">Please try again</string>
     <string name="no_route_found">No available Route Found</string>
     <string name="no_vehicle_found">No available vehicle on the Route</string>
@@ -53,12 +46,11 @@
     <string name="trip_off_trip_on">TRIP ON</string>
 
     <!-- MDC Main -->
-    <string name="gps_permission_check">GPS permission is needed to proceed service</string>
+    <string name="gps_permission_check">GPS permission is required to proceed service</string>
     <string name="gps_permission_grant">User grants GPS permission</string>
     <string name="gps_permission_reject">User should grant a permission to proceed</string>
-     <string name="geofence_removed">Geofence Removed</string>
-     <string name="geofence_denied">Geofence Denied</string>
-
+    <string name="geofence_removed">Geofence Removed</string>
+    <string name="geofence_denied">Geofence Denied</string>
 
     <!-- Fare Tab -->
     <string name="fare_origin_legend">Origin : </string>

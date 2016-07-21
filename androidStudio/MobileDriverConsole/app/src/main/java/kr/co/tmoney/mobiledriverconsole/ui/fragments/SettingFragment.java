@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.firebase.client.ServerValue;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class SettingFragment extends Fragment{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TextView mHandOverTxt, mLogOutTxt, mUserInfoTxt, mLanguageDescTxt, mEmailTxt;
 
@@ -117,26 +117,22 @@ public class SettingFragment extends Fragment{
     private void settingEvents(View view){
         switch(view.getId()){
             case R.id.setting_hand_over_txt :
-                logger.debug("Hand Over Event");
                 setTripOff();
                 break;
             case R.id.setting_log_out_txt :
                 logOut();
-                logger.debug("Log Out Event");
                 break;
             case R.id.setting_thai_btn :
-                logger.debug("Thai Language Event");
                 switchLanguage(Constants.LANGUAGE_THAILAND);
                 break;
             case R.id.setting_english_btn :
                 switchLanguage(Constants.LANGUAGE_ENGLISH);
-                logger.debug("English Language Event");
                 break;
         }
     }
 
     private void logOut() {
-        logger.debug("logOut()");
+        Log.d(LOG_TAG, "logOut()");
         LogOutDialog logOutDialog = new LogOutDialog(mActivity);
         logOutDialog.show(mActivity.getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
     }
@@ -194,7 +190,7 @@ public class SettingFragment extends Fragment{
            LocaleHelper.setLocale(mContext.getApplicationContext(), Constants.LANGUAGE_ENGLISH);
        }
         MDCUtils.put(mContext, Constants.SELECTED_LANGUAGE, lang);
-        Log.e(LOG_TAG, lang + " is now saved");
+        Log.d(LOG_TAG, lang + " is now saved");
         applyLanguageSetting();
     }
 
@@ -209,6 +205,8 @@ public class SettingFragment extends Fragment{
         mLogOutTxt.setText(R.string.setting_log_out);
         mUserInfoTxt.setText(R.string.setting_user_info);
         mLanguageDescTxt.setText(R.string.setting_language_title);
+        // change Tab names
+        mActivity.updateTabNames();
     }
 
 
@@ -228,28 +226,4 @@ public class SettingFragment extends Fragment{
         mEmailTxt.setTextColor(Color.BLACK);
         mDriverImg.setImageResource(R.drawable.driver_off);
     }
-
-//    public void put(String key, String value){
-//        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString(key, value);
-//        editor.commit();
-//    }
-//
-//    public void put(String key, boolean value){
-//        SharedPreferences sharedPreferences = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putBoolean(key, value);
-//        editor.commit();
-//    }
-//
-//
-//    public String getValue(String key, String dftValue) {
-//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//        try {
-//            return pref.getString(key, dftValue);
-//        } catch (Exception e) {
-//            return dftValue;
-//        }
-//    }
 }

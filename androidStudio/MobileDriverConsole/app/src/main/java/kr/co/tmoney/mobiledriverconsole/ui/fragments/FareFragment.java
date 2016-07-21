@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,7 +47,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mPassengerCountTxt, mPaymentTxt;
 
@@ -135,6 +136,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mDestinationTxt.setText(getResources().getString(R.string.fare_destination_title));
         mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
+        mPaymentTxt.setText(getResources().getString(R.string.fare_payment_title));
         mPassengerCount = 0;
         mTotalFare = 0;
     }
@@ -200,7 +202,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         SpannableStringBuilder stringBuilder = new SpannableStringBuilder(printInfo);
         PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, mPassengerCount);
         printConfirmationDialog.show();
-        logger.debug(stringBuilder.toString());
+        Log.d(LOG_TAG, stringBuilder.toString());
 
     }
 
@@ -443,12 +445,12 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     @Override
     public void showConnected() {
-        logger.debug("Printer connected");
+        Log.d(LOG_TAG, "Printer connected");
     }
 
     @Override
     public void showFailed() {
-        logger.debug("Printer connection fails");
+        Log.d(LOG_TAG, "Printer connection fails");
     }
 
         /**
@@ -463,9 +465,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
             if(isVisibleToUser){
                 resetData();
-                logger.debug("FareFragment is visible");
+                Log.d(LOG_TAG, "FareFragment is visible");
             }else{
-                logger.debug("FareFragment is not visible");
+                Log.d(LOG_TAG, "FareFragment is not visible");
             }
         }
     }
@@ -481,12 +483,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return msg;
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        logger.error("onResume......");
-    }
 
     public SpannableStringBuilder getPrintMessage(){
         SpannableStringBuilder spannable = new SpannableStringBuilder();

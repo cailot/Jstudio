@@ -3,7 +3,7 @@
     <string name="action_settings">MDC</string>
     <string name="first_tab_name">Trip               </string>
     <string name="second_tab_name">Fare              </string>
-    <string name="third_tab_name">Setting              </string>
+    <string name="third_tab_name">Settings              </string>
 
 
     <!-- Transition type strings -->

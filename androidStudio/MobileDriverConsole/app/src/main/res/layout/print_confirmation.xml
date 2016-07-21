@@ -40,7 +40,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/dialog_cancel"
             android:id="@+id/print_cancel_btn"
             android:background="@drawable/bg_navy_rounded_corners"
             android:layout_marginRight="@dimen/abc_action_bar_default_height_material"
@@ -52,7 +52,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Confirm"
+            android:text="@string/dialog_confirm"
             android:id="@+id/print_confirmation_btn"
             android:background="@drawable/bg_navy_rounded_corners"
             android:textColor="#ffffff"

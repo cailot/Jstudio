@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -26,7 +25,7 @@ import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOffActivity.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Log÷ger.getLogger(LOG_TAG);
 
     private TextView mRouteTxt, mVehicleTxt, mLogoutTxt, mTripOnTxt;
 
@@ -75,7 +74,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_off_activity);
         // change status bar color
@@ -104,7 +103,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
         // loading Splash
-        startActivity(new Intent(this, SplashActivity.class));
+//        startActivity(new Intent(this, SplashActivity.class));
 
         // build UI
         initialiseUI();
@@ -174,22 +173,22 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
         switch(view.getId()){
             case R.id.trip_off_route_txt :
 //                Log.d(LOG_TAG, "Route Event");
-                logger.debug("Route Event");
+                Log.d(LOG_TAG, "Route Event");
                 showRouteDialog();
                 break;
             case R.id.trip_off_vehicle_txt :
 //                Log.d(LOG_TAG, "Vehicle Event");
-                logger.debug("Vehicle Event");
+                Log.d(LOG_TAG, "Vehicle Event");
                 showVehicleDialog();
                 break;
             case R.id.trip_off_logout_btn :
 //                Log.d(LOG_TAG, "Logout Event");
-                logger.debug("Logout Event");
+                Log.d(LOG_TAG, "Logout Event");
                 logOut();
                 break;
             case R.id.trip_off_tripon_btn :
 //                Log.d(LOG_TAG, "TripOn Event");
-                logger.debug("TripOn Event");
+                Log.d(LOG_TAG, "TripOn Event");
                 turnOnTripOn();
                 break;
         }
@@ -198,7 +197,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        logger.error("onConfigurationChanged");
+        Log.d(LOG_TAG, "onConfigurationChanged");
     }
 
     /**
@@ -281,7 +280,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
      *  logout
      */
     private void logOut(){
-        logger.debug("logOut()");
+        Log.d(LOG_TAG, "logOut()");
         LogOutDialog logOutDialog = new LogOutDialog(this);
         logOutDialog.show(getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
 //        finishAffinity();
@@ -422,7 +421,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
+                Log.e(LOG_TAG, getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
     }
@@ -453,7 +452,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
+                Log.e(LOG_TAG, getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
     }
@@ -534,7 +533,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                logger.error(getString(R.string.error_route_list) + firebaseError.getMessage());
+                Log.e(LOG_TAG, getString(R.string.error_route_list) + firebaseError.getMessage());
             }
         });
 

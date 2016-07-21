@@ -36,7 +36,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -51,7 +50,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private static final String LOG_TAG = MDCUtils.getLogTag(MDCMainActivity.class);
 
-    private Logger logger = Logger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TabAdapter mTabAdapter;
 
@@ -167,9 +166,10 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
 
-                logger.debug(getString(R.string.gps_permission_grant));
+                Log.d(LOG_TAG, getString(R.string.gps_permission_grant));
+//                logger.debug(getString(R.string.gps_permission_grant));
             } else {
-                logger.error(getString(R.string.gps_permission_reject));
+                Log.e(LOG_TAG, getString(R.string.gps_permission_reject));
             }
 
         } else {
@@ -200,14 +200,14 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         super.onStart();
         if(!mGoogleApiClient.isConnecting()||!mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            logger.debug("GoogleApiClient is now connected");
+            Log.d(LOG_TAG, "GoogleApiClient is now connected");
         }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        logger.debug("onStop()");
+        Log.d(LOG_TAG, "onStop()");
     }
 
     @Override
@@ -218,7 +218,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             mGoogleApiClient.disconnect();
         }
         super.onDestroy();
-        logger.debug("onDestroy()");
+        Log.d(LOG_TAG, "onDestroy()");
     }
 
 
@@ -289,7 +289,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        logger.debug("onConnected()");
+        Log.d(LOG_TAG, "onConnected()");
         startIntentService();
     }
 
@@ -357,7 +357,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             }); // Result processed in onResult().
         } catch (SecurityException en) {
-            logger.debug( en.getMessage());
+            Log.d(LOG_TAG, en.getMessage());
         }
     }
 
@@ -386,7 +386,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             });
         } catch (SecurityException securityException) {
-            logger.debug( securityException.getMessage());
+            Log.d(LOG_TAG, securityException.getMessage());
         }
     }
 
@@ -527,7 +527,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        logger.error("onConfigurationChanged");
+        Log.e(LOG_TAG, "onConfigurationChanged");
     }
 
 
@@ -563,6 +563,14 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             });
         }
         mViewPager.setSwappable(false);
+    }
+
+
+    public void updateTabNames(){
+        for(int i=0; i<mTabAdapter.getCount(); i++){
+            TabLayout.Tab tab =mTabLayout.getTabAt(i);
+            tab.setText(mTabAdapter.getPageTitle(i).toString());
+        }
     }
 
 

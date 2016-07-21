@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="185dp"
+        android:layout_height="@dimen/design_bottom_sheet_modal_peek_height"
         android:orientation="horizontal"
         android:gravity="center_vertical|center_horizontal"
         android:paddingEnd="30dp"
@@ -34,11 +34,11 @@
 
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:scaleType="fitCenter"
+            android:scaleType="fitXY"
 
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/imageView"
             android:src="@drawable/logout" />
 

@@ -39,6 +39,7 @@ public class PrintConfirmationDialog extends Dialog {
         mConfirmTxt.setText(confirm);
 
         mConfirmBtn = (Button) findViewById(R.id.print_confirmation_btn);
+        mConfirmBtn.setText(context.getString(R.string.dialog_confirm));
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,6 +51,7 @@ public class PrintConfirmationDialog extends Dialog {
             }
         });
         mCancelBtn = (Button) findViewById(R.id.print_cancel_btn);
+        mCancelBtn.setText(context.getString(R.string.dialog_cancel));
         mCancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

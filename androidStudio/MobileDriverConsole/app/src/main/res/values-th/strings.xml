@@ -1,86 +1,77 @@
 <resources>
     <string name="app_name">TMS</string>
     <string name="action_settings">MDC</string>
-    <string name="first_tab_name">TRIP               </string>
-    <string name="second_tab_name">FARE              </string>
-    <string name="third_tab_name">SETTING              </string>
+    <string name="first_tab_name">การเดินรถ               </string>
+    <string name="second_tab_name">ค่าโดยสาร              </string>
+    <string name="third_tab_name">ตั้งค่า           </string>
 
 
     <!-- Transition type strings -->
-    <string name="geofence_transition_entered">Entered</string>
-    <string name="geofence_transition_exited">Exited</string>
-    <string name="unknown_geofence_transition">Unknown Transition</string>
+    <string name="geofence_transition_entered">ถึงป้าย</string>
+    <string name="geofence_transition_exited">ออกจากป้าย</string>
+    <string name="unknown_geofence_transition">ไม่สามารถระบุตำแหน่ง</string>
 
     <!-- Error strings -->
-    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
-    <string name="geofence_not_available">Geofence service is not available now</string>
-    <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
-    <string name="geofence_too_many_pending_intents">
-        You have provided too many PendingIntents to the addGeofences() call
-    </string>
-    <string name="unknown_geofence_error">
-        Unknown error: the Geofence service is not available now
-    </string>
-    <string name="geofence_transition_invalid_type">
-        Geofence transition error: invalid transition type %1$d
-    </string>
-
-    <string name="null_avoid_text">Please try again</string>
-    <string name="no_route_found">No available Route Found</string>
-    <string name="no_vehicle_found">No available vehicle on the Route</string>
-    <string name="error_route_list">Error happens while getting Route list : </string>
+    <string name="not_connected"> ยังไม่ได้เชื่อมต่อ GoogleApiClient ลองใหม่อีกครั้ง.</string>
+    <string name="geofence_not_available">บริการ Geofence ไม่สามารถใช้งานได้ในขณะนี้</string>
+    <string name="geofence_too_many_geofences">โปรแกรมได้ลงทะเบียน geofence มากเกินไป</string>
+    <string name="geofence_too_many_pending_intents">คุณส่งข้อมูลเพื่อ addGeofences() call มากเกินไป</string>
+    <string name="unknown_geofence_error">ขัดข้อง : บริการ Geofence ไม่สามารถใช้งานได้ในขณะนี้ </string>
+    <string name="geofence_transition_invalid_type"> การแปลง Geofence ขัดข้อง : ชนิดการแปลงไม่ถูกต้อง %1$d</string>
+    <string name="null_avoid_text">โปรดลองใหม่อีกครั้ง</string>
+    <string name="no_route_found">ไม่พบเส้นทางที่พร้อมใช้งาน</string>
+    <string name="no_vehicle_found">ไม่พบยานพาหนะที่พร้อมใช้งานบนเส้นทาง</string>
+    <string name="error_route_list">เกิดข้อผิดพลาดขณะเรียกรายการเส้นทาง : </string>
 
     <!-- Bluetooth Printer -->
-    <string name="printer_connected">Connected</string>
-    <string name="printer_unconnected">Unconnected</string>
+    <string name="printer_connected">เชื่อมต่อแล้ว</string>
+    <string name="printer_unconnected">ไม่ได้เชื่อมต่อ</string>
     <string name="section_type">Section</string>
-    <string name="device_type">Device</string>
-    <string name="pair">Pair</string>
-    <string name="search">Search</string>
-
+    <string name="device_type">อุปกรณ์</string>
+    <string name="pair">จับคู่</string>
+    <string name="search">ค้นหา</string>
 
     <!-- Dialog -->
-    <string name="log_off_confirm_title">로그아웃 하시겠습니까 ?</string>
-    <string name="log_off_confirm">확인</string>
-    <string name="log_off_cancel">취소</string>
+    <string name="log_off_confirm_title">คุณต้องการออกจากระบบหรือไม่ ?</string>
+    <string name="log_off_confirm">ยืนยัน</string>
+    <string name="log_off_cancel">ยกเลิก</string>
 
     <!-- Trip Off Tab -->
-    <string name="trip_off_route_legend">노선 : </string>
-    <string name="trip_off_vechicle_legend">차량번호 : </string>
-    <string name="trip_off_route_title">노선을 선택해주세요</string>
-    <string name="trip_off_vehicle_title">차량을 선택해주세요</string>
-    <string name="trip_off_wait">잠시 기다려주세요</string>
-    <string name="trip_off_log_out">로그아웃</string>
-    <string name="trip_off_trip_on">운행시작</string>
+    <string name="trip_off_route_legend">เส้นทาง : </string>
+    <string name="trip_off_vechicle_legend">ยานพาหนะ : </string>
+    <string name="trip_off_route_title">โปรดเลือกเส้นทาง</string>
+    <string name="trip_off_vehicle_title">โปรดเลือกยานพาหนะ</string>
+    <string name="trip_off_wait">โปรดรอสักครู่...</string>
+    <string name="trip_off_log_out">ออกจากระบบ</string>
+    <string name="trip_off_trip_on">เริ่มเดินทาง</string>
 
     <!-- MDC Main -->
-    <string name="gps_permission_check">GPS permission is needed to proceed service</string>
-    <string name="gps_permission_grant">User grants GPS permission</string>
-    <string name="gps_permission_reject">User should grant a permission to proceed</string>
-    <string name="geofence_removed">Geofence Removed</string>
-    <string name="geofence_denied">Geofence Denied</string>
-
+    <string name="gps_permission_check">ต้องเปิดใช้ GPS เพื่อเริ่มทำงาน</string>
+    <string name="gps_permission_grant">ผู้ใช้อณุญาติเปิดใช้ GPS</string>
+    <string name="gps_permission_reject">ผู้ใช้ต้องอณุญาติให้เปิดใช้ GPS เพื่อเริ่มใช้งาน</string>
+    <string name="geofence_removed">Geofence ถูกลบ</string>
+    <string name="geofence_denied">Geofence ถูกปฏิเสธ</string>
 
     <!-- Fare Tab -->
-    <string name="fare_origin_legend">ส่งรถ : </string>
-    <string name="fare_destination_legend">도착 정류장 : </string>
-    <string name="fare_passenger_legend">승객수 : </string>
-    <string name="fare_origin_title">출발 정류장을 선택해주세요</string>
-    <string name="fare_destination_title">도착 정류장을 선택해주세요</string>
-    <string name="fare_passenger_title">승객수를 선택해주세요</string>
+    <string name="fare_origin_legend">ต้นทาง : </string>
+    <string name="fare_destination_legend">ปลายทาง : </string>
+    <string name="fare_passenger_legend">จำนวนผู้โดยสาร : </string>
+    <string name="fare_payment_title">ชำระเงิน</string>
+    <string name="fare_origin_title">เลือกป้ายต้นทาง</string>
+    <string name="fare_destination_title">เลือกป้ายปลายทาง</string>
+    <string name="fare_passenger_title">เลือกจำนวนผู้โดยสาร</string>
     <string name="fare_price_title">ค่าโดยสาร</string>
-    <string name="fare_payment_title">결재</string>
 
     <!-- Setting Tab -->
-    <string name="setting_thai_language">\t\t태국</string>
-    <string name="setting_english_language">\t\t영어</string>
-    <string name="setting_language_title">จัดการผู้ใช้</string>
-    <string name="setting_user_info">จัดการผู้ใช้</string>
+    <string name="setting_thai_language">\t\tภาษาไทย</string>
+    <string name="setting_english_language">\t\tภาษาอังกฤษ</string>
+    <string name="setting_language_title">เปลี่ยนภาษา</string>
+    <string name="setting_user_info">ข้อมูลพนักงานขับรถ</string>
     <string name="setting_hand_over">ส่งรถ</string>
-    <string name="setting_log_out">로그아웃</string>
+    <string name="setting_log_out">ออกจากระบบ</string>
 
     <!-- Confirm Dialog -->
-    <string name="dialog_confirm">확인</string>
-    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">ยืนยัน</string>
+    <string name="dialog_cancel">ยกเลิก</string>
 
 </resources>

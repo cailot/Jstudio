@@ -27,7 +27,6 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/LICENSE-FIREBASE.txt'
         exclude 'META-INF/NOTICE'
-
     }
 }
 
@@ -35,9 +34,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.android.support:design:23.2.0'
-    // Firebase config
-    //
+    /* Firebase config */
     compile 'com.firebase:firebase-client-android:2.5.2+'
+    compile 'com.google.firebase:firebase-core:9.2.0'
+    compile 'com.google.firebase:firebase-auth:9.2.0'
+
     /* For Google Play Services */
     compile 'com.google.android.gms:play-services-safetynet:9.2.0'
     compile 'com.google.android.gms:play-services-auth:9.2.0'
@@ -56,6 +57,8 @@ dependencies {
     /* Printer libary */
     compile files('libs/rtdriver.jar')
     /*  Log out into file system */
-    compile 'log4j:log4j:1.2+'
-    compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
+    //compile 'log4j:log4j:1.2+'
+    //compile 'de.mindpipe.android:android-logging-log4j:1.0.3'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -55,6 +55,9 @@ public class TabAdapter extends FragmentPagerAdapter{
         if(object instanceof Fragment){
             Fragment fragment = (Fragment) object;
             String tag = fragment.getTag();
+//
+//            Log.e("##################", tag);
+
             mTags.put(position, tag);
         }
         return object;

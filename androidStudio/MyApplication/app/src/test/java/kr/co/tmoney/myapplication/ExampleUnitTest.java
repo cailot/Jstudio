@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole;
+package kr.co.tmoney.myapplication;
 
 import org.junit.Test;
 
