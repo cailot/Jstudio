@@ -71,7 +71,11 @@
     <string name="setting_log_out">ออกจากระบบ</string>
 
     <!-- Confirm Dialog -->
+    <string name="fare_ask_title">คุณต้องการที่จะ พิมพ์ ข้อมูล ดังต่อไปนี้ ?</string>
     <string name="dialog_confirm">ยืนยัน</string>
     <string name="dialog_cancel">ยกเลิก</string>
+
+    <string name="oauth_client_id">765954447697-4do3v18e9rhrdrkaktj1b6l8rc46mnp0.apps.googleusercontent.com</string>
+
 
 </resources>

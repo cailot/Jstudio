@@ -12,7 +12,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -57,7 +60,12 @@ public class LogOutDialog extends DialogFragment {
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // log out user
+                Firebase firebase = new Firebase(Constants.FIREBASE_HOME);
+                firebase.unauth();
+                // finish all activity
                 mActivity.finishAffinity();
+                // disappear
                 dismiss();
             }
         });

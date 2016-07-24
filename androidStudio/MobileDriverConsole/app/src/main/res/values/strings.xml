@@ -81,7 +81,11 @@
     <string name="setting_log_out">Log Out</string>
 
     <!-- Confirm Dialog -->
+    <string name="fare_ask_title">Do you want to print the information below ?</string>
     <string name="dialog_confirm">Confirm</string>
     <string name="dialog_cancel">Cancel</string>
+
+
+    <string name="oauth_client_id">765954447697-v375b8de0k5p5sq5f35arhqsje3sghgg.apps.googleusercontent.com</string>
 
 </resources>

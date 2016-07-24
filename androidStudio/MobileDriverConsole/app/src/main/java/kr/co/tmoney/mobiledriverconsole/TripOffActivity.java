@@ -18,14 +18,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
-
-//import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +39,8 @@ import kr.co.tmoney.mobiledriverconsole.ui.dialog.RouteDialog;
 import kr.co.tmoney.mobiledriverconsole.ui.dialog.VehicleDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
+
+//import org.apache.log4j.Logger;
 
 /**
  * Created by jinseo on 2016. 6. 25..
@@ -103,7 +104,29 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
         // loading Splash
-//        startActivity(new Intent(this, SplashActivity.class));
+        startActivity(new Intent(this, SplashActivity.class));
+
+
+
+        // check wether user is logged in or not
+        // if not, forward back to login page
+//        if(mFirebase.getAuth() == null || isExpired(mFirebase.getAuth())){
+//
+//            Log.d(LOG_TAG, "not authorised");
+//            Intent intent = new Intent(this, GoogleLogin.class);
+//            startActivity(intent);
+//        }else{
+//
+//            Log.d(LOG_TAG, "already authorised");
+//
+//        }
+
+
+
+
+
+
+
 
         // build UI
         initialiseUI();
@@ -112,6 +135,9 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     }
 
+    private boolean isExpired(AuthData authData){
+        return (System.currentTimeMillis() / 1000) >= authData.getExpires();
+    }
 
     /**
      * build up UI and register click events per component

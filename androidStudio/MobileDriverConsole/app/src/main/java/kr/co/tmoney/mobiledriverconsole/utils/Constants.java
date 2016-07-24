@@ -81,6 +81,8 @@ public interface Constants {
 
     public static final String FIREBASE_FARE_LIST_PATH = "fares";
 
+    public static final String FIREBASE_USER_LIST_PATH = "users";
+
     public static final String FIREBASE_TRIP_LIST_PATH = "trips";
 
 
@@ -215,6 +217,20 @@ public interface Constants {
     public static final String LANGUAGE_ENGLISH = "en";
 
     public static final String LANGUAGE_THAILAND = "th";
+
+
+
+
+    /////////////////////////// Log in Info ////////////////////////////////////////////
+
+    public static final String LOGIN_EMAIL = "login_email";
+
+    public static final String LOGIN_USER_NAME = "login_user_name";
+
+    public static final boolean LOGIN_CHECK = false;
+
+    public static final String LOGIN_URL = "";
+
 
 
 }

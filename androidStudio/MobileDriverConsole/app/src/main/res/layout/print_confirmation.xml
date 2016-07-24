@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="คุณต้องการที่จะ พิมพ์ ข้อมูล ดังต่อไปนี้ ?"
+        android:text="@string/fare_ask_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:minLines="2"
