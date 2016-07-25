@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -45,8 +44,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-//import org.apache.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,6 +54,8 @@ import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.VehicleVO;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
+
+//import org.apache.log4j.Logger;
 
 
 /**
@@ -90,6 +89,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     protected GoogleApiClient mGoogleApiClient;
 
     private LocationRequest mLocationRequest;
+
+    private Location mLastLocation;
 
     /**
      * Geofencing Data
@@ -173,70 +174,33 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(LOG_TAG, "GoogleApiClient onConnected");
+
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(Constants.GOOGLE_MAP_POLLING_INTERVAL);
-        // Android SDK 23
-        requestLocationUpdate();
-    }
-
-//    /**
-//     * GPS permission handles - Android SDK 23
-//     * @param requestCode
-//     * @param permissions
-//     * @param grantResults
-//     */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        Log.d(LOG_TAG, "Request code : " + requestCode);
-//
-//        if(requestCode == Constants.GPS_PERMISSION_GRANT){
-//            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-//                requestLocationUpdate();
-//                Log.e(LOG_TAG, "User grants GPS permission");
-//            }else{
-//                Log.e(LOG_TAG, "User should grant a permission to proceed");
-//            }
-//
-//        }else{
-//            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        }
-
-//
-//
-//        switch (requestCode) {
-//            case Constants.GPS_PERMISSION_GRANT: {
-//                Log.d(LOG_TAG, "User permission grant");
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    requestLocationUpdate();
-//                    Log.e(LOG_TAG, "User grants GPS permission");
-//                } else {
-//                    Log.e(LOG_TAG, "User should grant a permission to proceed");
-//                }
-//                return;
-//            }
-//        }
-//    }
-
-
-    /**
-     * From SDK 23, device checks the required permission in runtime.
-     * This will also cover Android Marshmallow 6 or the above for furture device upgrade
-     */
-    private void requestLocationUpdate() {
-        if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
-                Toast.makeText(mContext, getString(R.string.gps_permission_check), Toast.LENGTH_SHORT).show();
-            }
-            // request GPS permission
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
-        }else{
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(mLastLocation != null){
+            LatLng last = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            mMarker = mGoogleMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_marker))
+                    .position(last)
+            );
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(last, Constants.GOOGLE_MAP_ZOOM_LEVEL));
+            mGoogleMap.setTrafficEnabled(true);
         }
 
     }
-
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -286,6 +250,9 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(!isKeepOn){
             // release resource and exit
             Log.d(LOG_TAG, "Release resouces and going to exit");
+            // stop searching location
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            // disconnect google api client
             if(mGoogleApiClient.isConnecting() || mGoogleApiClient.isConnected()){
                 mGoogleApiClient.disconnect();
             }
@@ -297,19 +264,18 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             mGpsCount=0;
         }
         Log.d(LOG_TAG, mGpsCount+"");
-        if(mGpsCount==10){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
+        if(mGpsCount==5){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
         }
-        // update Map
-        if(mMarker!=null){
+        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
+        if(mMarker != null){
             mMarker.remove();
         }
-        LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+
         mMarkerOptions.position(current)
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_marker));
         mMarker = mGoogleMap.addMarker(mMarkerOptions);
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
-        mGoogleMap.setTrafficEnabled(true);
 
         // Decorate Info
         SpannableStringBuilder spannable = new SpannableStringBuilder();
@@ -599,25 +565,4 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 .addApi(LocationServices.API)
                 .build();
     }
-
-//    public String getValue(String key, String dftValue) {
-//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//
-//        try {
-//            return pref.getString(key, dftValue);
-//        } catch (Exception e) {
-//            return dftValue;
-//        }
-//    }
-//
-//    public boolean getValue(String key, boolean dftValue) {
-//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//
-//        try {
-//            return pref.getBoolean(key, dftValue);
-//        } catch (Exception e) {
-//            return dftValue;
-//        }
-//    }
-
 }

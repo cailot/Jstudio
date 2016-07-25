@@ -1,6 +1,5 @@
 package kr.co.tmoney.mobiledriverconsole;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -8,9 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -100,17 +97,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mViewPager = (MDCViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mTabAdapter);
 
-
-
         // make sure 3 tabs retained rather than re-creation
         mViewPager.setOffscreenPageLimit(2);
-
-
-
-
-
-
-
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -123,58 +111,12 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         // Register Receiver
         mIntentFilter = new IntentFilter(Constants.BROADCAST_SERVICE);
         mGeoReceiver = new GeoReceiver();
-//        LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, intentFilter);
-
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-                // permission granted
-                LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
-
-            }else {
-                // need permission to proceed
-                if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
-                    Toast.makeText(this, getString(R.string.gps_permission_check), Toast.LENGTH_SHORT).show();
-                }
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT);
-            }
-        }
-
-        // Firebase set up
-//        Firebase.setAndroidContext(this);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
 
         // Dummy data for presentation purpose
         MDCMainActivity.currentStopName = mStops[3].getName();
         MDCMainActivity.nextStopName = mStops[4].getName();
 
-    }
-
-
-
-    /**
-     * GPS permission handles - Android SDK 23
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.d(LOG_TAG, "Request code : " + requestCode);
-
-        if (requestCode == Constants.GPS_PERMISSION_GRANT) {
-            if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
-
-                Log.d(LOG_TAG, getString(R.string.gps_permission_grant));
-//                logger.debug(getString(R.string.gps_permission_grant));
-            } else {
-                Log.e(LOG_TAG, getString(R.string.gps_permission_reject));
-            }
-
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
     }
 
 
@@ -473,17 +415,6 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 .setNotificationResponsiveness(1000)
                 .build());
 
-//        mGeofenceList.add(new Geofence.Builder()
-//                .setRequestId("Leopold St.")
-//                .setCircularRegion(
-//                        -37.841150, 144.977329,
-//                        Constants.GEOFENCE_RADIUS_IN_METERS
-//                )
-//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-//                        Geofence.GEOFENCE_TRANSITION_EXIT)
-//                .setNotificationResponsiveness(1000)
-//                .build());
 
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
 //        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER); Is it enough ???????

@@ -1,12 +1,16 @@
 package kr.co.tmoney.mobiledriverconsole;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -18,7 +22,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -124,6 +127,41 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
 
+        // permission check
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    // user already reject the permission so show the dialog again
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT+1);
+
+                } else {
+
+                    // we can request the permission for the first time.
+
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, Constants.GPS_PERMISSION_GRANT+1);
+
+                }
+            } else {
+                // already got the permission
+                this.preparePermission();
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -135,8 +173,37 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
     }
 
-    private boolean isExpired(AuthData authData){
-        return (System.currentTimeMillis() / 1000) >= authData.getExpires();
+    /**
+     * GPS permission handles - Android SDK 23
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        Log.d(LOG_TAG, "Request code : " + requestCode);
+
+        switch (requestCode) {
+            case Constants.GPS_PERMISSION_GRANT: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(this, "TripOff : GPS permission granted ", Toast.LENGTH_SHORT).show();
+                    preparePermission();
+
+                } else {
+
+                    Toast.makeText(this, "Need to grant the permssion", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
+    private void preparePermission(){
+        Log.e(LOG_TAG, "Prepare Permission at TripOffActivity");
     }
 
     /**
