@@ -60,11 +60,42 @@ public interface Constants {
 
     public static final String VEHICLE_UPDATED = "updated";
 
-
-
     public static final String FRONT_VEHICLE_ID = "front_vehicle_id";
 
     public static final String FRONT_VEHICLE_INDEX = "front_vehicle_index";
+
+
+
+    public static final String AUTH_EMAIL = "email";
+
+    public static final String AUTH_AREA_TAG = "areaTag";
+
+    public static final String AUTH_COMPANY_TAG = "companyTag";
+
+    public static final String AUTH_TYPE = "type";
+
+    public static final String AUTH_LOG_IN_TIME = "loginTimestamp";
+
+    public static final String AUTH_LOG_OUT_TIME = "logoutTimestamp";
+
+    public static final String AUTH_AREA_TAG_VALE = "Thai_Private";
+
+    public static final String AUTH_COMPANY_TAG_VALE = "TH_PMB";
+
+    public static final String AUTH_TYPE_VALE = "DR";
+
+    public static final String AUTH_ROUTE = "route";
+
+    public static final String AUTH_VEHICLE = "vehicle";
+
+
+    public static final String USER_UID = "user_uid";
+
+    public static final String USER_EMAIL = "user_email";
+
+    public static final String USER_PATH = "user_path";
+
+
 
 
 

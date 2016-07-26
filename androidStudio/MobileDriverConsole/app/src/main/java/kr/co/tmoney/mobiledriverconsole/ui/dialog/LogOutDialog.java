@@ -13,9 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
+import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -60,11 +66,22 @@ public class LogOutDialog extends DialogFragment {
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // log out user
-                Firebase firebase = new Firebase(Constants.FIREBASE_HOME);
-                firebase.unauth();
+                // Firebase logout
+                // update logout time
+                String userUid = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.USER_UID, "");
+                String userPath = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.USER_PATH, "");
+                if(!userUid.equalsIgnoreCase("") && !userPath.equalsIgnoreCase("")) {
+                    Firebase currentUser = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_USER_LIST_PATH + "/" + userUid + "/" + userPath);
+                    Map<String, Object> userData = new HashMap<String, Object>();
+                    userData.put(Constants.AUTH_LOG_OUT_TIME, ServerValue.TIMESTAMP);
+                    currentUser.updateChildren(userData);
+                }
+                // logout
+                FirebaseAuth.getInstance().signOut();
+
                 // finish all activity
                 mActivity.finishAffinity();
+
                 // disappear
                 dismiss();
             }

@@ -8,50 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:765954447697:android:12b355fd4cdaa18d",
-        "android_client_info": {
-          "package_name": "kr.co.tmoney.oauthtest"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "765954447697-0so9iae21mmv3gpb7ulcec1ngudcas71.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "kr.co.tmoney.oauthtest",
-            "certificate_hash": "69C0102A001C2F67D50E0A386645BCF48ED19886"
-          }
-        },
-        {
-          "client_id": "765954447697-1e2ad2qlt3j4qh7ep6lt0bcj9564mhk3.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC4CdpxcUMHtkC4mw6VBCkgk5kVE4SWC_0"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "765954447697-1e2ad2qlt3j4qh7ep6lt0bcj9564mhk3.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:765954447697:android:a5fa88c49a06e692",
         "android_client_info": {
           "package_name": "kr.co.tmoney.mobiledriverconsole"
@@ -67,13 +23,13 @@
           }
         },
         {
-          "client_id": "765954447697-1e2ad2qlt3j4qh7ep6lt0bcj9564mhk3.apps.googleusercontent.com",
+          "client_id": "765954447697-6ndlseon1go105c9qcdk1pubp48rrq97.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC4CdpxcUMHtkC4mw6VBCkgk5kVE4SWC_0"
+          "current_key": "AIzaSyACZyznnjTw5V4wehAIXWoM9Wi0o8bJ6fM"
         }
       ],
       "services": {
@@ -84,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "765954447697-1e2ad2qlt3j4qh7ep6lt0bcj9564mhk3.apps.googleusercontent.com",
+              "client_id": "765954447697-6ndlseon1go105c9qcdk1pubp48rrq97.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

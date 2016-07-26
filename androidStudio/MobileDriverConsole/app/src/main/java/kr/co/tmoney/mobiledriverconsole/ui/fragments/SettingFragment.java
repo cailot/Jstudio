@@ -78,9 +78,28 @@ public class SettingFragment extends Fragment{
         mLogOutTxt = (TextView) view.findViewById(R.id.setting_log_out_txt);
         mLogOutTxt.setEnabled(false);
         mUserInfoTxt = (TextView) view.findViewById(R.id.setting_user_info);
+        String email = MDCUtils.getValue(mContext, Constants.USER_EMAIL, "");
+        if(!email.equalsIgnoreCase("")) {
+            ((TextView) view.findViewById(R.id.setting_email)).setText(email);
+        }
         mLanguageDescTxt = (TextView) view.findViewById(R.id.setting_language_desc);
+
+
+
         mThaiBtn = (RadioButton) view.findViewById(R.id.setting_thai_btn);
         mEnglishBtn = (RadioButton) view.findViewById(R.id.setting_english_btn);
+
+
+        String lang = MDCUtils.getValue(mContext, Constants.SELECTED_LANGUAGE, "");
+        if(lang.equalsIgnoreCase(Constants.LANGUAGE_ENGLISH)){
+            mEnglishBtn.setChecked(true);
+        }else if(lang.equalsIgnoreCase(Constants.LANGUAGE_THAILAND)){
+            mThaiBtn.setChecked(true);
+        }else{
+            mEnglishBtn.setChecked(true);
+        }
+
+
         mHandOverTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

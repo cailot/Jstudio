@@ -107,7 +107,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
 
 
         // loading Splash
-        startActivity(new Intent(this, SplashActivity.class));
+//        startActivity(new Intent(this, SplashActivity.class));
 
 
 
@@ -203,7 +203,7 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
     }
 
     private void preparePermission(){
-        Log.e(LOG_TAG, "Prepare Permission at TripOffActivity");
+        Log.d(LOG_TAG, "Prepare Permission at TripOffActivity");
     }
 
     /**
@@ -591,6 +591,17 @@ public class TripOffActivity extends AppCompatActivity implements RouteDialog.Pa
             routeUpdate.put(Constants.VEHICLE_INDEX, 0);
         }
         routeVehicle.updateChildren(routeUpdate);
+
+        // update user login by adding route & vehicle
+        String userUid = MDCUtils.getValue(this, Constants.USER_UID, "");
+        String userPath = MDCUtils.getValue(this, Constants.USER_PATH, "");
+        if(!userUid.equalsIgnoreCase("") && !userPath.equalsIgnoreCase("")) {
+            Firebase currentUser = mFirebase.child(Constants.FIREBASE_USER_LIST_PATH + "/" + userUid + "/" + userPath);
+            Map<String, Object> userData = new HashMap<String, Object>();
+            userData.put(Constants.AUTH_ROUTE, mRouteId);
+            userData.put(Constants.AUTH_VEHICLE, mVehicleId);
+            currentUser.updateChildren(userData);
+        }
 
         // turn on 'Trip On'
         MDCUtils.put(getApplicationContext(), Constants.VEHICLE_TRIP_ON, true);
