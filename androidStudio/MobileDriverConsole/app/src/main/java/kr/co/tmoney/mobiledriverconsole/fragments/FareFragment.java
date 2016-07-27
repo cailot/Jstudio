@@ -509,10 +509,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 //                + "จำนวน : " + mPassengerCount + "\t ราคาต่อคน : " + mPrice + "\t ราคารวม : " + mTotalFare + "\n"
 //                + "      ขอบคุณที่ใช้บริการ";
 
-        spannable.append("หมายเลขตั๋ว : ");
+        spannable.append("หมายเลขตว: ");
         spannable.append(getSpannableString(StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0")));
         spannable.append("\t");
-        spannable.append(" วันเวลา : " );
+        spannable.append("วนเวลา: " );
         spannable.append(getSpannableString(getTimestamp()));
         spannable.append("\n");
         spannable.append("สาย : ");
@@ -536,7 +536,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append(" ราคารวม : ");
         spannable.append(getSpannableString(Integer.toString(mTotalFare)));
         spannable.append("\n");
-        spannable.append("      ขอบคุณที่ใช้บริการ");
+        spannable.append("      ขอบคณทใชบรการ");
 
         return spannable;
     }

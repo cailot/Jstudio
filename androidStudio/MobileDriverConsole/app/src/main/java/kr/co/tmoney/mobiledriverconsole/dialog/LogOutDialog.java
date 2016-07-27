@@ -34,6 +34,9 @@ public class LogOutDialog extends DialogFragment {
 
     private Activity mActivity;
 
+    public LogOutDialog() {
+    }
+
     public LogOutDialog(Activity activity) {
         mActivity = activity;
     }
