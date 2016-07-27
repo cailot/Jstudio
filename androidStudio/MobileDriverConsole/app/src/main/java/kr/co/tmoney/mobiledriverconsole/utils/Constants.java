@@ -99,6 +99,26 @@ public interface Constants {
 
 
 
+    public static final String PRINT_TICKET_NUMBER = "print_ticket_number";
+
+    public static final String PRINT_DATE = "print_date";
+
+    public static final String PRINT_ROUTE = "print_route";
+
+    public static final String PRINT_BUS = "print_bus";
+
+    public static final String PRINT_FROM = "print_from";
+
+    public static final String PRINT_TO = "print_to";
+
+    public static final String PRINT_NUMBER_OF_PERSON = "print_number_of_person";
+
+    public static final String PRINT_FARE_PER_PERSON = "print_fare_per_person";
+
+    public static final String PRINT_TOTAL = "print_total";
+
+
+
 
 
 
@@ -186,6 +206,8 @@ public interface Constants {
 
     public static final String GEOFENCE_INTENT_STOP = "geofence_intent_stop";
 
+    public static final int GEOFENCE_NOTIFICATION_RESPONSIVENESS = 1000;
+
 
 
 
@@ -252,15 +274,8 @@ public interface Constants {
 
 
 
-    /////////////////////////// Log in Info ////////////////////////////////////////////
 
-    public static final String LOGIN_EMAIL = "login_email";
-
-    public static final String LOGIN_USER_NAME = "login_user_name";
-
-    public static final boolean LOGIN_CHECK = false;
-
-    public static final String LOGIN_URL = "";
+    public static final int THREAD_SLEEP = 1000;
 
 
 

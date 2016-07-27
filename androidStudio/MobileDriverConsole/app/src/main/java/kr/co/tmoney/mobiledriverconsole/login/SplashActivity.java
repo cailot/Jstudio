@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole;
+package kr.co.tmoney.mobiledriverconsole.login;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.TextView;
+
+import kr.co.tmoney.mobiledriverconsole.R;
 
 /**
  * Created by jinseo on 2016. 7. 8..
@@ -33,6 +35,6 @@ public class SplashActivity extends Activity {
                 finish();
             }
         };
-        handler.sendEmptyMessageDelayed(0, 2000); // disappear in 5 sesc
+        handler.sendEmptyMessageDelayed(0, 2000); // disappear in 2 sesc
     }
 }

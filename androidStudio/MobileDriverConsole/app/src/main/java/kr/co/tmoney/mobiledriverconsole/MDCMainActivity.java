@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import kr.co.tmoney.mobiledriverconsole.geofencing.GeofenceService;
 import kr.co.tmoney.mobiledriverconsole.model.MDCViewPager;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
-import kr.co.tmoney.mobiledriverconsole.ui.fragments.TabAdapter;
+import kr.co.tmoney.mobiledriverconsole.fragments.TabAdapter;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
@@ -60,9 +60,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private StopVO[] mStops; // shared by FareFragment
 
-    public String getVehicleId() {
-        return mVehicleId;
-    }
+//    public String getVehicleId() {
+//        return mVehicleId;
+//    }
 
     private String mVehicleId; // vehicle id
 
@@ -137,6 +137,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -146,11 +147,13 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "onStop()");
     }
+
 
     @Override
     protected void onDestroy() {
@@ -206,6 +209,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         return stops;
     }
 
+
     /**
      * Retreive vehicle id
      * @param key
@@ -216,6 +220,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         String id = pref.getString(key, getString(R.string.no_vehicle_found));
         return id;
     }
+
 
     public StopVO[] getStops() {
         return mStops;
@@ -235,10 +240,12 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         startIntentService();
     }
 
+
     @Override
     public void onConnectionSuspended(int i) {
 
     }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -295,13 +302,13 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                                 message = getString(R.string.unknown_geofence_transition);
                         }
                     }
-//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             }); // Result processed in onResult().
         } catch (SecurityException en) {
             Log.d(LOG_TAG, en.getMessage());
         }
     }
+
 
     /**
      * Stop GeofenceSerivce
@@ -324,7 +331,6 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     } else {
                         message = getString(R.string.geofence_denied) + status.getStatusCode();
                     }
-//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                 }
             });
         } catch (SecurityException securityException) {
@@ -341,6 +347,10 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     private GeofencingRequest getGeofencingRequest(){
 
         mGeofenceList = new ArrayList<Geofence>();
+
+        //////////// uncomment when ready /////////////////
+//        mGeofenceList = addGefenceToList();
+        ///////////////////////////////////////////////////
 
         mGeofenceList.add(new Geofence.Builder()
                 .setRequestId("Company")
@@ -417,13 +427,34 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
 
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-//        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER); Is it enough ???????
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER |
-                GeofencingRequest.INITIAL_TRIGGER_DWELL);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER | GeofencingRequest.INITIAL_TRIGGER_DWELL);
         builder.addGeofences(mGeofenceList);
         return builder.build();
 
     }
+
+
+    /**
+     * Add all stop info to Geofening List
+     */
+    private ArrayList<Geofence> addGefenceToList(){
+        ArrayList<Geofence> list = new ArrayList<Geofence>();
+        for(StopVO stop : mStops){
+            list.add(new Geofence.Builder()
+                .setRequestId(stop.getName())
+                .setCircularRegion(
+                        stop.getLat(), stop.getLon(),
+                        Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setNotificationResponsiveness(Constants.GEOFENCE_NOTIFICATION_RESPONSIVENESS)
+                .build()
+            );
+        }
+        return list;
+    }
+
 
     /**
      * Create PendingIntent for GeofenceService
@@ -455,28 +486,12 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.e(LOG_TAG, "onConfigurationChanged");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-////////////////// close methods //////////////////////////////////////
 
 
     /**
@@ -497,6 +512,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     }
 
 
+    /**
+     * Update Tab name as per language setting
+     */
     public void updateTabNames(){
         for(int i=0; i<mTabAdapter.getCount(); i++){
             TabLayout.Tab tab =mTabLayout.getTabAt(i);
@@ -507,9 +525,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     /**
      * Release the resource
-     * 1. GoogleApiClient
-     *
-     *
+     * 1. Unregister Geofencing
+     * 2. GoogleApiClient
      */
     public void closeResources(){
         stopIntentService();

@@ -42,7 +42,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         -->
         <activity
-            android:name=".LoginManager"
+            android:name=".login.LoginManager"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
             android:configChanges="locale"
@@ -68,13 +68,13 @@
             android:configChanges="locale"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".SplashActivity"
+        <activity android:name=".login.SplashActivity"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCOeilFT6ARshi5B4y2l8r47Jnc1vQpgkk" />
+            android:value="AIzaSyDxtAudDDEYFOwQdyAlKLDJPoHMGJ1pKN0" />
 
         <!-- Declaring Services -->
         <service android:name=".geofencing.GeofenceService"

@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.fragments;
+package kr.co.tmoney.mobiledriverconsole.fragments;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -24,7 +24,7 @@ import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.LogOutDialog;
+import kr.co.tmoney.mobiledriverconsole.dialog.LogOutDialog;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.LocaleHelper;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -84,11 +84,8 @@ public class SettingFragment extends Fragment{
         }
         mLanguageDescTxt = (TextView) view.findViewById(R.id.setting_language_desc);
 
-
-
         mThaiBtn = (RadioButton) view.findViewById(R.id.setting_thai_btn);
         mEnglishBtn = (RadioButton) view.findViewById(R.id.setting_english_btn);
-
 
         String lang = MDCUtils.getValue(mContext, Constants.SELECTED_LANGUAGE, "");
         if(lang.equalsIgnoreCase(Constants.LANGUAGE_ENGLISH)){
@@ -98,7 +95,6 @@ public class SettingFragment extends Fragment{
         }else{
             mEnglishBtn.setChecked(true);
         }
-
 
         mHandOverTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,11 +146,15 @@ public class SettingFragment extends Fragment{
         }
     }
 
+    /**
+     * Launch Logout Dialog
+     */
     private void logOut() {
         Log.d(LOG_TAG, "logOut()");
         LogOutDialog logOutDialog = new LogOutDialog(mActivity);
         logOutDialog.show(mActivity.getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
     }
+
 
     /**
      * Trip Off events

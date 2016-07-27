@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.dialog;
+package kr.co.tmoney.mobiledriverconsole.dialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;

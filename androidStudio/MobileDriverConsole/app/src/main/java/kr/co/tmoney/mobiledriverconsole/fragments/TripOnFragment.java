@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.fragments;
+package kr.co.tmoney.mobiledriverconsole.fragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -162,12 +162,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-//        LatLng melbourne = new LatLng(-37.835909, 144.981128);
         mMarkerOptions = new MarkerOptions();
-//        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(melbourne, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         mGoogleMap.setTrafficEnabled(true);
-        // temporary showing geofences
-//        showGeofences();
     }
 
 
@@ -235,6 +231,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         }
         super.onDestroy();
     }
+
 
     /**
      * Update several informaton
@@ -304,6 +301,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         }
     }
 
+
     /**
      * Initialise Trip info such as
      * 1. initialise VOs
@@ -340,6 +338,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             }
         });
     }
+
 
     /**
      * subscribe updated front/rear vehicle's GPS
@@ -511,6 +510,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         }
 
     }
+
 
     /**
      * Insert transaction record into Firebase

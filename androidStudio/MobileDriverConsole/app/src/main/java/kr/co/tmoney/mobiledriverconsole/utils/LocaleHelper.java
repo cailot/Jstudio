@@ -18,24 +18,29 @@ public class LocaleHelper {
         setLocale(context, lang);
     }
 
+
     public static void onCreate(Context context, String defaultLanguage) {
         String lang = getPersistedData(context, defaultLanguage);
         setLocale(context, lang);
     }
 
+
     public static String getLanguage(Context context) {
         return getPersistedData(context, Locale.getDefault().getLanguage());
     }
+
 
     public static void setLocale(Context context, String language) {
         persist(context, language);
         updateResources(context, language);
     }
 
+
     private static String getPersistedData(Context context, String defaultLanguage) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString(Constants.SELECTED_LANGUAGE, defaultLanguage);
     }
+
 
     private static void persist(Context context, String language) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -44,6 +49,7 @@ public class LocaleHelper {
         editor.putString(Constants.SELECTED_LANGUAGE, language);
         editor.apply();
     }
+
 
     private static void updateResources(Context context, String language) {
         Locale locale = new Locale(language);

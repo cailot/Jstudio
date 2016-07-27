@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.dialog;
+package kr.co.tmoney.mobiledriverconsole.dialog;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,23 +12,25 @@ import kr.co.tmoney.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class PassengerCustomAdapter extends BaseAdapter{
+public class RouteCustomAdapter extends BaseAdapter{
     private Context mContext;
     private String[] mNames;
+    private String[] mTeams;
 
-    public PassengerCustomAdapter(Context context, String[] names){
+    public RouteCustomAdapter(Context context, String[] names, String[] teams){
         mContext = context;
         mNames = names;
+        mTeams = teams;
     }
 
     @Override
     public int getCount() {
-        return mNames==null ? 0 :mNames.length;
+        return mNames==null ? 0 : mNames.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames==null ? "" : mNames[i];
+        return mNames==null ? "" :mNames[i];
     }
 
     @Override
@@ -41,12 +43,14 @@ public class PassengerCustomAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.passenger_detail, null);
+            view = layoutInflater.inflate(R.layout.route_detail, null);
         }
 
         // Get View
-        TextView passengerCount = (TextView) view.findViewById(R.id.passenger_count_txt);
-        passengerCount.setText(mNames==null ? "" : mNames[i]);
+        TextView stopName = (TextView) view.findViewById(R.id.route_id_txt);
+        TextView stopZone = (TextView) view.findViewById(R.id.route_name_txt);
+        stopName.setText(mNames==null ? "" : mNames[i]);
+        stopZone.setText(mTeams==null ? "" : mTeams[i]);
 
         return view;
     }

@@ -42,6 +42,7 @@ public class MDCUtils {
         return Constants.PRE_LOG_ENTRY +  className.getSimpleName() + Constants.POST_LOG_ENTRY;
     }
 
+
     /**
      * Convert Object[] into String[]
      * @param from
@@ -61,36 +62,6 @@ public class MDCUtils {
         return converts;
     }
 
-    /**
-     * Generate String[] by ' , '
-     * @param list
-     * @return
-     */
-    public static String[] convertStringToStringArray(String list){
-        String[] value = StringUtils.splitByWholeSeparator(list, Constants.STRING_ARRAY_SEPARATOR);
-        return value!=null ? value : new String[]{};
-    }
-
-    /**
-     * Generate concatenated String with ','
-     * @param list
-     * @return
-     */
-    public static String convertStringArrayToString(String[] list){
-        String value = StringUtils.join(list, Constants.STRING_ARRAY_SEPARATOR);
-        return value!=null ? value : "";
-//        if(list==null || list.length==0){
-//            return "";
-//        }
-//        StringBuffer stringBuffer = new StringBuffer();
-//        for(String str : list){
-//            stringBuffer.append(str + Constants.STRING_ARRAY_SEPARATOR);
-//        }
-//        String string = stringBuffer.toString();
-//        string = StringUtils.substringBeforeLast(string, Constants.STRING_ARRAY_SEPARATOR);
-//        return string;
-    }
-
 
     /**
      * Randomise int number within range
@@ -107,6 +78,7 @@ public class MDCUtils {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+
 
     /**
      * Return node name under trips (ex> 20160707222443_SV580003 )
@@ -142,6 +114,7 @@ public class MDCUtils {
         return Double.parseDouble(mDecimalFormat.format(d));
     }
 
+
     /**
      * Get the index of closest distance
      * @param gps
@@ -159,6 +132,15 @@ public class MDCUtils {
         return index;
     }
 
+
+    /**
+     * Get distance information between two GPS
+     * @param originLat
+     * @param originLon
+     * @param destLat
+     * @param destLon
+     * @return
+     */
     public static String[] getDistanceInfo(double originLat, double originLon, double destLat, double destLon) {
 
         String[] infos = new String[]{"0","0"};
@@ -215,6 +197,7 @@ public class MDCUtils {
         return infos;
     }
 
+
     /**
      * Convert into proper format of distance such as 1.2 km or 234 m
      * @param digit
@@ -230,6 +213,7 @@ public class MDCUtils {
         }
         return info;
     }
+
 
     /**
      * Bring up Stop groups per interval as String array
@@ -247,7 +231,12 @@ public class MDCUtils {
     }
 
 
-
+    /**
+     * Add String information into SharedPreferences
+     * @param context
+     * @param key
+     * @param value
+     */
     public static void put(Context context, String key, String value){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -255,6 +244,13 @@ public class MDCUtils {
         editor.commit();
     }
 
+
+    /**
+     * Add boolean information into SharedPreferences
+     * @param context
+     * @param key
+     * @param value
+     */
     public static void put(Context context, String key, boolean value){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -262,6 +258,13 @@ public class MDCUtils {
         editor.commit();
     }
 
+
+    /**
+     * Add Object information into SharedPreferences
+     * @param context
+     * @param key
+     * @param value
+     */
     public static void put(Context context, String key, Object value) {
         SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
@@ -270,6 +273,14 @@ public class MDCUtils {
         editor.commit();
     }
 
+
+    /**
+     * Retrieve String information into SharedPreferences
+     * @param context
+     * @param key
+     * @param dftValue
+     * @return
+     */
     public static String getValue(Context context, String key, String dftValue) {
         SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         try {
@@ -279,6 +290,14 @@ public class MDCUtils {
         }
     }
 
+
+    /**
+     * Retrieve boolean information into SharedPreferences
+     * @param context
+     * @param key
+     * @param dftValue
+     * @return
+     */
     public static boolean getValue(Context context, String key, boolean dftValue) {
         SharedPreferences pref = context.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         try {

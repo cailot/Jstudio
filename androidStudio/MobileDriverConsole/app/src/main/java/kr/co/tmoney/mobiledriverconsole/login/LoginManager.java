@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole;
+package kr.co.tmoney.mobiledriverconsole.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,22 +18,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import kr.co.tmoney.mobiledriverconsole.ProgressActivity;
+import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.TripOffActivity;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
 
 /**
  * Created by jinseo on 2016. 7. 22..
  */
-public class LoginManager extends LogBaseActivity{
+public class LoginManager extends ProgressActivity {
 
+    private EditText mEmailTxt, mPasswordTxt;
 
-
-    EditText mEmailTxt, mPasswordTxt;
-
-    ImageView mLoginImg;
+    private ImageView mLoginImg;
 
     // this is reported bug that 'onAuthStateChanged()' called twice times.
     // http://stackoverflow.com/questions/37674823/firebase-android-onauthstatechanged-fire-twice-after-signinwithemailandpasswor
@@ -51,11 +54,8 @@ public class LoginManager extends LogBaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-
-
         // loading Splash page
         startActivity(new Intent(this, SplashActivity.class));
-
 
         mEmailTxt = (EditText) findViewById(R.id.log_in_email_txt);
         mPasswordTxt = (EditText) findViewById(R.id.log_in_password_txt);
@@ -68,11 +68,8 @@ public class LoginManager extends LogBaseActivity{
             }
         });
 
-
-
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener(){
-
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -86,8 +83,6 @@ public class LoginManager extends LogBaseActivity{
                 updateUI(user);
             }
         };
-
-
     }
 
     /**
@@ -105,7 +100,7 @@ public class LoginManager extends LogBaseActivity{
         auth.put(Constants.AUTH_LOG_IN_TIME, ServerValue.TIMESTAMP);
         userPost.setValue(auth);
         String keyId = userPost.getKey();
-        Log.d(LOG_TAG, " Key ID :::::  --> " + keyId);
+//        Log.d(LOG_TAG, " Key ID :::::  --> " + keyId);
 
         // save user info for other Activity
         MDCUtils.put(this, Constants.USER_UID, user.getUid());
@@ -114,8 +109,12 @@ public class LoginManager extends LogBaseActivity{
     }
 
 
+    /**
+     * Sign in process
+     * @param email
+     * @param password
+     */
     private void logIn(String email, String password) {
-//        Log.d(LOG_TAG, email + " - " + password );
         if(!validateForm()){
             return;
         }
@@ -128,9 +127,8 @@ public class LoginManager extends LogBaseActivity{
                         hideProgressDialog();
                         if(!task.isSuccessful()){
                             Log.w(LOG_TAG, "logIn exception - " + task.getException());
-                            Toast.makeText(LoginManager.this, "Authenticatation failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginManager.this, "Email and Password does not match", Toast.LENGTH_SHORT).show();
                         }else{
-//                            Log.d(LOG_TAG, "I am moving to TripOffActivity");
                             mProgressDialog.dismiss();
                             Intent intent = new Intent(LoginManager.this, TripOffActivity.class);
                             startActivity(intent);
@@ -140,19 +138,30 @@ public class LoginManager extends LogBaseActivity{
                 });
     }
 
+
+    /**
+     * Validate form data
+     * @return
+     */
     private boolean validateForm() {
         boolean valid = true;
         String email = mEmailTxt.getText().toString();
         if(TextUtils.isEmpty(email)){
             mEmailTxt.setError("Required");
             valid = false;
+        }else if(!StringUtils.contains(email, "@") || !StringUtils.contains(email, ".")) {
+            mEmailTxt.setError("Invalid Email Format");
+            valid = false;
         }else{
             mEmailTxt.setError(null);
         }
 
         String password = mPasswordTxt.getText().toString();
-        if(TextUtils.isEmpty(password)){
+        if(TextUtils.isEmpty(password)) {
             mPasswordTxt.setError("Required");
+            valid = false;
+        }else if(password.length()<6){
+            mPasswordTxt.setError("Too Short Password");
             valid = false;
         }else{
             mPasswordTxt.setError(null);
@@ -163,7 +172,10 @@ public class LoginManager extends LogBaseActivity{
     }
 
 
-
+    /**
+     * Update UI but not used too much in this case
+     * @param user
+     */
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if(user !=null){
@@ -183,6 +195,7 @@ public class LoginManager extends LogBaseActivity{
         mPasswordTxt.setError(null);
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -190,5 +203,4 @@ public class LoginManager extends LogBaseActivity{
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 }

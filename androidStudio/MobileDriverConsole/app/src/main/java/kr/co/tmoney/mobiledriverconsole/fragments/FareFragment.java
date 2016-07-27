@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.fragments;
+package kr.co.tmoney.mobiledriverconsole.fragments;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -22,22 +22,25 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import org.apache.commons.lang3.StringUtils;
-//import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
+import kr.co.tmoney.mobiledriverconsole.dialog.PassengerDialog;
+import kr.co.tmoney.mobiledriverconsole.dialog.PrintConfirmationDialog;
+import kr.co.tmoney.mobiledriverconsole.dialog.StopDialog;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopGroupVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.StopVO;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.PassengerDialog;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.PrintConfirmationDialog;
-import kr.co.tmoney.mobiledriverconsole.ui.dialog.StopDialog;
+import kr.co.tmoney.mobiledriverconsole.print.PrinterAdapter;
+import kr.co.tmoney.mobiledriverconsole.print.PrinterViewAction;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
-import kr.co.tmoney.mobiledriverconsole.utils.PrinterAdapter;
-import kr.co.tmoney.mobiledriverconsole.utils.PrinterViewAction;
+
+//import org.apache.log4j.Logger;
 
 
 /**
@@ -141,11 +144,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mTotalFare = 0;
     }
 
+
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
-    
+
+
     /**
      * build up UI components
      * @param view
@@ -184,26 +189,32 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     }
 
+
     @Override
     public void onStop() {
         super.onStop();
         mPrinterAdapter.stopConnection();
     }
 
+
     /**
      * Send print command to bluetooth printer
      */
     private void sendPrintCommand() {
-        // increase total passenger count
-        MDCMainActivity.passengerCount += mPassengerCount;
-        // simple test printing
-        String printInfo = printMessage();
-//        SpannableStringBuilder stringBuilder = getPrintMessage();
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder(printInfo);
-        PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, mPassengerCount);
-        printConfirmationDialog.show();
-        Log.d(LOG_TAG, stringBuilder.toString());
+        SpannableStringBuilder stringBuilder = getPrintMessage();
+        Map map = new HashMap<String, String>();
+        map.put(Constants.PRINT_TICKET_NUMBER, StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0"));
+        map.put(Constants.PRINT_DATE, getTimestamp());
+        map.put(Constants.PRINT_ROUTE, mRouteId);
+        map.put(Constants.PRINT_BUS, mVehicleId);
+        map.put(Constants.PRINT_FROM, mOriginStop);
+        map.put(Constants.PRINT_TO, mDestinationStop);
+        map.put(Constants.PRINT_NUMBER_OF_PERSON, mPassengerCount+"");
+        map.put(Constants.PRINT_FARE_PER_PERSON, mPrice+"");
+        map.put(Constants.PRINT_TOTAL, mTotalFare+"");
 
+        PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map, mPassengerCount);
+        printConfirmationDialog.show();
     }
 
 
@@ -227,6 +238,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mFares = getFareInfo();
     }
 
+
     /**
      * Get group name by using fareStopTag in StopVO
      * @param index
@@ -244,6 +256,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return group;
     }
 
+
     /**
      * Get fareStopTag by using name in StopVO
      * @param name
@@ -260,6 +273,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         }
         return tag;
     }
+
 
     /**
      * Calculate fare based on origin & destination
@@ -299,6 +313,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return mTotalFare;
     }
 
+
     /**
      * Pop up dialog for origin stop
      */
@@ -311,6 +326,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
     }
 
+
     /**
      * Pop up dialog for destination stop
      */
@@ -322,6 +338,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
     }
+
 
     /**
      * Pop up dialog for passenger count
@@ -395,6 +412,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         }
     }
 
+
     /**
      * 1. update user's selection on passenger count
      * 2. update Fare Textview
@@ -421,6 +439,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mPriceTxt.setText(fare);
     }
 
+
     /**
      * Retreive stop groups info under route
      * @return
@@ -431,6 +450,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         StopGroupVO[] stopGroups = new Gson().fromJson(json, StopGroupVO[].class);
         return stopGroups;
     }
+
 
     /**
      * Retreive fares info under route
@@ -443,17 +463,20 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return fares;
     }
 
+
     @Override
     public void showConnected() {
         Log.d(LOG_TAG, "Printer connected");
     }
+
 
     @Override
     public void showFailed() {
         Log.d(LOG_TAG, "Printer connection fails");
     }
 
-        /**
+
+    /**
      * Check whether current tab is selected or not
      * @param isVisibleToUser
      */
@@ -472,18 +495,11 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         }
     }
 
-    public String printMessage(){
-        String msg = "";
-        msg = "หมายเลขตั๋ว : " + StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0") + "\t วันเวลา : " + getTimestamp() + "\n"
-                + "สาย : " + mRouteId + "\t   หมายเลขรถ : " + mVehicleId + "\n"
-                + "ต้นทาง : " + mOriginStop +"\t   ปลายทาง : " + mDestinationStop + "\n"
-                + "จำนวน : " + mPassengerCount + "\t ราคาต่อคน : " + mPrice + "\t ราคารวม : " + mTotalFare + "\n"
-                + "      ขอบคุณที่ใช้บริการ";
 
-        return msg;
-    }
-
-
+    /**
+     * Decorate print message for Dialog
+     * @return
+     */
     public SpannableStringBuilder getPrintMessage(){
         SpannableStringBuilder spannable = new SpannableStringBuilder();
 
@@ -525,6 +541,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return spannable;
     }
 
+
     public SpannableString getSpannableString(String str){
         SpannableString spannableString = new SpannableString(str);
         spannableString.setSpan(new RelativeSizeSpan(1.0f), 0, str.length(), 0);
@@ -533,6 +550,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return spannableString;
     }
 
+
     public String getTimestamp(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH.mm");
@@ -540,13 +558,4 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         return format;
     }
 
-//    public String getValue(String key, String dftValue) {
-//        SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-//        try {
-//            return pref.getString(key, dftValue);
-//        } catch (Exception e) {
-//            return dftValue;
-//        }
-//
-//    }
 }

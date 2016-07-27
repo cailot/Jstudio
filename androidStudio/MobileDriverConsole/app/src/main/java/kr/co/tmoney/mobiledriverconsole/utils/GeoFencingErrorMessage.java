@@ -10,11 +10,11 @@ import kr.co.tmoney.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class ErrorMessage {
+public class GeoFencingErrorMessage {
     /**
      * Will use only static methods
      */
-    private ErrorMessage(){}
+    private GeoFencingErrorMessage(){}
 
     public static String getErrorMessage(Context context, int error){
         Resources resources = context.getResources();

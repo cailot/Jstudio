@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "765954447697-v375b8de0k5p5sq5f35arhqsje3sghgg.apps.googleusercontent.com",
+          "client_id": "765954447697-ekn5qlk4157p7duemthlbs4vu14ckd96.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "kr.co.tmoney.mobiledriverconsole",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "765954447697-6ndlseon1go105c9qcdk1pubp48rrq97.apps.googleusercontent.com",
+          "client_id": "765954447697-2cbnhflnuf2k8p2jo4og93men9ju6bjf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyACZyznnjTw5V4wehAIXWoM9Wi0o8bJ6fM"
+          "current_key": "AIzaSyCig4uIAQfNEDovGqB4p4dPTHqG-UEGm7M"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "765954447697-6ndlseon1go105c9qcdk1pubp48rrq97.apps.googleusercontent.com",
+              "client_id": "765954447697-2cbnhflnuf2k8p2jo4og93men9ju6bjf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -12,10 +12,12 @@ public class MDCViewPager extends ViewPager{
 
     private boolean isSwappable;
 
+
     public MDCViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         isSwappable = true;
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -25,6 +27,7 @@ public class MDCViewPager extends ViewPager{
         return false;
     }
 
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(isSwappable){
@@ -32,6 +35,7 @@ public class MDCViewPager extends ViewPager{
         }
         return false;
     }
+
 
     public void setSwappable(boolean value){
         isSwappable = value;

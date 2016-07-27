@@ -69,8 +69,6 @@ public class GeofenceService extends IntentService {
 
         // Broadcasts the Intent to receivers in this app.
         LocalBroadcastManager.getInstance(this).sendBroadcast(localIntent);
-
-
     }
 
     @Override

@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.fragments;
+package kr.co.tmoney.mobiledriverconsole.fragments;
 
 /**
  * Created by jinseo on 2016. 6. 25..

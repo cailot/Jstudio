@@ -1,4 +1,4 @@
-package kr.co.tmoney.mobiledriverconsole.ui.dialog;
+package kr.co.tmoney.mobiledriverconsole.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -9,9 +9,11 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Map;
+
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.utils.PrinterAdapter;
+import kr.co.tmoney.mobiledriverconsole.print.PrinterAdapter;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -25,13 +27,12 @@ public class PrintConfirmationDialog extends Dialog {
 
     private PrinterAdapter mPrinterAdapter;
 
-    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final int count) {
+    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final Map map, final int count) {
         super(context);
 
         mPrinterAdapter = printerAdapter;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.print_confirmation);
-//        setTitle("Print Receipt");
 
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -43,8 +44,8 @@ public class PrintConfirmationDialog extends Dialog {
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPrinterAdapter.print(confirm.toString());
-                mPrinterAdapter.fullCut();
+                mPrinterAdapter.print(map);
+//                mPrinterAdapter.fullCut();
                 MDCMainActivity.passengerCount += count;
                 MDCMainActivity.fareTransactionId++;
                 dismiss();
