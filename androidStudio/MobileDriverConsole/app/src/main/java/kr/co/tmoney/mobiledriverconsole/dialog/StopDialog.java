@@ -1,5 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ public class StopDialog extends DialogFragment{
     public StopDialog() {
     }
 
+    @SuppressLint("ValidFragment")
     public StopDialog(String[] names, String[] types, int requestCode) {
         this.mNames = names;
         this.mTypes = types;

@@ -29,7 +29,7 @@ public class ProgressActivity extends AppCompatActivity {
      */
     public void hideProgressDialog(){
         if(mProgressDialog !=null && mProgressDialog.isShowing()){
-            mProgressDialog.hide();
+            mProgressDialog.dismiss();
         }
     }
 

@@ -1,5 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -37,6 +38,7 @@ public class LogOutDialog extends DialogFragment {
     public LogOutDialog() {
     }
 
+    @SuppressLint("ValidFragment")
     public LogOutDialog(Activity activity) {
         mActivity = activity;
     }

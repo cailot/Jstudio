@@ -503,16 +503,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     public SpannableStringBuilder getPrintMessage(){
         SpannableStringBuilder spannable = new SpannableStringBuilder();
 
-//        String msg = "หมายเลขตั๋ว : " + StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0") + "\t วันเวลา : " + getTimestamp() + "\n"
-//                + "สาย : " + mRouteId + "\t   หมายเลขรถ : " + mVehicleId + "\n"
-//                + "ต้นทาง : " + mOriginStop +"\t   ปลายทาง : " + mDestinationStop + "\n"
-//                + "จำนวน : " + mPassengerCount + "\t ราคาต่อคน : " + mPrice + "\t ราคารวม : " + mTotalFare + "\n"
-//                + "      ขอบคุณที่ใช้บริการ";
-
-        spannable.append("หมายเลขตว: ");
+        spannable.append("หมายเลขตั๋ว: ");
         spannable.append(getSpannableString(StringUtils.leftPad(Integer.toString(MDCMainActivity.fareTransactionId), 5, "0")));
         spannable.append("\t");
-        spannable.append("วนเวลา: " );
+        spannable.append("วันเวลา: " );
         spannable.append(getSpannableString(getTimestamp()));
         spannable.append("\n");
         spannable.append("สาย : ");
@@ -536,7 +530,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append(" ราคารวม : ");
         spannable.append(getSpannableString(Integer.toString(mTotalFare)));
         spannable.append("\n");
-        spannable.append("      ขอบคณทใชบรการ");
+        spannable.append("      ขอบคุณที่ใช้บริการ");
 
         return spannable;
     }

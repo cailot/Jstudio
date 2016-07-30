@@ -74,8 +74,7 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAGDygU8aGNwFn6I9f0h8BI5VBtP3pQX-o" />
-        <!--    AIzaSyAGDygU8aGNwFn6I9f0h8BI5VBtP3pQX-o  -->
+            android:value="AIzaSyCig4uIAQfNEDovGqB4p4dPTHqG-UEGm7M" />
         <!-- Declaring Services -->
         <service android:name=".geofencing.GeofenceService"
             />

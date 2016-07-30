@@ -505,6 +505,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                 if(vehicles.size()>0){
                     mVehicles = MDCUtils.convertListToStringArray(vehicles);
                 }
+                Log.d(LOG_TAG, vehicles.toString());
 
             }
             @Override

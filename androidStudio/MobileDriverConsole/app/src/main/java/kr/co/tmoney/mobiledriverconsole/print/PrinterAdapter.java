@@ -154,6 +154,9 @@ public class PrinterAdapter {
             String ticket_out = "หมายเลขตว: " + ticketNumber;
             String date_out = "วนเวลา: " + date;
             String line1 = vowel + "\n" + ticket_out + "    " + date_out + "\n";
+            Log.d("#######", line1);
+
+
 
             //line 2
             String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString());;//"554F";

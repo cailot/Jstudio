@@ -1,5 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ public class PassengerDialog extends DialogFragment{
         void sendPassengerCount(String name);
     }
 
+    @SuppressLint("ValidFragment")
     public PassengerDialog() {
         mCount = new String[30];
         for(int i=0; i<mCount.length; i++){

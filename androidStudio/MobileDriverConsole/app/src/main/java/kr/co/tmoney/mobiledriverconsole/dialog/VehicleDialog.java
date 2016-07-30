@@ -1,5 +1,6 @@
 package kr.co.tmoney.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class VehicleDialog extends DialogFragment{
      */
     PassValueFromVehicleDialogListener mPassValueFromVehicleDialogListener;
 
+    @SuppressLint("ValidFragment")
     public VehicleDialog(String[] names) {
         this.mNames = names;
     }

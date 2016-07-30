@@ -1,10 +1,11 @@
 package kr.co.tmoney.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class RouteDialog extends DialogFragment{
      */
     PassValueFromRouteDialogListener mPassValueFromRouteDialogListener;
 
+    @SuppressLint("ValidFragment")
     public RouteDialog(String[] ids, String[] names) {
         this.mRouteIds = ids;
         this.mNames = names;
