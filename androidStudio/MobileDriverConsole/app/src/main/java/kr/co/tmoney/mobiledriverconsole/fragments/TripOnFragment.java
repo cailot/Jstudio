@@ -111,7 +111,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     int mGpsCount;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
@@ -264,6 +263,21 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(mGpsCount==5){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
         }
+
+
+        // add speed into list to calculate average interval speed
+        if(MDCMainActivity.isSpeedCheckTurnOn()){
+            MDCMainActivity.addAverageSpeed(location.getSpeed());
+        }
+
+
+
+
+
+
+
+
+
         LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, Constants.GOOGLE_MAP_ZOOM_LEVEL));
         if(mMarker != null){
@@ -514,6 +528,41 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     /**
      * Insert transaction record into Firebase
+     *
+     *
+     *
+     *
+     * 1. 구간평균 속도 - 각 Trip 아래 stoplogs 각 정류장 정보에 추가 avgSpeed
+     *   이전 정류장과 현재 정류장 간 평균 속도를 저장 ex) 10단위 속도합을 측정 횟수로 나눔
+     *  ==> Enter
+     *
+     * 2. 정류장 정차시간 - 각 Trip 아래 stoplogs  정보에 추가 stopInterval
+     * Geofence 집입 후 이탈이전 속도가 0인 시간의 합
+     *  ==> Exit
+     *
+     * 3. 순통행 시간 - 각 Trip 아래 stoplogs 정보에 추가 tripInterval
+     * 직전 정류장 Geofence 이탈 시간부터 이번 정류장 Geofence 이탈 시간의 차이
+     *  ==> Enter
+     *
+     * 4. 정류장 별 현금 거래인원 - 각 Trip 아래 stoplogs 정보에 추가 cashCount
+     *  ==>
+     *
+     * 5. 정류장 별 현금 거래금액 - 각 Trip 아래 stoplogs 정보에 추가 cashAmount
+     *  ==>
+     *
+     * 6. Trip 별 거래금액 합 - 각 Trip아래 정보 추가 cashAmountSum
+     *  ==> static value
+     *
+     * 7. Trip 별 거래인원 합 - 각 Trip아래 정보 추가 cashCountSum
+     *  ==> static value
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
      * @param lat
      * @param lon
      */
