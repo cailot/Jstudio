@@ -50,7 +50,6 @@ import java.util.Map;
 
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
-import kr.co.tmoney.mobiledriverconsole.model.vo.TripVO;
 import kr.co.tmoney.mobiledriverconsole.model.vo.VehicleVO;
 import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 import kr.co.tmoney.mobiledriverconsole.utils.MDCUtils;
@@ -105,7 +104,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private String mRouteId;
 
-    private TripVO mTrip;
+//    private TripVO mTrip;
 
     private Firebase mFirebase;
 
@@ -262,6 +261,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         Log.d(LOG_TAG, mGpsCount+"");
         if(mGpsCount==5){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
+
         }
 
 
@@ -325,7 +325,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      * 5. Retreive front/rear vehicleIds & update GPS
      */
     private void initialiseTripInfo() {
-        mTrip = new TripVO();
+
         mFrontVehicle = new VehicleVO();
         mRearVehicle = new VehicleVO();
 
@@ -523,59 +523,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             mRearVehicleTxt.setText(getDrivingInfo(rearInfo));
         }
 
-    }
-
-
-    /**
-     * Insert transaction record into Firebase
-     *
-     *
-     *
-     *
-     * 1. 구간평균 속도 - 각 Trip 아래 stoplogs 각 정류장 정보에 추가 avgSpeed
-     *   이전 정류장과 현재 정류장 간 평균 속도를 저장 ex) 10단위 속도합을 측정 횟수로 나눔
-     *  ==> Enter
-     *
-     * 2. 정류장 정차시간 - 각 Trip 아래 stoplogs  정보에 추가 stopInterval
-     * Geofence 집입 후 이탈이전 속도가 0인 시간의 합
-     *  ==> Exit
-     *
-     * 3. 순통행 시간 - 각 Trip 아래 stoplogs 정보에 추가 tripInterval
-     * 직전 정류장 Geofence 이탈 시간부터 이번 정류장 Geofence 이탈 시간의 차이
-     *  ==> Enter
-     *
-     * 4. 정류장 별 현금 거래인원 - 각 Trip 아래 stoplogs 정보에 추가 cashCount
-     *  ==>
-     *
-     * 5. 정류장 별 현금 거래금액 - 각 Trip 아래 stoplogs 정보에 추가 cashAmount
-     *  ==>
-     *
-     * 6. Trip 별 거래금액 합 - 각 Trip아래 정보 추가 cashAmountSum
-     *  ==> static value
-     *
-     * 7. Trip 별 거래인원 합 - 각 Trip아래 정보 추가 cashCountSum
-     *  ==> static value
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     *
-     * @param lat
-     * @param lon
-     */
-    private void auditTransaction(double lat, double lon) {
-        String key = MDCUtils.getTipNode(mVehicleId);
-        mTrip.setCurrentStopId("1");
-        mTrip.setDriverId("jinhyung.seo");
-        mTrip.setRouteKey(mRouteId);
-        mTrip.setLat(lat);
-        mTrip.setLon(lon);
-        Firebase vehicleRef = mFirebase.child(key);
-//        vehicleRef.setValue(mTrip);
-//        Log.d(LOG_TAG, mTrip.toString());
     }
 
 

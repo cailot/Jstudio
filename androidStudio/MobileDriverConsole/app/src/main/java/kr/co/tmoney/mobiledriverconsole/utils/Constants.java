@@ -242,6 +242,11 @@ public interface Constants {
 
 
     ///////////////////////////// Geofencing Test ////////////////////////////////
+
+    public static final String GEOFENCE_ENTER = "ENTER";
+
+    public static final String GEOFENCE_EXIT = "EXIT";
+
     /**
      * For this sample, geofences expire after one hour.
      */

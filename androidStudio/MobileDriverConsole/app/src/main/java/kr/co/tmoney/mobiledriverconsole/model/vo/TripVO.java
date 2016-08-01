@@ -1,94 +1,78 @@
 package kr.co.tmoney.mobiledriverconsole.model.vo;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * Created by jinseo on 2016. 7. 7..
  */
 public class TripVO implements Serializable{
+
     private String currentStopId;
 
     private String currentStopName;
 
     private String driverId;
 
-    private HashMap<String, String> messagelogs;
-
     private String route;
-
-    private String routeKey;
-
-    private int runningNo;
-
-    private HashMap<String, Object> stoplogs;
-
-    private HashMap<String, Object> transactions;
-
-    private long tripStartTime;
-
-    private long updated;
 
     private String vehicleId;
 
-    private double lat;
+    private String status;
 
-    private double lon;
+    private long updated;
 
-    public double getLat() {
-        return lat;
+    private int stopDuration;
+
+    private int driveDuration;
+
+    private double averageSpeed;
+
+    private int passengerCount;
+
+    private int cashAmount;
+
+    private int totalPassengerCount;
+
+    private int totalCashAmount;
+
+    public String getStatus() {
+        return status;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public double getLon() {
-        return lon;
+    public int getDriveDuration() {
+        return driveDuration;
     }
 
-    public void setLon(double lon) {
-        this.lon = lon;
+    public void setDriveDuration(int driveDuration) {
+        this.driveDuration = driveDuration;
     }
 
-    public TripVO() {
+    public int getStopDuration() {
+        return stopDuration;
     }
 
-    public TripVO(String currentStopId, String currentStopName, String driverId, double lat, double lon, HashMap<String, String> messagelogs, String route, String routeKey, int runningNo, HashMap<String, Object> stoplogs, HashMap<String, Object> transactions, long tripStartTime, long updated, String vehicleId) {
-        this.currentStopId = currentStopId;
-        this.currentStopName = currentStopName;
-        this.driverId = driverId;
-        this.lat = lat;
-        this.lon = lon;
-        this.messagelogs = messagelogs;
-        this.route = route;
-        this.routeKey = routeKey;
-        this.runningNo = runningNo;
-        this.stoplogs = stoplogs;
-        this.transactions = transactions;
-        this.tripStartTime = tripStartTime;
-        this.updated = updated;
-        this.vehicleId = vehicleId;
+    public void setStopDuration(int stopDuration) {
+        this.stopDuration = stopDuration;
     }
 
-    @Override
-    public String toString() {
-        return "TripVO{" +
-                "currentStopId='" + currentStopId + '\'' +
-                ", currentStopName='" + currentStopName + '\'' +
-                ", driverId='" + driverId + '\'' +
-                ", messagelogs=" + messagelogs +
-                ", route='" + route + '\'' +
-                ", routeKey='" + routeKey + '\'' +
-                ", runningNo=" + runningNo +
-                ", stoplogs=" + stoplogs +
-                ", transactions=" + transactions +
-                ", tripStartTime=" + tripStartTime +
-                ", updated=" + updated +
-                ", vehicleId='" + vehicleId + '\'' +
-                ", lat=" + lat +
-                ", lon=" + lon +
-                '}';
+    public double getAverageSpeed() {
+        return averageSpeed;
+    }
+
+    public void setAverageSpeed(double averageSpeed) {
+        this.averageSpeed = averageSpeed;
+    }
+
+    public int getCashAmount() {
+        return cashAmount;
+    }
+
+    public void setCashAmount(int cashAmount) {
+        this.cashAmount = cashAmount;
     }
 
     public String getCurrentStopId() {
@@ -115,12 +99,12 @@ public class TripVO implements Serializable{
         this.driverId = driverId;
     }
 
-    public HashMap<String, String> getMessagelogs() {
-        return messagelogs;
+    public int getPassengerCount() {
+        return passengerCount;
     }
 
-    public void setMessagelogs(HashMap<String, String> messagelogs) {
-        this.messagelogs = messagelogs;
+    public void setPassengerCount(int passengerCount) {
+        this.passengerCount = passengerCount;
     }
 
     public String getRoute() {
@@ -131,44 +115,23 @@ public class TripVO implements Serializable{
         this.route = route;
     }
 
-    public String getRouteKey() {
-        return routeKey;
+    public int getTotalCashAmount() {
+        return totalCashAmount;
     }
 
-    public void setRouteKey(String routeKey) {
-        this.routeKey = routeKey;
+    public void setTotalCashAmount(int totalCashAmount) {
+        this.totalCashAmount = totalCashAmount;
     }
 
-    public int getRunningNo() {
-        return runningNo;
+    public TripVO() {
     }
 
-    public void setRunningNo(int runningNo) {
-        this.runningNo = runningNo;
+    public int getTotalPassengerCount() {
+        return totalPassengerCount;
     }
 
-    public HashMap<String, Object> getStoplogs() {
-        return stoplogs;
-    }
-
-    public void setStoplogs(HashMap<String, Object> stoplogs) {
-        this.stoplogs = stoplogs;
-    }
-
-    public HashMap<String, Object> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(HashMap<String, Object> transactions) {
-        this.transactions = transactions;
-    }
-
-    public long getTripStartTime() {
-        return tripStartTime;
-    }
-
-    public void setTripStartTime(long tripStartTime) {
-        this.tripStartTime = tripStartTime;
+    public void setTotalPassengerCount(int totalPassengerCount) {
+        this.totalPassengerCount = totalPassengerCount;
     }
 
     public long getUpdated() {
@@ -186,4 +149,6 @@ public class TripVO implements Serializable{
     public void setVehicleId(String vehicleId) {
         this.vehicleId = vehicleId;
     }
+
+
 }

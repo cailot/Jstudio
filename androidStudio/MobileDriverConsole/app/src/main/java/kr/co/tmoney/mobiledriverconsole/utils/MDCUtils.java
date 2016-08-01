@@ -30,6 +30,8 @@ public class MDCUtils {
 
     private static DecimalFormat mDecimalFormat = new DecimalFormat("##.00");
 
+    private static SimpleDateFormat mTripNode = new SimpleDateFormat("yyyyMMddHHmmss");
+
     private MDCUtils(){}
 
 
@@ -86,8 +88,8 @@ public class MDCUtils {
      * @return
      */
     public static String getTipNode(String vehicle){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String date = sdf.format(new Date());
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String date = mTripNode.format(new Date());
         return date + "_" + vehicle;
     }
 
@@ -306,4 +308,24 @@ public class MDCUtils {
             return dftValue;
         }
     }
+
+    /**
+     * Get timestamp
+     * @return
+     */
+//    public static long getTimestamp(){
+//        return System.currentTimeMillis();
+//    }
+
+    /**
+     * Return time difference as seconds
+     * @param from
+     * @param to
+     * @return
+     */
+    public static int getTimeDifference(long from, long to){
+        long difference = Math.abs(to - from);
+        return (int)(difference/1000);
+    }
+
 }

@@ -139,9 +139,15 @@ public class SettingFragment extends Fragment{
                 break;
             case R.id.setting_thai_btn :
                 switchLanguage(Constants.LANGUAGE_THAILAND);
+
+//                mActivity.auditTransaction(Constants.GEOFENCE_ENTER);
+
                 break;
             case R.id.setting_english_btn :
                 switchLanguage(Constants.LANGUAGE_ENGLISH);
+
+//                mActivity.auditTransaction(Constants.GEOFENCE_EXIT);
+
                 break;
         }
     }
