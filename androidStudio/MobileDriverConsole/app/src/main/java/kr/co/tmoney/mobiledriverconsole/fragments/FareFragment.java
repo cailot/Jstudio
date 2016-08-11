@@ -213,7 +213,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         map.put(Constants.PRINT_FARE_PER_PERSON, mPrice+"");
         map.put(Constants.PRINT_TOTAL, mTotalFare+"");
 
-        PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map, mPassengerCount);
+        PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map);
         printConfirmationDialog.show();
     }
 

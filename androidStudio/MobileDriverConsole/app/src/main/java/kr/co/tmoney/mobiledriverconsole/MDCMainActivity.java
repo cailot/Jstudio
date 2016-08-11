@@ -77,7 +77,13 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     public static String nextStopName = "ด่านทับช้าง";
 
-    public static int passengerCount;
+    public static int mPassengerCount; // passenger count during specific interval
+
+    public static int mPassengerCountSum; // total passenger count
+
+    public static int mFareCash; // fare during specific interval
+
+    public static int mFareCashSum; // total fare
 
     public static int fareTransactionId = 1;
 
@@ -702,7 +708,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 //        private double averageSpeed; // enter
 //        private int driveDuration; // enter
 //        private int stopDuration; // exit
-//        private int passengerCount; // exit
+//        private int passengerCountSum; // exit
 //        private int cashAmount; // exit
 
 
@@ -719,8 +725,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mTrip.setRoute(mRouteId); // common
         mTrip.setVehicleId(mVehicleId); // common
         mTrip.setUpdated(System.currentTimeMillis()); // common
-        mTrip.setTotalPassengerCount(passengerCount); // common
-        mTrip.setTotalCashAmount(0); // common
+        mTrip.setTotalPassengerCount(mPassengerCountSum); // common
+        mTrip.setTotalCashAmount(mFareCashSum); // common
 
         if(Constants.GEOFENCE_ENTER.equalsIgnoreCase(status)) {
             mTrip.setAverageSpeed(0.0); // enter
@@ -739,4 +745,39 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         Log.d(LOG_TAG, "auditTx");
 
     }
+
+//
+//    /**
+//     * Increase passenger count
+//     * @param cnt
+//     */
+//    public void increasePassengerCount(int cnt){
+//        mPassengerCount += cnt;
+//        mPassengerCountSum += cnt;
+//    }
+//
+//    /**
+//     * Increase fare
+//     * @param cnt
+//     */
+//    public void increaseFare(int cnt){
+//        mFareCash += cnt;
+//        mFareCashSum += cnt;
+//    }
+//
+//    /**
+//     * Retreive total passenger count
+//     * @return
+//     */
+//    public int getTotalPassengerCount(){
+//        return mPassengerCountSum;
+//    }
+//
+//    /**
+//     * Retreive total fare
+//     * @return
+//     */
+//    public int getTotalFare(){
+//        return mFareCashSum;
+//    }
 }

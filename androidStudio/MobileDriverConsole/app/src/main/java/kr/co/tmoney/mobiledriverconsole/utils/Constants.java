@@ -52,7 +52,9 @@ public interface Constants {
 
     public static final String VEHICLE_FRONT = "frontVehicle";
 
-    public static final String VEHICLE_PASSENGERS = "passengers";
+    public static final String VEHICLE_PASSENGER_SUM = "passengers";
+
+    public static final String VEHICLE_FARE_SUM = "fare";
 
     public static final String VEHICLE_LATITUDE = "lat";
 

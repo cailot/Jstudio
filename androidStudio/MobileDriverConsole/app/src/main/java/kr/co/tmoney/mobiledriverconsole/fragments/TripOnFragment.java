@@ -420,7 +420,8 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            // update GPS on current vehicle
             Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
             Map<String, Object> currentTripOn = new HashMap<String, Object>();
-            currentTripOn.put(Constants.VEHICLE_PASSENGERS, MDCMainActivity.passengerCount);
+            currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, MDCMainActivity.mPassengerCountSum);
+            currentTripOn.put(Constants.VEHICLE_FARE_SUM, MDCMainActivity.mFareCashSum);
             currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
             currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
             currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);

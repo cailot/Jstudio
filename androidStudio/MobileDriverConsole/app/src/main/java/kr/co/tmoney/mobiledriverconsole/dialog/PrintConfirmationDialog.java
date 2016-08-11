@@ -14,6 +14,7 @@ import java.util.Map;
 import kr.co.tmoney.mobiledriverconsole.MDCMainActivity;
 import kr.co.tmoney.mobiledriverconsole.R;
 import kr.co.tmoney.mobiledriverconsole.print.PrinterAdapter;
+import kr.co.tmoney.mobiledriverconsole.utils.Constants;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -27,7 +28,7 @@ public class PrintConfirmationDialog extends Dialog {
 
     private PrinterAdapter mPrinterAdapter;
 
-    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final Map map, final int count) {
+    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final Map map) {
         super(context);
 
         mPrinterAdapter = printerAdapter;
@@ -45,9 +46,16 @@ public class PrintConfirmationDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 mPrinterAdapter.print(map);
-//                mPrinterAdapter.fullCut();
-                MDCMainActivity.passengerCount += count;
+                Map params = map;
+                int count = Integer.parseInt(params.get(Constants.PRINT_NUMBER_OF_PERSON).toString());
+                int fare = Integer.parseInt(params.get(Constants.PRINT_TOTAL).toString());
+
+                MDCMainActivity.mPassengerCount += count;
+                MDCMainActivity.mPassengerCountSum += count;
+                MDCMainActivity.mFareCash += fare;
+                MDCMainActivity.mFareCashSum += fare;
                 MDCMainActivity.fareTransactionId++;
+
                 dismiss();
             }
         });

@@ -534,6 +534,8 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         currentTripOn.put(Constants.VEHICLE_TRIP_ON, true);
         currentTripOn.put(Constants.VEHICLE_CURRENT_ROUTE, mRouteId);
         currentTripOn.put(Constants.VEHICLE_FRONT, frontCar);
+        currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, 0);
+        currentTripOn.put(Constants.VEHICLE_FARE_SUM, 0);
         currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
         currentVehicle.updateChildren(currentTripOn);
 
