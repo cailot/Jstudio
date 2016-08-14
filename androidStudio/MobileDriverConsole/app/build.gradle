@@ -5,7 +5,7 @@ android {
     buildToolsVersion '23.0.1'
 
     defaultConfig {
-        applicationId "kr.co.tmoney.mobiledriverconsole"
+        applicationId "com.creapple.tms.mobiledriverconsole"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
