@@ -618,7 +618,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      */
     private void getStopsDetail(){
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId +"/routeStop");
-        Query queryRef = ref.orderByChild("id");
+        Query queryRef = ref.orderByChild("sortIndex");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

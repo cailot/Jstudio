@@ -224,7 +224,9 @@ public interface Constants {
 
     public static final String GOOGLE_DISTANCE_MATRIX_ADDRESS = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
 
-    public static final String GOOGLE_DISTANCE_MATRIX_API_KEY = "AIzaSyARcc57YdbbyaiS517LoES5i4sqBl2kyh8";
+//    public static final String GOOGLE_DISTANCE_MATRIX_API_KEY = "AIzaSyARcc57YdbbyaiS517LoES5i4sqBl2kyh8";
+
+    public static final String GOOGLE_DISTANCE_MATRIX_API_KEY = "AIzaSyCEHd89JYc6Orj_26QNRsJ4cTzpjSWP1LE";
 
     public static final String GOOGLE_DISTANCE_MATRIX_OK = "OK";
 

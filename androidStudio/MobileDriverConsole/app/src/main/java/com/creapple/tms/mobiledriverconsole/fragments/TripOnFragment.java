@@ -24,6 +24,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
+import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.model.vo.VehicleVO;
+import com.creapple.tms.mobiledriverconsole.utils.Constants;
+import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -47,12 +52,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
-import com.creapple.tms.mobiledriverconsole.R;
-import com.creapple.tms.mobiledriverconsole.model.vo.VehicleVO;
-import com.creapple.tms.mobiledriverconsole.utils.Constants;
-import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 
 //import org.apache.log4j.Logger;
 
@@ -411,46 +410,49 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      * 2. bring distance info between front/rear vehicles
      */
     public class SubscribeDistanceTask extends AsyncTask<Double, Void, Map> {
+//        @Override
+//        protected Map doInBackground(Double... doubles) {
+//            double lat = doubles[0];
+//            double lon = doubles[1];
+////            // update GPS on current vehicle
+//            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+//            Map<String, Object> currentTripOn = new HashMap<String, Object>();
+//            currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, MDCMainActivity.mPassengerCountSum);
+//            currentTripOn.put(Constants.VEHICLE_FARE_SUM, MDCMainActivity.mFareCashSum);
+//            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
+//            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
+//            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+//            currentVehicle.updateChildren(currentTripOn);
+////
+////            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
+//            Map<String, String[]> distances = new HashMap<String, String[]>();
+//
+//            String[] frontInfo = null;
+//            String[] rearInfo = null;
+//
+//            // dummy for test
+//            frontInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
+//            rearInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
+//
+////            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
+////                // no need to subscribe
+////            } else {
+////                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+////            }
+////            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
+////                // no need to subscribe
+////            } else {
+////                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+////            }
+//            distances.put(Constants.VEHICLE_FRONT, frontInfo);
+//            distances.put(Constants.VEHICLE_REAR, rearInfo);
+//            return distances;
+//        }
         @Override
         protected Map doInBackground(Double... doubles) {
 
             double lat = doubles[0];
             double lon = doubles[1];
-
-//            // update GPS on current vehicle
-            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
-            Map<String, Object> currentTripOn = new HashMap<String, Object>();
-            currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, MDCMainActivity.mPassengerCountSum);
-            currentTripOn.put(Constants.VEHICLE_FARE_SUM, MDCMainActivity.mFareCashSum);
-            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
-            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
-            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
-            currentVehicle.updateChildren(currentTripOn);
-//
-//            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
-            Map<String, String[]> distances = new HashMap<String, String[]>();
-
-            String[] frontInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
-            String[] rearInfo = new String[]{MDCUtils.getRandomNumberInRange(90, 1500)+"", MDCUtils.getRandomNumberInRange(2, 10)+""};
-//            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
-//                // no need to subscribe
-//            } else {
-//                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
-//            }
-//            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
-//                // no need to subscribe
-//            } else {
-//                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
-//            }
-            distances.put(Constants.VEHICLE_FRONT, frontInfo);
-            distances.put(Constants.VEHICLE_REAR, rearInfo);
-            return distances;
-        }
-
-//        protected Map doInBackground(Double... doubles) {
-//
-//            double lat = doubles[0];
-//            double lon = doubles[1];
 //
 //            // update GPS on current vehicle
 //            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
@@ -459,25 +461,34 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
 //            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
 //            currentVehicle.updateChildren(currentTripOn);
-//
-//            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
-//            Map<String, String[]> distances = new HashMap<String, String[]>();
-//            String[] frontInfo = new String[]{"0", "0"};
-//            String[] rearInfo = new String[]{"0", "0"};
-//            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
-//                // no need to subscribe
-//            } else {
-//                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
-//            }
-//            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
-//                // no need to subscribe
-//            } else {
-//                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
-//            }
-//            distances.put(Constants.VEHICLE_FRONT, frontInfo);
-//            distances.put(Constants.VEHICLE_REAR, rearInfo);
-//            return distances;
-//        }
+
+            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+            Map<String, Object> currentTripOn = new HashMap<String, Object>();
+            currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, MDCMainActivity.mPassengerCountSum);
+            currentTripOn.put(Constants.VEHICLE_FARE_SUM, MDCMainActivity.mFareCashSum);
+            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
+            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
+            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+            currentVehicle.updateChildren(currentTripOn);
+
+            // get distance between current vehicle & fron/rear vehicle by calling Google Distance Matrix
+            Map<String, String[]> distances = new HashMap<String, String[]>();
+            String[] frontInfo = new String[]{"0", "0"};
+            String[] rearInfo = new String[]{"0", "0"};
+            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
+                // no need to subscribe
+            } else {
+                frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
+            }
+            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
+                // no need to subscribe
+            } else {
+                rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
+            }
+            distances.put(Constants.VEHICLE_FRONT, frontInfo);
+            distances.put(Constants.VEHICLE_REAR, rearInfo);
+            return distances;
+        }
 
         @Override
         protected void onPostExecute(Map info) {// dummy data
@@ -487,12 +498,14 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             int rearDistance = Integer.parseInt(rearInfo[0]);
 
 
-            String front = "\tSV580003";
+//            String front = "\tSV580003";
+            String front = mFrontVehicle.getId();
             SpannableString frontS = new SpannableString(front);
             frontS.setSpan(new StyleSpan(Typeface.BOLD), 0, front.length(), 0);
             mFrontVehicleIdTxt.setText(frontS);
 
-            String rear = "\tSV580005";
+//            String rear = "\tSV580005";
+            String rear = mRearVehicle.getId();
             SpannableString rearS = new SpannableString(rear);
             rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);
             mRearVehicleIdTxt.setText(rearS);
@@ -531,13 +544,13 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         SpannableString durationS = new SpannableString(info[1]);
-        durationS.setSpan(new RelativeSizeSpan(2f), 0, info[1].length(), 0);
+        durationS.setSpan(new RelativeSizeSpan(1.3f), 0, info[1].length(), 0);
         durationS.setSpan(new StyleSpan(Typeface.BOLD), 0, info[1].length(), 0);
         spannableStringBuilder.append(durationS);
-        String time = " mins";
-        SpannableString timeS = new SpannableString(time);
+//        String time = " mins";
+//        SpannableString timeS = new SpannableString(time);
 //        timeS.setSpan(new RelativeSizeSpan(0.7f), 0, time.length(), 0);
-        spannableStringBuilder.append(timeS);
+//        spannableStringBuilder.append(timeS);
         spannableStringBuilder.append("\t\t");
 
         String speed = MDCUtils.getDistanceFormat(Integer.parseInt(info[0]));
@@ -545,8 +558,9 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(Integer.parseInt(info[0]) > 1000){
             meter = " km";
         }
+
         SpannableString speedS = new SpannableString(speed);
-        speedS.setSpan(new RelativeSizeSpan(1.5f), 0, speed.length(), 0);
+        speedS.setSpan(new RelativeSizeSpan(1.3f), 0, speed.length(), 0);
         speedS.setSpan(new StyleSpan(Typeface.BOLD), 0, speed.length(), 0);
         SpannableString meterS = new SpannableString(meter);
 //        meterS.setSpan(new RelativeSizeSpan(0.7f), 0, meterS.length(), 0);

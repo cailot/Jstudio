@@ -21,6 +21,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.creapple.tms.mobiledriverconsole.fragments.TabAdapter;
+import com.creapple.tms.mobiledriverconsole.geofencing.GeofenceService;
+import com.creapple.tms.mobiledriverconsole.model.MDCViewPager;
+import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
+import com.creapple.tms.mobiledriverconsole.model.vo.TripVO;
+import com.creapple.tms.mobiledriverconsole.utils.Constants;
+import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -36,14 +43,6 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-
-import com.creapple.tms.mobiledriverconsole.fragments.TabAdapter;
-import com.creapple.tms.mobiledriverconsole.geofencing.GeofenceService;
-import com.creapple.tms.mobiledriverconsole.model.MDCViewPager;
-import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
-import com.creapple.tms.mobiledriverconsole.model.vo.TripVO;
-import com.creapple.tms.mobiledriverconsole.utils.Constants;
-import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 
 public class MDCMainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -158,8 +157,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         LocalBroadcastManager.getInstance(this).registerReceiver(mGeoReceiver, mIntentFilter);
 
         // Dummy data for presentation purpose
-        MDCMainActivity.currentStopName = mStops[3].getName();
-        MDCMainActivity.nextStopName = mStops[4].getName();
+        MDCMainActivity.currentStopName = mStops[0].getName();
+        MDCMainActivity.nextStopName = mStops[1].getName();
 
     }
 
@@ -410,81 +409,81 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mGeofenceList = new ArrayList<Geofence>();
 
         //////////// uncomment when ready /////////////////
-//        mGeofenceList = addGefenceToList();
+        mGeofenceList = addGefenceToList();
         ///////////////////////////////////////////////////
 
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Company")
-                .setCircularRegion(
-                        -37.809003, 144.970886,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("State library")
-                .setCircularRegion(
-                        -37.810403, 144.964330,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Burke mall")
-                .setCircularRegion(
-                        -37.813454, 144.965676,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
-
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Flinders Station")
-                .setCircularRegion(
-                        -37.818224, 144.967852,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("South Bank")
-                .setCircularRegion(
-                        -37.823425, 144.970170,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
-
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId("Domain Interchange")
-                .setCircularRegion(
-                        -37.832627, 144.972108,
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(1000)
-                .build());
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("Company")
+//                .setCircularRegion(
+//                        -37.809003, 144.970886,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
+//
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("State library")
+//                .setCircularRegion(
+//                        -37.810403, 144.964330,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
+//
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("Burke mall")
+//                .setCircularRegion(
+//                        -37.813454, 144.965676,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
+//
+//
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("Flinders Station")
+//                .setCircularRegion(
+//                        -37.818224, 144.967852,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
+//
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("South Bank")
+//                .setCircularRegion(
+//                        -37.823425, 144.970170,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
+//
+//        mGeofenceList.add(new Geofence.Builder()
+//                .setRequestId("Domain Interchange")
+//                .setCircularRegion(
+//                        -37.832627, 144.972108,
+//                        Constants.GEOFENCE_RADIUS_IN_METERS
+//                )
+//                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+//                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+//                        Geofence.GEOFENCE_TRANSITION_EXIT)
+//                .setNotificationResponsiveness(1000)
+//                .build());
 
 
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
@@ -717,8 +716,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         mTrip.setStatus(status); // common
         mTrip.setCurrentStopName(currentStopName); // common
 
-        // mTrip.setCurrentStopId(getStopId(currentStopName)); // common
-        mTrip.setCurrentStopId("1.a"); // test
+         mTrip.setCurrentStopId(getStopId(currentStopName)); // common
+//        mTrip.setCurrentStopId("1.a"); // test
 
         String email = MDCUtils.getValue(getApplicationContext(), Constants.USER_EMAIL, "");
         mTrip.setDriverId(email); // common
