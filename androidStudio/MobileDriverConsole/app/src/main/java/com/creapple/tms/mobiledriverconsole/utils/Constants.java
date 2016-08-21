@@ -126,7 +126,7 @@ public interface Constants {
 
 //    public static final String FIREBASE_HOME = "https://creapple-tms-5c7bf.firebaseio.com/Thai_Private/Dev/";
 
-    public static final String FIREBASE_HOME = "https://pia-tms.firebaseio.com/Thai_Private_Test/";
+    public static final String FIREBASE_HOME = "https://pia-tms.firebaseio.com/Thai_Private_Test/TH_PMB/";
 
     public static final String FIREBASE_ROUTE_LIST_PATH = "routes";
 

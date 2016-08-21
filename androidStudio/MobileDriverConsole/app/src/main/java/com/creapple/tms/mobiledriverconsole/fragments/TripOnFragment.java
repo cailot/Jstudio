@@ -49,6 +49,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -453,14 +455,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
             double lat = doubles[0];
             double lon = doubles[1];
-//
-//            // update GPS on current vehicle
-//            Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
-//            Map<String, Object> currentTripOn = new HashMap<String, Object>();
-//            currentTripOn.put(Constants.VEHICLE_LATITUDE, lat);
-//            currentTripOn.put(Constants.VEHICLE_LONGITUDE, lon);
-//            currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
-//            currentVehicle.updateChildren(currentTripOn);
 
             Firebase currentVehicle = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
             Map<String, Object> currentTripOn = new HashMap<String, Object>();
@@ -475,12 +469,12 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             Map<String, String[]> distances = new HashMap<String, String[]>();
             String[] frontInfo = new String[]{"0", "0"};
             String[] rearInfo = new String[]{"0", "0"};
-            if (mFrontVehicle == null || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
+            if (mFrontVehicle == null || mFrontVehicle.getId() == null || mFrontVehicle.getId().equalsIgnoreCase("") || mFrontVehicle.getLat() == 0.0 || mFrontVehicle.getLon() == 0.0) {
                 // no need to subscribe
             } else {
                 frontInfo = MDCUtils.getDistanceInfo(lat, lon, mFrontVehicle.getLat(), mFrontVehicle.getLon());
             }
-            if (mRearVehicle == null || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
+            if (mRearVehicle == null || mRearVehicle.getId() == null || mRearVehicle.getId().equalsIgnoreCase("") || mRearVehicle.getLat() == 0.0 || mRearVehicle.getLon() == 0.0) {
                 // no need to subscribe
             } else {
                 rearInfo = MDCUtils.getDistanceInfo(lat, lon, mRearVehicle.getLat(), mRearVehicle.getLon());
@@ -499,18 +493,26 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 
 //            String front = "\tSV580003";
+
             String front = mFrontVehicle.getId();
-            SpannableString frontS = new SpannableString(front);
-            frontS.setSpan(new StyleSpan(Typeface.BOLD), 0, front.length(), 0);
-            mFrontVehicleIdTxt.setText(frontS);
+
+            if(StringUtils.isNotBlank(front)) {
+                SpannableString frontS = new SpannableString(front);
+                frontS.setSpan(new StyleSpan(Typeface.BOLD), 0, front.length(), 0);
+                mFrontVehicleIdTxt.setText(frontS);
+            }
 
 //            String rear = "\tSV580005";
             String rear = mRearVehicle.getId();
-            SpannableString rearS = new SpannableString(rear);
-            rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);
-            mRearVehicleIdTxt.setText(rearS);
+            if(StringUtils.isNotBlank(rear)) {
+                SpannableString rearS = new SpannableString(rear);
+                rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);
+                mRearVehicleIdTxt.setText(rearS);
+            }
 
-            if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
+            if(frontDistance == 0){
+                mFrontVehicleImg.setImageResource(0);// no image show
+            }else if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             } else if (frontDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
@@ -520,11 +522,15 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mFrontVehicleTxt.setTextColor(Color.WHITE);
             }
-            mFrontVehicleTxt.setText(getDrivingInfo(frontInfo));
+            if(frontDistance != 0) {
+                mFrontVehicleTxt.setText(getDrivingInfo(frontInfo));
+            }
 
 
 
-            if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
+            if(rearDistance == 0){
+                mRearVehicleImg.setImageResource(0); // no image show
+            }else if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             } else if (rearDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
@@ -534,7 +540,9 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
                 mRearVehicleTxt.setTextColor(Color.WHITE);
             }
-            mRearVehicleTxt.setText(getDrivingInfo(rearInfo));
+            if(rearDistance != 0) {
+                mRearVehicleTxt.setText(getDrivingInfo(rearInfo));
+            }
         }
 
     }
