@@ -13,16 +13,15 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.utils.Constants;
+import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.firebase.client.Firebase;
 import com.firebase.client.ServerValue;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.creapple.tms.mobiledriverconsole.R;
-import com.creapple.tms.mobiledriverconsole.utils.Constants;
-import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -76,11 +75,27 @@ public class LogOutDialog extends DialogFragment {
                 String userUid = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.USER_UID, "");
                 String userPath = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.USER_PATH, "");
                 if(!userUid.equalsIgnoreCase("") && !userPath.equalsIgnoreCase("")) {
-                    Firebase currentUser = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_USER_LIST_PATH + "/" + userUid + "/" + userPath);
+                    Firebase currentUser = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_USER_LIST_PATH + "/" + userUid);
+                    // update logIn flag from true to false
+                    currentUser.child(Constants.USER_LOGIN).setValue(false);
+
+                    // update logout timestamp
+                    Firebase currentPath = currentUser.child(userPath);
                     Map<String, Object> userData = new HashMap<String, Object>();
                     userData.put(Constants.AUTH_LOG_OUT_TIME, ServerValue.TIMESTAMP);
-                    currentUser.updateChildren(userData);
+                    currentPath.updateChildren(userData);
                 }
+
+                // update front Vehicle's rearVehicle value as "" if exists
+                String frontCar = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.VEHICLE_FRONT, "");
+                if(!frontCar.equalsIgnoreCase("")){
+                    Firebase frontVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + frontCar);
+                    Map<String, Object> frontTripOn = new HashMap<String, Object>();
+                    frontTripOn.put(Constants.VEHICLE_REAR, "");
+                    //frontTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+                    frontVehicle.updateChildren(frontTripOn);
+                }
+
                 // logout
                 FirebaseAuth.getInstance().signOut();
 

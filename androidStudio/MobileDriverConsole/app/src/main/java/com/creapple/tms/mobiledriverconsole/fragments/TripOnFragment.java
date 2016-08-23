@@ -260,7 +260,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             mGpsCount=0;
         }
         Log.d(LOG_TAG, mGpsCount+"");
-        if(mGpsCount==5){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
+        if(mGpsCount%10==0){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
 
         }
@@ -341,11 +341,15 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(Constants.VEHICLE_FRONT).getValue()!=null){
                     mFrontVehicle.setId(dataSnapshot.child(Constants.VEHICLE_FRONT).getValue().toString());
+                }else{
+                    mFrontVehicle.setId(""); // set ID as empty not to update any more
                 }
                 if(dataSnapshot.child(Constants.VEHICLE_REAR).getValue()!=null){
                     mRearVehicle.setId(dataSnapshot.child(Constants.VEHICLE_REAR).getValue().toString());
+                }else{
+                    mRearVehicle.setId(""); // set ID as empty not to update any more
                 }
-//                logger.debug("Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+                Log.d(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -354,17 +358,15 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         });
     }
 
-
     /**
      * subscribe updated front/rear vehicle's GPS
      */
     private void updateFrontAndBackVehicles() {
         // update front gps
-//        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
         if(mFrontVehicle.getId()!=null && !mFrontVehicle.getId().equalsIgnoreCase("")) {
             Firebase frontRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mFrontVehicle.getId());
-//            Log.d(LOG_TAG,"Front - path : " + frontRef.getPath());
-            frontRef.addValueEventListener(new ValueEventListener() {
+            frontRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.child(Constants.VEHICLE_LATITUDE).getValue() != null) {
@@ -373,20 +375,20 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mFrontVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-//                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
+                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
                 }
+
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
 
                 }
             });
-
         }
 
         // update rear gps
         if(mRearVehicle.getId()!=null && !mRearVehicle.getId().equalsIgnoreCase("")) {
             Firebase rearRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mRearVehicle.getId());
-            rearRef.addValueEventListener(new ValueEventListener() {
+            rearRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.child(Constants.VEHICLE_LATITUDE).getValue() != null) {
@@ -395,7 +397,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mRearVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-//                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
+                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
                 }
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -495,54 +497,55 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            String front = "\tSV580003";
 
             String front = mFrontVehicle.getId();
+            Log.d(LOG_TAG, "Front - " + front);
 
             if(StringUtils.isNotBlank(front)) {
                 SpannableString frontS = new SpannableString(front);
                 frontS.setSpan(new StyleSpan(Typeface.BOLD), 0, front.length(), 0);
                 mFrontVehicleIdTxt.setText(frontS);
+
+                if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
+                    mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
+                    mFrontVehicleTxt.setTextColor(Color.WHITE);
+                } else if (frontDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
+                    mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
+                    mFrontVehicleTxt.setTextColor(Color.BLACK);
+                } else {
+                    mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
+                    mFrontVehicleTxt.setTextColor(Color.WHITE);
+                }
+                mFrontVehicleTxt.setText(getDrivingInfo(frontInfo));
+            }else{
+                mFrontVehicleIdTxt.setText("");
+                mFrontVehicleImg.setImageResource(0);
+                mFrontVehicleTxt.setText("");
             }
 
 //            String rear = "\tSV580005";
             String rear = mRearVehicle.getId();
+            Log.d(LOG_TAG, "Rear - " + rear);
             if(StringUtils.isNotBlank(rear)) {
                 SpannableString rearS = new SpannableString(rear);
                 rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);
                 mRearVehicleIdTxt.setText(rearS);
-            }
 
-            if(frontDistance == 0){
-                mFrontVehicleImg.setImageResource(0);// no image show
-            }else if (frontDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
-                mFrontVehicleImg.setImageResource(R.drawable.bus_background_danger);
-                mFrontVehicleTxt.setTextColor(Color.WHITE);
-            } else if (frontDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
-                mFrontVehicleImg.setImageResource(R.drawable.bus_background_normal);
-                mFrontVehicleTxt.setTextColor(Color.BLACK);
-            } else {
-                mFrontVehicleImg.setImageResource(R.drawable.bus_background_safe);
-                mFrontVehicleTxt.setTextColor(Color.WHITE);
-            }
-            if(frontDistance != 0) {
-                mFrontVehicleTxt.setText(getDrivingInfo(frontInfo));
-            }
-
-
-
-            if(rearDistance == 0){
-                mRearVehicleImg.setImageResource(0); // no image show
-            }else if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
-                mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
-                mRearVehicleTxt.setTextColor(Color.WHITE);
-            } else if (rearDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
-                mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
-                mRearVehicleTxt.setTextColor(Color.BLACK);
-            } else {
-                mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
-                mRearVehicleTxt.setTextColor(Color.WHITE);
-            }
-            if(rearDistance != 0) {
+                if (rearDistance < Constants.DISTANCE_THRESHOLD_DANGER) {
+                    mRearVehicleImg.setImageResource(R.drawable.bus_background_danger);
+                    mRearVehicleTxt.setTextColor(Color.WHITE);
+                } else if (rearDistance < Constants.DISTANCE_THRESHOLD_SAFE) {
+                    mRearVehicleImg.setImageResource(R.drawable.bus_background_normal);
+                    mRearVehicleTxt.setTextColor(Color.BLACK);
+                } else {
+                    mRearVehicleImg.setImageResource(R.drawable.bus_background_safe);
+                    mRearVehicleTxt.setTextColor(Color.WHITE);
+                }
                 mRearVehicleTxt.setText(getDrivingInfo(rearInfo));
+            }else{
+                mRearVehicleIdTxt.setText("");
+                mRearVehicleImg.setImageResource(0);
+                mRearVehicleTxt.setText("");
             }
+
         }
 
     }

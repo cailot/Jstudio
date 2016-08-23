@@ -268,6 +268,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         // save fares into SharedPreferences
         saveFaresDetail();
 
+
         // update DB to indicate starting
         setTripOn();
 
@@ -534,6 +535,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         currentTripOn.put(Constants.VEHICLE_TRIP_ON, true);
         currentTripOn.put(Constants.VEHICLE_CURRENT_ROUTE, mRouteId);
         currentTripOn.put(Constants.VEHICLE_FRONT, frontCar);
+        currentTripOn.put(Constants.VEHICLE_REAR, "");
         currentTripOn.put(Constants.VEHICLE_PASSENGER_SUM, 0);
         currentTripOn.put(Constants.VEHICLE_FARE_SUM, 0);
         currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
@@ -546,6 +548,8 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
             frontTripOn.put(Constants.VEHICLE_REAR, mVehicleId);
             frontTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
             frontVehicle.updateChildren(frontTripOn);
+            // save into Preference in order to delete 'rear' on front vehicle when log off
+            MDCUtils.put(getApplicationContext(), Constants.VEHICLE_FRONT, frontCar);
         }
 
         // register vehicle name under 'routes'/vehicles
@@ -574,8 +578,21 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         // turn on 'Trip On'
         MDCUtils.put(getApplicationContext(), Constants.VEHICLE_TRIP_ON, true);
 
+        // reset global variables in case of the previous instance still remains
+        resetGlabalVariables();
     }
 
+
+    /**
+     * Reset the count for several static variables in MDCMainActivity
+     */
+    private void resetGlabalVariables(){
+        MDCMainActivity.mPassengerCount = 0;
+        MDCMainActivity.mPassengerCountSum = 0;
+        MDCMainActivity.mFareCash = 0;
+        MDCMainActivity.mFareCashSum = 0;
+        MDCMainActivity.fareTransactionId = 1;
+    }
 
     /**
      * Search front vehicle info by looking maximum 'index' under /routes/{routeId}/vheicles/{vehicle}/index

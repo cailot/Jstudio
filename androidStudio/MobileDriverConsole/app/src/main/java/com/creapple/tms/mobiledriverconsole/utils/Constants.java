@@ -48,9 +48,9 @@ public interface Constants {
 
     public static final String VEHICLE_CURRENT_ROUTE = "currentRoute";
 
-    public static final String VEHICLE_REAR = "rearVehicle";
-
     public static final String VEHICLE_FRONT = "frontVehicle";
+
+    public static final String VEHICLE_REAR = "rearVehicle";
 
     public static final String VEHICLE_PASSENGER_SUM = "passengers";
 
@@ -96,6 +96,8 @@ public interface Constants {
     public static final String USER_EMAIL = "user_email";
 
     public static final String USER_PATH = "user_path";
+
+    public static final String USER_LOGIN = "logIn";
 
 
 
