@@ -14,20 +14,21 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.ServerValue;
-
-//import org.apache.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.dialog.LogOutDialog;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.LocaleHelper;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
+import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+//import org.apache.log4j.Logger;
 
 
 /**
@@ -35,7 +36,7 @@ import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
  */
 public class SettingFragment extends Fragment{
 
-    private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
+    private static final String LOG_TAG = MDCUtils.getLogTag(SettingFragment.class);
 
 //    private Logger logger = Logger.getLogger(LOG_TAG);
 
@@ -51,6 +52,8 @@ public class SettingFragment extends Fragment{
 
     private String mVehicleId;
 
+    private String mTripPath;
+
     private MDCMainActivity mActivity;
 
     @Nullable
@@ -63,6 +66,7 @@ public class SettingFragment extends Fragment{
 
         mRouteId = MDCUtils.getValue(mContext, Constants.ROUTE_ID, getString(R.string.no_route_found));
         mVehicleId = MDCUtils.getValue(mContext, Constants.VEHICLE_NAME, getString(R.string.no_vehicle_found));
+        mTripPath = MDCUtils.getValue(mContext, Constants.TRIP_PATH, "");
 
         initialiseUI(view);
 
@@ -165,24 +169,35 @@ public class SettingFragment extends Fragment{
     /**
      * Trip Off events
      * 1. update vechicle info  such as changing to false on tripOn
-     * 2. remove vehicle info under routes/{routeId}/vehicles/{vehicleId}
-     * 3. Update tripOn to false
-     * 4. show Toast message
-     * 5. disable all component except Log Out
+     * 2. update trip info by adding tripEndTime
+     * 3. remove vehicle info under routes/{routeId}/vehicles/{vehicleId}
+     * 4. Update tripOn to false
+     * 5. show Toast message
+     * 6. disable all component except Log Out
      */
     private void setTripOff() {
-        // update Vehicle info under 'vehicles'
+        // 1. update Vehicle info under 'vehicles'
         Firebase currentVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
         Map<String, Object> currentTripOn = new HashMap<String, Object>();
         currentTripOn.put(Constants.VEHICLE_TRIP_ON, false);
         currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
         currentVehicle.updateChildren(currentTripOn);
 
-        // delete car under routes/554/vehicles
+        // 2. update trip info
+        if(StringUtils.isNotBlank(mTripPath)) {
+            Firebase currentTrip = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_TRIP_LIST_PATH + "/" + mTripPath);
+            Map<String, Object> tripInfo = new HashMap<String, Object>();
+            tripInfo.put(Constants.TRIP_STOP_TIME, ServerValue.TIMESTAMP);
+            tripInfo.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
+            currentTrip.updateChildren(tripInfo);
+            Log.d(LOG_TAG, "Trip Path : " + currentTrip.getPath());
+        }
+
+        // 3. delete car under routes/554/vehicles
         Firebase routeVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId + "/vehicles/" + mVehicleId);
         routeVehicle.removeValue();
 
-        // turn off 'Trip On'
+        // 4. Sturn off 'Trip On'
         MDCUtils.put(mContext, Constants.VEHICLE_TRIP_ON, false);
 
         // notify user

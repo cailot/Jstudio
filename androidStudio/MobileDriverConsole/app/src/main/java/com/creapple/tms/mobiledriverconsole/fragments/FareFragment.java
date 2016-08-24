@@ -19,15 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.dialog.PassengerDialog;
@@ -39,6 +30,14 @@ import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
 import com.creapple.tms.mobiledriverconsole.print.PrinterViewAction;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
+import com.google.gson.Gson;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 //import org.apache.log4j.Logger;
 
@@ -214,6 +213,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         map.put(Constants.PRINT_TOTAL, mTotalFare+"");
 
         PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map);
+        printConfirmationDialog.setMainActivity(mMainActivity);
         printConfirmationDialog.show();
     }
 

@@ -66,6 +66,44 @@ public interface Constants {
 
     public static final String FRONT_VEHICLE_INDEX = "front_vehicle_index";
 
+    public static final String STOP_ID = "stopId";
+
+    public static final String STOP_NAME = "stopName";
+
+    public static final String STOP_UPDATED = "updated";
+
+
+
+
+    public static final String TRIP_PATH = "tripPath";
+
+    public static final String TRIP_CURRENT_STOP_ID = "currentStopId";
+
+    public static final String TRIP_CURRENT_STOP_NAME = "currentStopName";
+
+    public static final String TRIP_DRIVER_ID = "driverId";
+
+    public static final String TRIP_FARE_SUM = "fareSum";
+
+    public static final String TRIP_PASSENGER_SUM = "passengerSum";
+
+    public static final String TRIP_ROUTE = "route";
+
+    public static final String TRIP_START_TIME = "tripStartTime";
+
+    public static final String TRIP_STOP_TIME = "tripStopTime";
+
+    public static final String TRIP_UPDATED = "updated";
+
+    public static final String TRIP_VEHICLE_ID = "vehicleId";
+
+
+
+
+
+
+
+
 
 
     public static final String AUTH_EMAIL = "email";

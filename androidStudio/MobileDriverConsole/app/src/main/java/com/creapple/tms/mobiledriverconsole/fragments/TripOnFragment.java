@@ -105,8 +105,6 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     private String mRouteId;
 
-//    private TripVO mTrip;
-
     private Firebase mFirebase;
 
     int mGpsCount;

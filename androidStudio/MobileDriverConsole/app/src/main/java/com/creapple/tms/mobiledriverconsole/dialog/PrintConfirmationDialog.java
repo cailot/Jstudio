@@ -9,12 +9,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Map;
-
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.model.vo.TransactionVO;
 import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
+
+import java.util.Map;
 
 /**
  * Created by jinseo on 2016. 7. 17..
@@ -25,6 +26,7 @@ public class PrintConfirmationDialog extends Dialog {
 
     private Button mConfirmBtn, mCancelBtn;
 
+    private MDCMainActivity mMainActivity;
 
     private PrinterAdapter mPrinterAdapter;
 
@@ -50,6 +52,22 @@ public class PrintConfirmationDialog extends Dialog {
                 int count = Integer.parseInt(params.get(Constants.PRINT_NUMBER_OF_PERSON).toString());
                 int fare = Integer.parseInt(params.get(Constants.PRINT_TOTAL).toString());
 
+//                MDCMainActivity.mPassengerCount += count;
+//                MDCMainActivity.mPassengerCountSum += count;
+//                MDCMainActivity.mFareCash += fare;
+//                MDCMainActivity.mFareCashSum += fare;
+//                MDCMainActivity.fareTransactionId++;
+
+                // add transactions under trips
+                TransactionVO transactionVO = new TransactionVO();
+                transactionVO.setUUID(MDCMainActivity.fareTransactionId);
+                transactionVO.setAdultNo(count);
+                transactionVO.setAdultPrice(fare);
+                transactionVO.setOriginName(params.get(Constants.PRINT_FROM)+"");
+                transactionVO.setDestinationName(params.get(Constants.PRINT_TO)+"");
+
+                mMainActivity.logTransaction(transactionVO);
+
                 MDCMainActivity.mPassengerCount += count;
                 MDCMainActivity.mPassengerCountSum += count;
                 MDCMainActivity.mFareCash += fare;
@@ -68,5 +86,9 @@ public class PrintConfirmationDialog extends Dialog {
             }
         });
 
+    }
+
+    public void setMainActivity(MDCMainActivity mMainActivity) {
+        this.mMainActivity = mMainActivity;
     }
 }

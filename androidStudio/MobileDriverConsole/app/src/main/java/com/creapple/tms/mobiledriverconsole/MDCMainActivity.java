@@ -25,10 +25,11 @@ import com.creapple.tms.mobiledriverconsole.fragments.TabAdapter;
 import com.creapple.tms.mobiledriverconsole.geofencing.GeofenceService;
 import com.creapple.tms.mobiledriverconsole.model.MDCViewPager;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
-import com.creapple.tms.mobiledriverconsole.model.vo.TripVO;
+import com.creapple.tms.mobiledriverconsole.model.vo.TransactionVO;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -43,6 +44,8 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MDCMainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -115,8 +118,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     private Firebase mFirebase;
 
-    private TripVO mTrip;
-
+    private String mTripPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +151,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
         buildGoogleApiClient();
 
-        mFirebase = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_TRIP_LIST_PATH + "/" + mRouteId);
+        mFirebase = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_TRIP_LIST_PATH);// + "/" + mRouteId);
 
         // Register Receiver
         mIntentFilter = new IntentFilter(Constants.BROADCAST_SERVICE);
@@ -159,6 +161,9 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         // Dummy data for presentation purpose
         MDCMainActivity.currentStopName = mStops[0].getName();
         MDCMainActivity.nextStopName = mStops[1].getName();
+
+        // register trip info
+        registerTripInfo();
 
     }
 
@@ -693,55 +698,38 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      *
      *
      */
-    public void auditTransaction(String status) {
+    public void registerTripInfo() {
 
-//        private String currentStopId; // common
-//        private String currentStopName; // common
-//        private String driverId; // common
-//        private String route; // common
-//        private String vehicleId; // common
-//        private String status; // common
-//        private long updated; // common
-//        private int totalPassengerCount; // common
-//        private int totalCashAmount; // common
-//        private double averageSpeed; // enter
-//        private int driveDuration; // enter
-//        private int stopDuration; // exit
-//        private int passengerCountSum; // exit
-//        private int cashAmount; // exit
+        mTripPath = MDCUtils.getTipNode(mVehicleId);
+        Firebase tripVehicle = mFirebase.child(mTripPath);
 
+        // save tripPath for other activities
+        MDCUtils.put(getApplicationContext(), Constants.TRIP_PATH, mTripPath);
 
+        Log.d(LOG_TAG, "Trip Path : " + mTripPath);
 
-        mTrip = new TripVO();
-        mTrip.setStatus(status); // common
-        mTrip.setCurrentStopName(currentStopName); // common
-
-         mTrip.setCurrentStopId(getStopId(currentStopName)); // common
-//        mTrip.setCurrentStopId("1.a"); // test
-
-        String email = MDCUtils.getValue(getApplicationContext(), Constants.USER_EMAIL, "");
-        mTrip.setDriverId(email); // common
-        mTrip.setRoute(mRouteId); // common
-        mTrip.setVehicleId(mVehicleId); // common
-        mTrip.setUpdated(System.currentTimeMillis()); // common
-        mTrip.setTotalPassengerCount(mPassengerCountSum); // common
-        mTrip.setTotalCashAmount(mFareCashSum); // common
-
-        if(Constants.GEOFENCE_ENTER.equalsIgnoreCase(status)) {
-            mTrip.setAverageSpeed(0.0); // enter
-//            mTrip.setDriveDuration(MDCUtils.getTimeDifference(mEnteredTime, mExitedTime)); // enter
-        }else if(Constants.GEOFENCE_EXIT.equalsIgnoreCase(status)) {
-//            mTrip.setStopDuration(MDCUtils.getTimeDifference(mExitedTime, mEnteredTime)); // exit
-            mTrip.setPassengerCount(0); // exit
-            mTrip.setCashAmount(0); // exit
-        }
-
-
-        String trip = MDCUtils.getTipNode(mVehicleId);
-        Firebase tripVehicle = mFirebase.child(trip);
-        tripVehicle.setValue(mTrip);
-
+        Map<String, Object> currentTripOn = new HashMap<String, Object>();
+        currentTripOn.put(Constants.TRIP_CURRENT_STOP_NAME, currentStopName);
+        currentTripOn.put(Constants.TRIP_CURRENT_STOP_ID, getStopId(currentStopName));
+        String driverId = MDCUtils.getValue(this, Constants.USER_EMAIL, "");
+        currentTripOn.put(Constants.TRIP_DRIVER_ID, driverId);
+        currentTripOn.put(Constants.TRIP_FARE_SUM, 0);
+        currentTripOn.put(Constants.TRIP_PASSENGER_SUM, 0);
+        currentTripOn.put(Constants.TRIP_ROUTE, mRouteId);
+        currentTripOn.put(Constants.TRIP_START_TIME, ServerValue.TIMESTAMP);
+        currentTripOn.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
+        currentTripOn.put(Constants.TRIP_VEHICLE_ID, mVehicleId);
+        tripVehicle.updateChildren(currentTripOn);
         Log.d(LOG_TAG, "auditTx");
+
+    }
+
+
+    public void logTransaction(TransactionVO transactionVO){
+        Firebase txLog = mFirebase.child(mTripPath).child("transactions");
+//        Map tx = new HashMap();
+//        tx.put(transactionVO.getUUID()+"", transactionVO);
+        txLog.push().setValue(transactionVO);
 
     }
 
