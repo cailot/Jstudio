@@ -64,15 +64,20 @@ public class PrintConfirmationDialog extends Dialog {
                 transactionVO.setAdultNo(count);
                 transactionVO.setAdultPrice(fare);
                 transactionVO.setOriginName(params.get(Constants.PRINT_FROM)+"");
+                transactionVO.setOriginId(mMainActivity.getStopId(params.get(Constants.PRINT_FROM)+""));
                 transactionVO.setDestinationName(params.get(Constants.PRINT_TO)+"");
+                transactionVO.setDestinationId(mMainActivity.getStopId(params.get(Constants.PRINT_TO)+""));
 
                 mMainActivity.logTransaction(transactionVO);
 
-                MDCMainActivity.mPassengerCount += count;
+//                MDCMainActivity.mPassengerCount += count;
                 MDCMainActivity.mPassengerCountSum += count;
-                MDCMainActivity.mFareCash += fare;
+//                MDCMainActivity.mFareCash += fare;
                 MDCMainActivity.mFareCashSum += fare;
                 MDCMainActivity.fareTransactionId++;
+
+                // update total count & fare
+                mMainActivity.updateTotalFare();
 
                 dismiss();
             }

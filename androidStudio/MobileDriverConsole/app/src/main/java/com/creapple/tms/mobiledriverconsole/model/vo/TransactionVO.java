@@ -1,5 +1,9 @@
 package com.creapple.tms.mobiledriverconsole.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.firebase.client.ServerValue;
+
 import java.io.Serializable;
 
 /**
@@ -21,11 +25,12 @@ public class TransactionVO implements Serializable{
 
     private String originId;
 
-    private int passengerTotal;
+//    private int passengerTotal;
 
     private String paymentType;
 
-    private long updated;
+    @JsonProperty
+    private Object updated;
 
     public int getAdultNo() {
         return adultNo;
@@ -75,13 +80,13 @@ public class TransactionVO implements Serializable{
         this.originName = originName;
     }
 
-    public int getPassengerTotal() {
-        return passengerTotal;
-    }
+//    public int getPassengerTotal() {
+//        return passengerTotal;
+//    }
 
-    public void setPassengerTotal(int passengerTotal) {
-        this.passengerTotal = passengerTotal;
-    }
+//    public void setPassengerTotal(int passengerTotal) {
+//        this.passengerTotal = passengerTotal;
+//    }
 
     public String getPaymentType() {
         return paymentType;
@@ -91,12 +96,13 @@ public class TransactionVO implements Serializable{
         this.paymentType = paymentType;
     }
 
-    public long getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(long updated) {
-        this.updated = updated;
+    @JsonIgnore
+    public Long getUpdatedLong() {
+        if(updated instanceof Long){
+            return (Long) updated;
+        }else{
+            return null;
+        }
     }
 
     public int getUUID() {
@@ -108,5 +114,6 @@ public class TransactionVO implements Serializable{
     }
 
     public TransactionVO() {
+        updated = ServerValue.TIMESTAMP;
     }
 }

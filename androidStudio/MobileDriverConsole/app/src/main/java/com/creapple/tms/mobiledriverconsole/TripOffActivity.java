@@ -587,9 +587,9 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * Reset the count for several static variables in MDCMainActivity
      */
     private void resetGlabalVariables(){
-        MDCMainActivity.mPassengerCount = 0;
+//        MDCMainActivity.mPassengerCount = 0;
         MDCMainActivity.mPassengerCountSum = 0;
-        MDCMainActivity.mFareCash = 0;
+//        MDCMainActivity.mFareCash = 0;
         MDCMainActivity.mFareCashSum = 0;
         MDCMainActivity.fareTransactionId = 1;
     }

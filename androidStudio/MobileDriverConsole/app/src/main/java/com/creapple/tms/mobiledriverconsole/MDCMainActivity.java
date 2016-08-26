@@ -79,11 +79,11 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     public static String nextStopName = "ด่านทับช้าง";
 
-    public static int mPassengerCount; // passenger count during specific interval
+//    public static int mPassengerCount; // passenger count during specific interval
 
     public static int mPassengerCountSum; // total passenger count
 
-    public static int mFareCash; // fare during specific interval
+//    public static int mFareCash; // fare during specific interval
 
     public static int mFareCashSum; // total fare
 
@@ -652,7 +652,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      * @param name
      * @return
      */
-    private String getStopId(String name){
+    public String getStopId(String name){
         String id = "";
         for(int i=0; i<mStops.length; i++){
             if(name.equalsIgnoreCase(mStops[i].getName()))
@@ -724,13 +724,26 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     }
 
-
+    /**
+     * Add transaction log under Trips
+     * @param transactionVO
+     */
     public void logTransaction(TransactionVO transactionVO){
         Firebase txLog = mFirebase.child(mTripPath).child("transactions");
-//        Map tx = new HashMap();
-//        tx.put(transactionVO.getUUID()+"", transactionVO);
         txLog.push().setValue(transactionVO);
+    }
 
+
+    /**
+     * Update total fare and passenger count under Trips
+     */
+    public void updateTotalFare(){
+        Firebase txUpdate = mFirebase.child(mTripPath);
+        Map<String, Object> fares = new HashMap<String, Object>();
+        fares.put(Constants.TRIP_FARE_SUM, mFareCashSum);
+        fares.put(Constants.TRIP_PASSENGER_SUM, mPassengerCountSum);
+        fares.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
+        txUpdate.updateChildren(fares);
     }
 
 //
