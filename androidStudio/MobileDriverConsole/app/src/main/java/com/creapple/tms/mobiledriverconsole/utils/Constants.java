@@ -30,7 +30,11 @@ public interface Constants {
 
     public static final String STOPS_IN_ROUTE = "stops_id";
 
-    public static final String FARES_IN_ROUTE = "fares_in_route";
+    public static final String ADULT_FARES_IN_ROUTE = "adult_fares_in_route";
+
+    public static final String SENIOR_FARES_IN_ROUTE = "senior_fares_in_route";
+
+    public static final String STUDENT_FARES_IN_ROUTE = "student_fares_in_route";
 
     public static final String STOP_GROUPS_IN_ROUTE = "stop_groups_in_route";
 
@@ -152,6 +156,26 @@ public interface Constants {
     public static final String PRINT_FROM = "print_from";
 
     public static final String PRINT_TO = "print_to";
+
+
+    public static final String PRINT_ADULT_NUMBER_OF_PERSON = "print_adult_number_of_person";
+
+    public static final String PRINT_ADULT_FARE_PER_PERSON = "print_adult_fare_per_person";
+
+    public static final String PRINT_ADULT_TOTAL = "print_adult_total";
+
+    public static final String PRINT_SENIOR_NUMBER_OF_PERSON = "print_senior_number_of_person";
+
+    public static final String PRINT_SENIOR_FARE_PER_PERSON = "print_senior_fare_per_person";
+
+    public static final String PRINT_SENIOR_TOTAL = "print_senior_total";
+
+    public static final String PRINT_STUDENT_NUMBER_OF_PERSON = "print_student_number_of_person";
+
+    public static final String PRINT_STUDENT_FARE_PER_PERSON = "print_student_fare_per_person";
+
+    public static final String PRINT_STUDENT_TOTAL = "print_student_total";
+
 
     public static final String PRINT_NUMBER_OF_PERSON = "print_number_of_person";
 

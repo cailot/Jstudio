@@ -17,6 +17,46 @@ public class TransactionVO implements Serializable{
 
     private int adultPrice;
 
+    private int seniorNo;
+
+    private int seniorPrice;
+
+    public int getSeniorNo() {
+        return seniorNo;
+    }
+
+    public void setSeniorNo(int seniorNo) {
+        this.seniorNo = seniorNo;
+    }
+
+    public int getSeniorPrice() {
+        return seniorPrice;
+    }
+
+    public void setSeniorPrice(int seniorPrice) {
+        this.seniorPrice = seniorPrice;
+    }
+
+    public int getStudentNo() {
+        return studentNo;
+    }
+
+    public void setStudentNo(int studentNo) {
+        this.studentNo = studentNo;
+    }
+
+    public int getStudentPrice() {
+        return studentPrice;
+    }
+
+    public void setStudentPrice(int studentPrice) {
+        this.studentPrice = studentPrice;
+    }
+
+    private int studentNo;
+
+    private int studentPrice;
+
     private String destinationId;
 
     private String destinationName;

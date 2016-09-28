@@ -63,7 +63,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
 
     StopGroupVO[] mStopGroups;
 
-    String mFares;
+    String mAdultFares, mSeniorFares, mStudentFares;
 
     private String mRouteId; // ex> 554R
 
@@ -326,7 +326,9 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * save all fares information into SharedPreference by Gson
      */
     public void saveFaresDetail() {
-        MDCUtils.put(getApplicationContext(), Constants.FARES_IN_ROUTE, MDCUtils.getStopGroups(mFares));
+        MDCUtils.put(getApplicationContext(), Constants.ADULT_FARES_IN_ROUTE, MDCUtils.getStopGroups(mAdultFares));
+        MDCUtils.put(getApplicationContext(), Constants.SENIOR_FARES_IN_ROUTE, MDCUtils.getStopGroups(mSeniorFares));
+        MDCUtils.put(getApplicationContext(), Constants.STUDENT_FARES_IN_ROUTE, MDCUtils.getStopGroups(mStudentFares));
     }
 
 
@@ -688,12 +690,43 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * Bring fares info - fares/{route_ID}/fareSets/CASH/ADULT/fare - from firebase and save into Arraylist
      */
     private void getFaresDetail(){
-        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/ADULT");
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        Firebase ref1 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/ADULT");
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mFares = (String) dataSnapshot.child("fare").getValue();
-//                Log.e(LOG_TAG, mFares);
+                mAdultFares = (String) dataSnapshot.child("fare").getValue();
+//                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
+//                mStudentFares = (String) dataSnapshot.child("fare").getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Firebase ref2 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/SENIOR");
+        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mAdultFares = (String) dataSnapshot.child("fare").getValue();
+                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
+//                mStudentFares = (String) dataSnapshot.child("fare").getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        Firebase ref3 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/STUDENT");
+        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                mAdultFares = (String) dataSnapshot.child("fare").getValue();
+//                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
+                mStudentFares = (String) dataSnapshot.child("fare").getValue();
             }
 
             @Override
@@ -748,7 +781,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
             boolean isDone = false;
             // check whether information is updated and ready to go
             while(!isDone){
-                if(mStops!=null && mStops.length > 0 && mStopGroups!=null && mStopGroups.length > 0 && mFares!=null && mFares.length() > 0){
+                if(mStops!=null && mStops.length > 0 && mStopGroups!=null && mStopGroups.length > 0 && mAdultFares !=null && mAdultFares.length() > 0){
                     isDone = true;
                 }
                 try {

@@ -17,11 +17,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
-import com.creapple.tms.mobiledriverconsole.dialog.PassengerDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.PrintConfirmationDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.StopDialog;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopGroupVO;
@@ -32,6 +34,7 @@ import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.google.gson.Gson;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.SimpleDateFormat;
@@ -45,13 +48,15 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
 //    private Logger logger = Logger.getLogger(LOG_TAG);
 
-    private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mPassengerCountTxt, mPaymentTxt;
+    private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mAdultTxt, mSeniorTxt, mStudentTxt, mPaymentTxt;
+
+    private Spinner mAdultFare, mSeniorFare, mStudentFare;
 
     Context mContext;
 
@@ -63,17 +68,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private String[] mStopGroups; // group names to pop up dialog
 
-    private String[] mFares; // all fare info as array
+    private String[] mAdultFares, mSeniorFares, mStudentFares; // all fare info as array
 
     private String mOriginStop; // original stop
 
     private String mDestinationStop; // destination stop
 
-    private int mPrice; // price per each adult
+    private int mAdultPrice, mSeniorPrice, mStudentPrice; // price per each
 
-    private int mPassengerCount; // passenger count
+    private int mAdultCount, mSeniorCount, mStudentCount; // passenger count
 
-    private int mTotalFare;
+    private int mAdultTotalFare, mSeniorTotalFare, mStudentTotalFare, mTotalFare;
 
     private String mRouteId; // need it for printing
 
@@ -136,11 +141,27 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mOriginTxt.setText(spannable);
 
         mDestinationTxt.setText(getResources().getString(R.string.fare_destination_title));
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
+
+        mAdultTxt.setText(getResources().getString(R.string.fare_adult_title));
+        mSeniorTxt.setText(getResources().getString(R.string.fare_senior_title));
+        mStudentTxt.setText(getResources().getString(R.string.fare_student_title));
+
+        mAdultFare.setSelection(0);
+        mSeniorFare.setSelection(0);
+        mStudentFare.setSelection(0);
+        mAdultFare.setEnabled(false);
+        mSeniorFare.setEnabled(false);
+        mStudentFare.setEnabled(false);
+
+
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
         mPaymentTxt.setText(getResources().getString(R.string.fare_payment_title));
-        mPassengerCount = 0;
-        mTotalFare = 0;
+        mAdultCount = 0;
+        mSeniorCount = 0;
+        mStudentCount = 0;
+        mAdultTotalFare = 0;
+        mSeniorTotalFare = 0;
+        mStudentTotalFare = 0;
     }
 
 
@@ -170,14 +191,88 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 showDestinationDialog();
             }
         });
-        mPassengerCountTxt = (TextView) view.findViewById(R.id.fare_passenger_count_txt);
-        mPassengerCountTxt.setOnClickListener(new View.OnClickListener(){
+        mAdultTxt = (TextView) view.findViewById(R.id.fare_adult_txt);
+        mSeniorTxt = (TextView) view.findViewById(R.id.fare_senior_txt);
+        mStudentTxt = (TextView) view.findViewById(R.id.fare_student_txt);
+//        mPassengerCountTxt = (TextView) view.findViewById(R.id.fare_passenger_count_txt);
+//        mPassengerCountTxt.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View view) {
+//                showPassengerCountDialog();
+//            }
+//        });
+
+        String[] count = new String[31];
+        for(int i=0; i<count.length; i++){
+            count[i] = i+"";
+        }
+        mAdultFare = (Spinner) view.findViewById(R.id.fare_adult_spinner);
+        mSeniorFare = (Spinner) view.findViewById(R.id.fare_senior_spinner);
+        mStudentFare = (Spinner) view.findViewById(R.id.fare_student_spinner);
+
+        ArrayAdapter adultAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
+        ArrayAdapter seniorAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
+        ArrayAdapter studentAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
+        adultAdapter.setDropDownViewResource(R.layout.spin_dropdown);
+        seniorAdapter.setDropDownViewResource(R.layout.spin_dropdown);
+        studentAdapter.setDropDownViewResource(R.layout.spin_dropdown);
+
+        mAdultFare.setAdapter(adultAdapter);
+        mSeniorFare.setAdapter(seniorAdapter);
+        mStudentFare.setAdapter(studentAdapter);
+
+        mAdultFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onClick(View view) {
-                showPassengerCountDialog();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
+                int count = Integer.parseInt(mAdultFare.getSelectedItem().toString());
+                mAdultCount = count;
+                Log.d(LOG_TAG, "Adult Fare selected : " + count);
+                mTotalFare = calculateTotal();
+                updateFareText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//                mAdultCount = 0;
             }
         });
+
+        mSeniorFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
+                int count = Integer.parseInt(mSeniorFare.getSelectedItem().toString());
+                mSeniorCount = count;
+                Log.d(LOG_TAG, "Senior Fare selected : " + count);
+                mTotalFare = calculateTotal();
+                updateFareText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//                mSeniorCount = 0;
+            }
+        });
+
+        mStudentFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
+                int count = Integer.parseInt(mStudentFare.getSelectedItem().toString());
+                mStudentCount = count;
+                Log.d(LOG_TAG, "Student Fare selected : " + count);
+                mTotalFare = calculateTotal();
+                updateFareText();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+//                mStudentCount = 0;
+            }
+        });
+
         mPaymentTxt = (TextView) view.findViewById(R.id.fare_payment_txt);
         mPaymentTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,9 +303,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         map.put(Constants.PRINT_BUS, mVehicleId);
         map.put(Constants.PRINT_FROM, mOriginStop);
         map.put(Constants.PRINT_TO, mDestinationStop);
-        map.put(Constants.PRINT_NUMBER_OF_PERSON, mPassengerCount+"");
-        map.put(Constants.PRINT_FARE_PER_PERSON, mPrice+"");
-        map.put(Constants.PRINT_TOTAL, mTotalFare+"");
+        map.put(Constants.PRINT_ADULT_NUMBER_OF_PERSON, mAdultCount +"");
+        map.put(Constants.PRINT_ADULT_FARE_PER_PERSON, mAdultPrice +"");
+        map.put(Constants.PRINT_ADULT_TOTAL, mAdultTotalFare +"");
+        map.put(Constants.PRINT_SENIOR_NUMBER_OF_PERSON, mSeniorCount + "");
+        map.put(Constants.PRINT_SENIOR_FARE_PER_PERSON, mSeniorPrice + "");
+        map.put(Constants.PRINT_SENIOR_TOTAL, mSeniorTotalFare + "");
+        map.put(Constants.PRINT_STUDENT_NUMBER_OF_PERSON, mStudentCount + "");
+        map.put(Constants.PRINT_STUDENT_FARE_PER_PERSON, mStudentPrice + "");
+        map.put(Constants.PRINT_STUDENT_TOTAL, mStudentTotalFare + "");
+
+
 
         PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map);
         printConfirmationDialog.setMainActivity(mMainActivity);
@@ -235,7 +338,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             mStopGroups[i] = getGroup(stop.getFareStopTag());
             i++;
         }
-        mFares = getFareInfo();
+        getFareInfo();
     }
 
 
@@ -279,38 +382,130 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Calculate fare based on origin & destination
      * @return
      */
-    private int calculateFare(){
-        mPrice = 0;
-        // 1. get origin group index
-        int originGroup = getStopTag(mOriginStop);
-        // 2. get destination group index
-        int destinationGroup = getStopTag(mDestinationStop);
 
-        // this will not happen in real life but just to avoid NPE in testing data
-        if(originGroup>=mFares.length){
-            originGroup = mFares.length-1;
-        }
-        if(destinationGroup>=mFares.length){
-            destinationGroup = mFares.length-1;
-        }
-        // 3. get fare info by using origin index
-        String originLine = mFares[originGroup];
-        // 4. make fare info to array
-        String[] fares = StringUtils.split(originLine, ",");
-        // 5. calculate difference from destination to origin, destination index should be greater than or equal to origin index
-        int difference = destinationGroup - originGroup;
-        // Exceptional case >>> such as driving backward for some reason, we will apply minimum fare for customer's convineince
-        if(difference<0){
-            difference = 0;
-        }
-        // 6. calculate final fare per person
-        mPrice = Integer.parseInt(fares[difference].trim());
 
-//        Log.e(LOG_TAG, "price ==> " + price);
-        // 7. check how many passengers need the fare
-        // 8. return fare in total
-        mTotalFare = mPrice * mPassengerCount;
-        return mTotalFare;
+    private int calculateTotal(){
+        int adult = calculateAdultFare();
+        int senior = calculateSeniorFare();
+        int student = calculateStudentFare();
+        return adult + senior + student;
+    }
+
+    private int calculateAdultFare(){
+        mAdultPrice = 0;
+
+        if(mAdultCount==0){
+            return 0;
+        }else {
+            // 1. get origin group index
+            int originGroup = getStopTag(mOriginStop);
+            // 2. get destination group index
+            int destinationGroup = getStopTag(mDestinationStop);
+
+            // this will not happen in real life but just to avoid NPE in testing data
+            if (originGroup >= mAdultFares.length) {
+                originGroup = mAdultFares.length - 1;
+            }
+            if (destinationGroup >= mAdultFares.length) {
+                destinationGroup = mAdultFares.length - 1;
+            }
+            // 3. get fare info by using origin index
+            String originLine = mAdultFares[originGroup];
+            // 4. make fare info to array
+            String[] fares = StringUtils.split(originLine, ",");
+            // 5. calculate difference from destination to origin, destination index should be greater than or equal to origin index
+            int difference = destinationGroup - originGroup;
+            // Exceptional case >>> such as driving backward for some reason, we will apply minimum fare for customer's convineince
+            if (difference < 0) {
+                difference = 0;
+            }
+            // 6. calculate final fare per person
+            mAdultPrice = Integer.parseInt(fares[difference].trim());
+
+            //        Log.e(LOG_TAG, "price ==> " + price);
+            // 7. check how many passengers need the fare
+            // 8. return fare in total
+            mAdultTotalFare = mAdultPrice * mAdultCount;
+            return mAdultTotalFare;
+        }
+    }
+
+    private int calculateSeniorFare(){
+        mSeniorPrice = 0;
+
+        if(mSeniorCount == 0){
+            return 0;
+        }else {
+            // 1. get origin group index
+            int originGroup = getStopTag(mOriginStop);
+            // 2. get destination group index
+            int destinationGroup = getStopTag(mDestinationStop);
+
+            // this will not happen in real life but just to avoid NPE in testing data
+            if (originGroup >= mSeniorFares.length) {
+                originGroup = mSeniorFares.length - 1;
+            }
+            if (destinationGroup >= mSeniorFares.length) {
+                destinationGroup = mSeniorFares.length - 1;
+            }
+            // 3. get fare info by using origin index
+            String originLine = mSeniorFares[originGroup];
+            // 4. make fare info to array
+            String[] fares = StringUtils.split(originLine, ",");
+            // 5. calculate difference from destination to origin, destination index should be greater than or equal to origin index
+            int difference = destinationGroup - originGroup;
+            // Exceptional case >>> such as driving backward for some reason, we will apply minimum fare for customer's convineince
+            if (difference < 0) {
+                difference = 0;
+            }
+            // 6. calculate final fare per person
+            mSeniorPrice = Integer.parseInt(fares[difference].trim());
+
+            //        Log.e(LOG_TAG, "price ==> " + price);
+            // 7. check how many passengers need the fare
+            // 8. return fare in total
+            mSeniorTotalFare = mSeniorPrice * mSeniorCount;
+            return mSeniorTotalFare;
+        }
+    }
+
+    private int calculateStudentFare(){
+        mStudentPrice = 0;
+
+        if(mStudentCount == 0){
+            return 0;
+        }else {
+            // 1. get origin group index
+            int originGroup = getStopTag(mOriginStop);
+            // 2. get destination group index
+            int destinationGroup = getStopTag(mDestinationStop);
+
+            // this will not happen in real life but just to avoid NPE in testing data
+            if (originGroup >= mStudentFares.length) {
+                originGroup = mStudentFares.length - 1;
+            }
+            if (destinationGroup >= mStudentFares.length) {
+                destinationGroup = mStudentFares.length - 1;
+            }
+            // 3. get fare info by using origin index
+            String originLine = mStudentFares[originGroup];
+            // 4. make fare info to array
+            String[] fares = StringUtils.split(originLine, ",");
+            // 5. calculate difference from destination to origin, destination index should be greater than or equal to origin index
+            int difference = destinationGroup - originGroup;
+            // Exceptional case >>> such as driving backward for some reason, we will apply minimum fare for customer's convineince
+            if (difference < 0) {
+                difference = 0;
+            }
+            // 6. calculate final fare per person
+            mStudentPrice = Integer.parseInt(fares[difference].trim());
+
+            //        Log.e(LOG_TAG, "price ==> " + price);
+            // 7. check how many passengers need the fare
+            // 8. return fare in total
+            mStudentTotalFare = mStudentPrice * mStudentCount;
+            return mStudentTotalFare;
+        }
     }
 
 
@@ -318,12 +513,16 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for origin stop
      */
     private void showOriginDialog() {
+        mAdultFare.setSelection(0);
+        mSeniorFare.setSelection(0);
+        mStudentFare.setSelection(0);
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
+
         StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_ORIGIN_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.ORIGIN_DIALOG_TAG);
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
-        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
+
     }
 
 
@@ -331,24 +530,27 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for destination stop
      */
     private void showDestinationDialog() {
+        mAdultFare.setSelection(0);
+        mSeniorFare.setSelection(0);
+        mStudentFare.setSelection(0);
+        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
+
         StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_DESTINATION_REQUEST);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
         stopsDialog.setPassValueFromStopDialogListener(FareFragment.this);
         stopsDialog.show(getFragmentManager(), Constants.DESTINATION_DIALOG_TAG);
-        mPassengerCountTxt.setText(getResources().getString(R.string.fare_passenger_title));
-        mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
     }
 
 
     /**
      * Pop up dialog for passenger count
      */
-    private void showPassengerCountDialog() {
-        PassengerDialog passengerDialog = new PassengerDialog();
-        // link itself to be updated via 'PassValueFromPassengerDialogListener.sendPassengerCount()'
-        passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
-        passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
-    }
+//    private void showPassengerCountDialog() {
+//        PassengerDialog passengerDialog = new PassengerDialog();
+//        // link itself to be updated via 'PassValueFromPassengerDialogListener.sendPassengerCount()'
+//        passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
+//        passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
+//    }
     
 
     /**
@@ -408,31 +610,24 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 spannable.append(groupSD);
 
                 mDestinationTxt.setText(spannable);
+
+                ///////////////////////////////////////////////
+                // activate spinners
+                ///////////////////////////////////////////////
+                mAdultFare.setEnabled(true);
+                mSeniorFare.setEnabled(true);
+                mStudentFare.setEnabled(true);
+
                 break;
         }
     }
 
 
     /**
-     * 1. update user's selection on passenger count
-     * 2. update Fare Textview
-     * @param name
+     * update Fare Textview
      */
-    @Override
-    public void sendPassengerCount(String name) {
-        mPassengerCount = Integer.parseInt(name);
-        SpannableStringBuilder stringBuilder = new SpannableStringBuilder();
-        String message = getString(R.string.fare_passenger_legend);// + name;
-        SpannableString text = new SpannableString(message);
-        text.setSpan(new RelativeSizeSpan(1f), 0, message.length(), 0);
-        text.setSpan(new ForegroundColorSpan(Color.BLACK), 0, message.length(), 0);
-        text.setSpan(new StyleSpan(Typeface.BOLD), 0, message.length(), 0);
-        stringBuilder.append(text);
-        stringBuilder.append("\t");
-        stringBuilder.append(name);
-        mPassengerCountTxt.setText(stringBuilder);
-
-        String price = " ฿ " + calculateFare()+"";
+    public void updateFareText() {
+        String price = " ฿ " + mTotalFare +"";
         SpannableString fare = new SpannableString(price);
         fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
         fare.setSpan(new StyleSpan(Typeface.BOLD), 0, price.length(), 0);
@@ -456,11 +651,19 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Retreive fares info under route
      * @return
      */
-    public String[] getFareInfo() {
+    public void getFareInfo() {
         SharedPreferences pref = mContext.getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        String json = pref.getString(Constants.FARES_IN_ROUTE, null);
-        String[] fares = new Gson().fromJson(json, String[].class);
-        return fares;
+        Gson gson = new Gson();
+        String json = pref.getString(Constants.ADULT_FARES_IN_ROUTE, null);
+        mAdultFares = gson.fromJson(json, String[].class);
+        json = pref.getString(Constants.SENIOR_FARES_IN_ROUTE, null);
+        mSeniorFares = gson.fromJson(json, String[].class);
+        json = pref.getString(Constants.STUDENT_FARES_IN_ROUTE, null);
+        mStudentFares = gson.fromJson(json, String[].class);
+
+        Log.d(LOG_TAG, "Adult " + ArrayUtils.toString(mAdultFares));
+        Log.d(LOG_TAG, "Senior " + ArrayUtils.toString(mSeniorFares));
+        Log.d(LOG_TAG, "Student " + ArrayUtils.toString(mStudentFares));
     }
 
 
@@ -521,13 +724,38 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append("   ปลายทาง : ");
         spannable.append(getSpannableString(mDestinationStop));
         spannable.append("\n");
-        spannable.append("จำนวน : ");
-        spannable.append(getSpannableString(Integer.toString(mPassengerCount)));
+        // adult
+        spannable.append("จำนวนผู้ใหญ่ : ");// number
+        spannable.append(getSpannableString(Integer.toString(mAdultCount)));
         spannable.append("\t");
-        spannable.append(" ราคาต่อคน : ");
-        spannable.append(getSpannableString(Integer.toString(mPrice)));
+        spannable.append(" ผราคาของผู้ใหญ่ : ");// price
+        spannable.append(getSpannableString(Integer.toString(mAdultPrice)));
         spannable.append("\t");
-        spannable.append(" ราคารวม : ");
+        spannable.append(" ค่าโดยสารรวมผู้ใหญ่ : ");// sum
+        spannable.append(getSpannableString(Integer.toString(mAdultTotalFare)));
+        spannable.append("\n");
+        // senior
+        spannable.append("จำนวนอาวุโส : ");
+        spannable.append(getSpannableString(Integer.toString(mSeniorCount)));
+        spannable.append("\t");
+        spannable.append(" ราคาของอาวุโส : ");
+        spannable.append(getSpannableString(Integer.toString(mSeniorPrice)));
+        spannable.append("\t");
+        spannable.append(" ค่าโดยสารอาวุโสทั้งหมด : ");
+        spannable.append(getSpannableString(Integer.toString(mSeniorTotalFare)));
+        spannable.append("\n");
+        // student
+        spannable.append("จำนวนนักเรียน : ");
+        spannable.append(getSpannableString(Integer.toString(mStudentCount)));
+        spannable.append("\t");
+        spannable.append(" ค่าโดยสารนักเรียน : ");
+        spannable.append(getSpannableString(Integer.toString(mStudentPrice)));
+        spannable.append("\t");
+        spannable.append(" นักเรียนราคารวม : ");
+        spannable.append(getSpannableString(Integer.toString(mStudentTotalFare)));
+        spannable.append("\n");
+        // Total
+        spannable.append(" ราคารวม : ");// total price
         spannable.append(getSpannableString(Integer.toString(mTotalFare)));
         spannable.append("\n");
         spannable.append("      ขอบคุณที่ใช้บริการ");

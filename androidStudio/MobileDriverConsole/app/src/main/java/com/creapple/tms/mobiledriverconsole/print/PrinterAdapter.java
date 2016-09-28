@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.creapple.tms.mobiledriverconsole.utils.Constants;
+import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
+
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.Charset;
@@ -18,8 +21,6 @@ import java.util.Set;
 import driver.BarcodeType;
 import driver.Contants;
 import driver.HsBluetoothPrintDriver;
-import com.creapple.tms.mobiledriverconsole.utils.Constants;
-import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 
 //import java.text.Format;
 
@@ -171,21 +172,38 @@ public class PrinterAdapter {
             line3 = getThaiFormat(line3);
 
             //line 4
-            String numberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_NUMBER_OF_PERSON).toString());//"2";
-            String farePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_FARE_PER_PERSON).toString());//"20";
-            String total = StringUtils.defaultString(map.get(Constants.PRINT_TOTAL).toString());//"40";
-            String line4 = "จำนวน: " + numberOfPerson + "     " + "ราคาต่อคน: " + farePerPerson + "    " + "ราคารวม: " + total;
+//            String numberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_NUMBER_OF_PERSON).toString());//"2";
+//            String farePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_FARE_PER_PERSON).toString());//"20";
+//            String total = StringUtils.defaultString(map.get(Constants.PRINT_TOTAL).toString());//"40";
+//            String line4 = "จำนวน: " + numberOfPerson + "     " + "ราคาต่อคน: " + farePerPerson + "    " + "ราคารวม: " + total;
+//            line4 = getThaiFormat(line4);
+            String adultNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());//"2";
+            String adultFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_FARE_PER_PERSON).toString());//"20";
+            String adultTotal = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_TOTAL).toString());//"40";
+            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ผราคาของผู้ใหญ่: " + adultFarePerPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
             line4 = getThaiFormat(line4);
 
-            //line 5
-            byte[] line5_vowelByteArray0 = (new byte[]{(byte) 0xD8}); //ุ
-            byte[] line5_vowelByteArray1 = (new byte[]{(byte) 0x9B}); //ี่
-            byte[] line5_vowelByteArray2 = (new byte[]{(byte) 0xE9}); // ้
-            byte[] line5_vowelByteArray3 = (new byte[]{(byte) 0xD4}); //ิ
-            String line_bottom_vowel = "   " + new String(line5_vowelByteArray0, CHARSET);
-            String line_top_vowel   =   "     " + new String(line5_vowelByteArray1, CHARSET) + " "+  new String(line5_vowelByteArray2, CHARSET)
-                    + " " +  new String(line5_vowelByteArray3, CHARSET);
-            String line5 = line_top_vowel + "\n" + "ขอบคณทใชบรการ" + "\n" + line_bottom_vowel;
+            String seniorNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString());//"2";
+            String seniorFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_FARE_PER_PERSON).toString());//"20";
+            String seniorTotal = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_TOTAL).toString());//"40";
+            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ราคาของอาวุโส: " + seniorFarePerPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
+            line5 = getThaiFormat(line5);
+
+            String studentNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString());//"2";
+            String studentFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_FARE_PER_PERSON).toString());//"20";
+            String studentTotal = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_TOTAL).toString());//"40";
+            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "ค่าโดยสารนักเรียน: " + studentFarePerPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
+            line6 = getThaiFormat(line6);
+
+            //line 7
+            byte[] line7_vowelByteArray0 = (new byte[]{(byte) 0xD8}); //ุ
+            byte[] line7_vowelByteArray1 = (new byte[]{(byte) 0x9B}); //ี่
+            byte[] line7_vowelByteArray2 = (new byte[]{(byte) 0xE9}); // ้
+            byte[] line7_vowelByteArray3 = (new byte[]{(byte) 0xD4}); //ิ
+            String line_bottom_vowel = "   " + new String(line7_vowelByteArray0, CHARSET);
+            String line_top_vowel   =   "     " + new String(line7_vowelByteArray1, CHARSET) + " "+  new String(line7_vowelByteArray2, CHARSET)
+                    + " " +  new String(line7_vowelByteArray3, CHARSET);
+            String line7 = line_top_vowel + "\n" + "ขอบคณทใชบรการ" + "\n" + line_bottom_vowel;
 
             hsBluetoothPrintDriver.SetAlignMode((byte) 0x00);
             hsBluetoothPrintDriver.SetUnderline((byte)0x00);
@@ -194,6 +212,8 @@ public class PrinterAdapter {
             hsBluetoothPrintDriver.printString(line3);
             hsBluetoothPrintDriver.printString(line4);
             hsBluetoothPrintDriver.printString(line5);
+            hsBluetoothPrintDriver.printString(line6);
+            hsBluetoothPrintDriver.printString(line7);
             hsBluetoothPrintDriver.SetHRIPosition((byte) 0x02);
             hsBluetoothPrintDriver.LF();
             hsBluetoothPrintDriver.CR();

@@ -49,8 +49,12 @@ public class PrintConfirmationDialog extends Dialog {
             public void onClick(View view) {
                 mPrinterAdapter.print(map);
                 Map params = map;
-                int count = Integer.parseInt(params.get(Constants.PRINT_NUMBER_OF_PERSON).toString());
-                int fare = Integer.parseInt(params.get(Constants.PRINT_TOTAL).toString());
+                int adultCount = Integer.parseInt(params.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());
+                int adultFare = Integer.parseInt(params.get(Constants.PRINT_ADULT_TOTAL).toString());
+                int seniorCount = Integer.parseInt(params.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString());
+                int seniorFare = Integer.parseInt(params.get(Constants.PRINT_SENIOR_TOTAL).toString());
+                int studentCount = Integer.parseInt(params.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString());
+                int studentFare = Integer.parseInt(params.get(Constants.PRINT_STUDENT_TOTAL).toString());
 
 //                MDCMainActivity.mPassengerCount += count;
 //                MDCMainActivity.mPassengerCountSum += count;
@@ -61,8 +65,12 @@ public class PrintConfirmationDialog extends Dialog {
                 // add transactions under trips
                 TransactionVO transactionVO = new TransactionVO();
                 transactionVO.setUUID(MDCMainActivity.fareTransactionId);
-                transactionVO.setAdultNo(count);
-                transactionVO.setAdultPrice(fare);
+                transactionVO.setAdultNo(adultCount);
+                transactionVO.setAdultPrice(adultFare);
+                transactionVO.setSeniorNo(seniorCount);
+                transactionVO.setSeniorPrice(seniorFare);
+                transactionVO.setStudentNo(studentCount);
+                transactionVO.setStudentPrice(studentFare);
                 transactionVO.setOriginName(params.get(Constants.PRINT_FROM)+"");
                 transactionVO.setOriginId(mMainActivity.getStopId(params.get(Constants.PRINT_FROM)+""));
                 transactionVO.setDestinationName(params.get(Constants.PRINT_TO)+"");
@@ -70,10 +78,8 @@ public class PrintConfirmationDialog extends Dialog {
 
                 mMainActivity.logTransaction(transactionVO);
 
-//                MDCMainActivity.mPassengerCount += count;
-                MDCMainActivity.mPassengerCountSum += count;
-//                MDCMainActivity.mFareCash += fare;
-                MDCMainActivity.mFareCashSum += fare;
+                MDCMainActivity.mPassengerCountSum += (adultCount + seniorCount + studentCount);
+                MDCMainActivity.mFareCashSum += (adultFare + seniorFare + studentFare);
                 MDCMainActivity.fareTransactionId++;
 
                 // update total count & fare
