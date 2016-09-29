@@ -1,0 +1,66 @@
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorGrey"
+    >
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/fare_ask_title"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:minLines="2"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/print_confimation_txt"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical|center_horizontal"
+        android:minLines="8" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical|center_horizontal">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_cancel"
+            android:id="@+id/print_cancel_btn"
+            android:background="@drawable/bg_navy_rounded_corners"
+            android:layout_marginRight="@dimen/abc_action_bar_default_height_material"
+            android:textColor="#ffffff"
+            android:minWidth="@dimen/abc_search_view_text_min_width"
+            android:nestedScrollingEnabled="false"
+            android:minHeight="@dimen/design_fab_size_normal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_confirm"
+            android:id="@+id/print_confirmation_btn"
+            android:background="@drawable/bg_navy_rounded_corners"
+            android:textColor="#ffffff"
+            android:minWidth="@dimen/abc_search_view_text_min_width"
+            android:minHeight="@dimen/design_fab_size_normal" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

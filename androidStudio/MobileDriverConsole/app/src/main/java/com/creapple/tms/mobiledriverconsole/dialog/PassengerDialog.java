@@ -22,14 +22,19 @@ public class PassengerDialog extends DialogFragment{
 
     // Bind the value between user selection in dialog and stop name on FareFragment
     public interface PassValueFromPassengerDialogListener{
-        void sendPassengerCount(String name);
+        void sendPassengerCount(String name, int requestCode);
+    }
+
+    public PassengerDialog(){
+
     }
 
     @SuppressLint("ValidFragment")
-    public PassengerDialog() {
+    public PassengerDialog(int requestCode) {
+        this.requestCode = requestCode;
         mCount = new String[30];
         for(int i=0; i<mCount.length; i++){
-            mCount[i] = (i + 1) + "";
+            mCount[i] = i + "";
         }
     }
 
@@ -39,6 +44,8 @@ public class PassengerDialog extends DialogFragment{
      * 2. passing value via sendPassengerCount() from PassengerDialog
      */
     PassValueFromPassengerDialogListener mPassValueFromPassengerDialogListener;
+
+    int requestCode;
 
     String[] mCount;
 
@@ -77,7 +84,7 @@ public class PassengerDialog extends DialogFragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
 //                String stopInfo = names[pos] + " : " + zones[pos];
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromPassengerDialogListener.sendPassengerCount(mCount[pos]);
+                mPassValueFromPassengerDialogListener.sendPassengerCount(mCount[pos], requestCode);
                 dismiss();
             }
         });

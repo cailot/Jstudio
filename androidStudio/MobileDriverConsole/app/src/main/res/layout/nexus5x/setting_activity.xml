@@ -1,0 +1,153 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/abc_dialog_padding_material"
+    android:background="@color/colorNavy">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:gravity="center_vertical|center_horizontal"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="@dimen/abc_text_size_display_4_material"
+                android:gravity="center">
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:id="@+id/setting_user_info"
+                        android:text="@string/setting_user_info"
+                        android:textColor="@color/colorWhite"
+                        android:minLines="2"
+                        android:gravity="center"
+                        android:textSize="@dimen/abc_floating_window_z" />
+                    
+                    <ImageView
+
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:scaleType="fitCenter"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/setting_driver_img"
+                        android:src="@drawable/driver_on"
+                        android:layout_marginLeft="30dp" />
+                    
+                    </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/setting_email"
+                    android:text="ap.travel.hotel@gmail.com"
+                    android:textColor="@color/colorWhite"
+                    android:gravity="center"
+                    android:textSize="@dimen/abc_floating_window_z" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/setting_language_desc"
+                    android:text="@string/setting_language_title"
+                    android:textColor="@color/colorWhite"
+                    android:minLines="1"
+                    android:textSize="@dimen/abc_floating_window_z"
+                    android:maxLines="1"
+                    android:gravity="right"
+                    android:layout_marginBottom="20dp" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_thai_language"
+                        android:id="@+id/setting_thai_btn"
+                        android:layout_column="5"
+                        android:gravity="center"
+                        android:textColor="#ffffff"
+                        android:checked="false"
+                        android:buttonTint="#ffffff" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/setting_english_language"
+                        android:id="@+id/setting_english_btn"
+                        android:layout_column="5"
+                        android:textColor="#ffffff"
+                        android:checked="false"
+                        android:buttonTint="#ffffff" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dip"
+        android:layout_weight="1"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_hand_over"
+            android:textColor="@color/colorWhite"
+            android:minLines="3"
+            android:gravity="center"
+            android:textSize="@dimen/abc_floating_window_z"
+            android:background="@drawable/bg_navy_rounded_corners"
+            android:layout_marginRight="@dimen/abc_text_size_display_4_material"
+            android:id="@+id/setting_hand_over_txt" />
+
+        <TextView
+            android:layout_width="@dimen/abc_action_bar_stacked_tab_max_width"
+            android:layout_height="wrap_content"
+            android:text="@string/setting_log_out"
+            android:textColor="@color/colorBlack"
+            android:minLines="3"
+            android:gravity="center"
+            android:textSize="@dimen/abc_floating_window_z"
+            android:background="@drawable/bg_navy_rounded_corners"
+            android:id="@+id/setting_log_out_txt"
+            android:enabled="false" />
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,192 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:stretchColumns="1"
+    android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
+    android:background="@color/colorNavy">
+
+<!-- Row 1 -->
+<TableRow>
+
+    <TextView
+        android:id="@+id/fare_origin_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="10dip"
+        android:layout_margin="4dip"
+        android:layout_weight="1"
+        android:text="@string/fare_origin_title"
+        android:background="@drawable/bg_grey_rounded_corners"
+        android:textColor="@color/colorWhite"
+        android:minLines="3"
+        android:gravity="center"
+        android:textSize="@dimen/abc_floating_window_z" />
+</TableRow>
+    <!-- just draw a red line -->
+    <View
+        android:layout_height="15dip"
+        android:background="@color/colorNavy" />
+<!-- Row 2 -->
+<TableRow>
+    <TextView
+        android:id="@+id/fare_destination_txt"
+        android:layout_width="0dip"
+        android:layout_height="wrap_content"
+        android:padding="10dip"
+        android:layout_margin="3dip"
+        android:layout_weight="1"
+        android:text="@string/fare_destination_title"
+        android:background="@drawable/bg_grey_rounded_corners"
+        android:textColor="@color/colorWhite"
+        android:minLines="3"
+        android:gravity="center"
+        android:textSize="@dimen/abc_floating_window_z" />
+
+</TableRow>
+
+    <!-- just draw a red line -->
+    <View
+        android:layout_height="15dip"
+        android:background="@color/colorNavy" />
+<!-- Row 3 -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_adult_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_adult_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorWhite"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:id="@+id/fare_adult_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_senior_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_senior_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_gravity="center"
+                android:textColor="@color/colorWhite" />
+            <TextView
+                android:id="@+id/fare_senior_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_student_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_student_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_gravity="center"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:id="@+id/fare_student_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </TableRow>
+
+    <!-- just draw a red line -->
+<View
+    android:layout_height="15dip"
+    android:background="@color/colorNavy" />
+<!-- Row 4 -->
+<TableRow>
+    <!-- Column 1 -->
+    <TextView
+        android:id="@+id/fare_price_txt"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="@string/fare_price_title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:layout_margin="5dip"
+        android:minLines="4"
+        android:textColor="@color/colorWhite"
+        android:allowUndo="false" />
+
+    <!-- Column 2 -->
+    <TextView
+        android:id="@+id/fare_payment_txt"
+        android:layout_width="0dip"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="@string/fare_payment_title"
+        android:layout_margin="4dip"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:background="@drawable/bg_navy_rounded_corners"
+        android:minLines="3"
+        android:textColor="@color/colorWhite" />
+</TableRow>
+</TableLayout>

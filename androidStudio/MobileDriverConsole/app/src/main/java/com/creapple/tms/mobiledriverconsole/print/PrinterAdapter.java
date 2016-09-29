@@ -180,19 +180,22 @@ public class PrinterAdapter {
             String adultNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());//"2";
             String adultFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_FARE_PER_PERSON).toString());//"20";
             String adultTotal = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_TOTAL).toString());//"40";
-            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ผราคาของผู้ใหญ่: " + adultFarePerPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
+//            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ผราคาของผู้ใหญ่: " + adultFarePerPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
+            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
             line4 = getThaiFormat(line4);
 
             String seniorNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString());//"2";
             String seniorFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_FARE_PER_PERSON).toString());//"20";
             String seniorTotal = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_TOTAL).toString());//"40";
-            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ราคาของอาวุโส: " + seniorFarePerPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
+//            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ราคาของอาวุโส: " + seniorFarePerPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
+            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
             line5 = getThaiFormat(line5);
 
             String studentNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString());//"2";
             String studentFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_FARE_PER_PERSON).toString());//"20";
             String studentTotal = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_TOTAL).toString());//"40";
-            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "ค่าโดยสารนักเรียน: " + studentFarePerPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
+//            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "ค่าโดยสารนักเรียน: " + studentFarePerPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
+            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
             line6 = getThaiFormat(line6);
 
             //line 7

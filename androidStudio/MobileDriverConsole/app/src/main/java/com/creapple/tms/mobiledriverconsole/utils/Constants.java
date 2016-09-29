@@ -225,7 +225,11 @@ public interface Constants {
 
     public static final int REQUEST_ENABLE_BT = STATUS_BASE + 6;
 
+    public static final int ADULT_FARE_REQUEST = STATUS_BASE + 7;
 
+    public static final int SENIOR_FARE_REQUEST = STATUS_BASE + 8;
+
+    public static final int STUDENT_FARE_REQUEST = STATUS_BASE + 9;
 
 
 

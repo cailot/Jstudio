@@ -17,13 +17,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.dialog.PassengerDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.PrintConfirmationDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.StopDialog;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopGroupVO;
@@ -48,15 +46,13 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PrinterViewAction {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
 //    private Logger logger = Logger.getLogger(LOG_TAG);
 
-    private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mAdultTxt, mSeniorTxt, mStudentTxt, mPaymentTxt;
-
-    private Spinner mAdultFare, mSeniorFare, mStudentFare;
+    private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mAdultTxt, mSeniorTxt, mStudentTxt, mAdultPriceTxt, mSeniorPriceTxt, mStudentPriceTxt, mPaymentTxt;
 
     Context mContext;
 
@@ -146,16 +142,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         mSeniorTxt.setText(getResources().getString(R.string.fare_senior_title));
         mStudentTxt.setText(getResources().getString(R.string.fare_student_title));
 
-        mAdultFare.setSelection(0);
-        mSeniorFare.setSelection(0);
-        mStudentFare.setSelection(0);
-        mAdultFare.setEnabled(false);
-        mSeniorFare.setEnabled(false);
-        mStudentFare.setEnabled(false);
+        mAdultPriceTxt.setText("0");
+        mSeniorPriceTxt.setText("0");
+        mStudentPriceTxt.setText("0");
+        mAdultPriceTxt.setClickable(false);
+        mSeniorPriceTxt.setClickable(false);
+        mStudentPriceTxt.setClickable(false);
 
 
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
         mPaymentTxt.setText(getResources().getString(R.string.fare_payment_title));
+        mPaymentTxt.setClickable(false);
         mAdultCount = 0;
         mSeniorCount = 0;
         mStudentCount = 0;
@@ -203,75 +200,45 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 //            }
 //        });
 
-        String[] count = new String[31];
-        for(int i=0; i<count.length; i++){
-            count[i] = i+"";
-        }
-        mAdultFare = (Spinner) view.findViewById(R.id.fare_adult_spinner);
-        mSeniorFare = (Spinner) view.findViewById(R.id.fare_senior_spinner);
-        mStudentFare = (Spinner) view.findViewById(R.id.fare_student_spinner);
-
-        ArrayAdapter adultAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
-        ArrayAdapter seniorAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
-        ArrayAdapter studentAdapter = new ArrayAdapter(mContext, R.layout.spin, count);
-        adultAdapter.setDropDownViewResource(R.layout.spin_dropdown);
-        seniorAdapter.setDropDownViewResource(R.layout.spin_dropdown);
-        studentAdapter.setDropDownViewResource(R.layout.spin_dropdown);
-
-        mAdultFare.setAdapter(adultAdapter);
-        mSeniorFare.setAdapter(seniorAdapter);
-        mStudentFare.setAdapter(studentAdapter);
-
-        mAdultFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mAdultPriceTxt = (TextView) view.findViewById(R.id.fare_adult_price_txt);
+        mAdultPriceTxt.setOnClickListener(new View.OnClickListener(){
 
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
-                int count = Integer.parseInt(mAdultFare.getSelectedItem().toString());
-                mAdultCount = count;
-                Log.d(LOG_TAG, "Adult Fare selected : " + count);
-                mTotalFare = calculateTotal();
-                updateFareText();
+            public void onClick(View view) {
+                showPassengerCountDialog(Constants.ADULT_FARE_REQUEST);
             }
-
+        });
+        mSeniorPriceTxt = (TextView) view.findViewById(R.id.fare_senior_price_txt);
+        mSeniorPriceTxt.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-//                mAdultCount = 0;
+            public void onClick(View view) {
+                showPassengerCountDialog(Constants.SENIOR_FARE_REQUEST);
+            }
+        });
+        mStudentPriceTxt = (TextView) view.findViewById(R.id.fare_student_price_txt);
+        mStudentPriceTxt.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showPassengerCountDialog(Constants.STUDENT_FARE_REQUEST);
             }
         });
 
-        mSeniorFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
-                int count = Integer.parseInt(mSeniorFare.getSelectedItem().toString());
-                mSeniorCount = count;
-                Log.d(LOG_TAG, "Senior Fare selected : " + count);
-                mTotalFare = calculateTotal();
-                updateFareText();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-//                mSeniorCount = 0;
-            }
-        });
-
-        mStudentFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
-                int count = Integer.parseInt(mStudentFare.getSelectedItem().toString());
-                mStudentCount = count;
-                Log.d(LOG_TAG, "Student Fare selected : " + count);
-                mTotalFare = calculateTotal();
-                updateFareText();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-//                mStudentCount = 0;
-            }
-        });
+//        mStudentFare.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int index, long id) {
+//                int count = Integer.parseInt(mStudentFare.getSelectedItem().toString());
+//                mStudentCount = count;
+//                Log.d(LOG_TAG, "Student Fare selected : " + count);
+//                mTotalFare = calculateTotal();
+//                updateFareText();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+////                mStudentCount = 0;
+//            }
+//        });
 
         mPaymentTxt = (TextView) view.findViewById(R.id.fare_payment_txt);
         mPaymentTxt.setOnClickListener(new View.OnClickListener() {
@@ -388,6 +355,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         int adult = calculateAdultFare();
         int senior = calculateSeniorFare();
         int student = calculateStudentFare();
+        mPaymentTxt.setClickable(true);
         return adult + senior + student;
     }
 
@@ -513,9 +481,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for origin stop
      */
     private void showOriginDialog() {
-        mAdultFare.setSelection(0);
-        mSeniorFare.setSelection(0);
-        mStudentFare.setSelection(0);
+        mAdultPriceTxt.setText("0");
+        mSeniorPriceTxt.setText("0");
+        mStudentPriceTxt.setText("0");
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
 
         StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_ORIGIN_REQUEST);
@@ -530,9 +498,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for destination stop
      */
     private void showDestinationDialog() {
-        mAdultFare.setSelection(0);
-        mSeniorFare.setSelection(0);
-        mStudentFare.setSelection(0);
+        mAdultPriceTxt.setText("0");
+        mSeniorPriceTxt.setText("0");
+        mStudentPriceTxt.setText("0");
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
 
         StopDialog stopsDialog = new StopDialog(mNames, mStopGroups, Constants.FARE_DESTINATION_REQUEST);
@@ -545,12 +513,12 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     /**
      * Pop up dialog for passenger count
      */
-//    private void showPassengerCountDialog() {
-//        PassengerDialog passengerDialog = new PassengerDialog();
-//        // link itself to be updated via 'PassValueFromPassengerDialogListener.sendPassengerCount()'
-//        passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
-//        passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
-//    }
+    private void showPassengerCountDialog(int request) {
+        PassengerDialog passengerDialog = new PassengerDialog(request);
+        // link itself to be updated via 'PassValueFromPassengerDialogListener.sendPassengerCount()'
+        passengerDialog.setPassValueFromPassengerDialogListener(FareFragment.this);
+        passengerDialog.show(getFragmentManager(), Constants.PASSENGER_DIALOG_TAG);
+    }
     
 
     /**
@@ -612,16 +580,39 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 mDestinationTxt.setText(spannable);
 
                 ///////////////////////////////////////////////
-                // activate spinners
+                // activate fare textview
                 ///////////////////////////////////////////////
-                mAdultFare.setEnabled(true);
-                mSeniorFare.setEnabled(true);
-                mStudentFare.setEnabled(true);
-
+                mAdultPriceTxt.setClickable(true);
+                mSeniorPriceTxt.setClickable(true);
+                mStudentPriceTxt.setClickable(true);
                 break;
         }
     }
 
+    /**
+     * check whether update will happen in fares
+     * @param name
+     * @param requestCode
+     */
+    @Override
+    public void sendPassengerCount(String name, int requestCode) {
+        switch (requestCode) {
+            case Constants.ADULT_FARE_REQUEST:
+                mAdultPriceTxt.setText(name);
+                mAdultCount = Integer.parseInt(name);
+                break;
+            case Constants.SENIOR_FARE_REQUEST:
+                mSeniorPriceTxt.setText(name);
+                mSeniorCount = Integer.parseInt(name);
+                break;
+            case Constants.STUDENT_FARE_REQUEST:
+                mStudentPriceTxt.setText(name);
+                mStudentCount = Integer.parseInt(name);
+                break;
+        }
+        mTotalFare = calculateTotal();
+        updateFareText();
+    }
 
     /**
      * update Fare Textview
@@ -779,5 +770,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         String format = simpleDateFormat.format(date);
         return format;
     }
+
 
 }

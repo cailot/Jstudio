@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash_image"
+        android:src="@mipmap/screen"
+        android:background="@color/colorNavy"
+        android:scaleType="fitXY" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/splash_image"
+        android:layout_alignLeft="@id/splash_image"
+        android:layout_alignRight="@id/splash_image"
+        android:layout_alignTop="@id/splash_image"
+
+        android:text="Transit Management System"
+        android:textColor="#FFFFFF"
+        android:textSize="25dp"
+        android:textStyle="bold|italic"
+        android:typeface="sans"
+        android:gravity="center"
+
+        android:shadowColor="#07FAFA"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:textAllCaps="true"
+        android:paddingLeft="@android:dimen/thumbnail_height"
+        android:paddingBottom="@dimen/abc_config_prefDialogWidth"
+        android:layout_marginTop="5dp" />
+
+
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/splash_loading_txt"
+        android:layout_alignBottom="@id/splash_image"
+        android:layout_alignLeft="@id/splash_image"
+        android:layout_alignRight="@id/splash_image"
+        android:layout_alignTop="@id/splash_image"
+
+        android:paddingLeft="@dimen/abc_panel_menu_list_width"
+        android:text="Loading..."
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold|italic"
+        android:typeface="sans"
+        android:gravity="center"
+        android:paddingBottom="@dimen/abc_search_view_text_min_width"
+
+        android:shadowColor="#07FAFA"
+        android:shadowDx="1.5"
+        android:shadowDy="1.3"
+        android:shadowRadius="1.6"
+        android:textAllCaps="true"
+        />
+
+</RelativeLayout>

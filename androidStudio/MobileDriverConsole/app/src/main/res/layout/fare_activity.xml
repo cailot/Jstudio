@@ -11,19 +11,22 @@ android:stretchColumns="1"
 
     <TextView
         android:id="@+id/fare_origin_txt"
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:padding="10dip"
         android:layout_margin="4dip"
         android:layout_weight="1"
         android:text="@string/fare_origin_title"
         android:background="@drawable/bg_grey_rounded_corners"
         android:textColor="@color/colorWhite"
-        android:minLines="2"
+        android:minLines="3"
         android:gravity="center"
         android:textSize="@dimen/abc_floating_window_z" />
 </TableRow>
-
+    <!-- just draw a red line -->
+    <View
+        android:layout_height="15dip"
+        android:background="@color/colorNavy" />
 <!-- Row 2 -->
 <TableRow>
     <TextView
@@ -36,86 +39,119 @@ android:stretchColumns="1"
         android:text="@string/fare_destination_title"
         android:background="@drawable/bg_grey_rounded_corners"
         android:textColor="@color/colorWhite"
-        android:minLines="2"
+        android:minLines="3"
         android:gravity="center"
         android:textSize="@dimen/abc_floating_window_z" />
 
 </TableRow>
 
-
+    <!-- just draw a red line -->
+    <View
+        android:layout_height="15dip"
+        android:background="@color/colorNavy" />
 <!-- Row 3 -->
-<TableRow>
-    <LinearLayout
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/fare_adult_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fare_adult_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_gravity="center"
-            android:textColor="@color/colorWhite" />
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <Spinner
-            android:id="@+id/fare_adult_spinner"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:scrollbarStyle="insideOverlay"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-    </LinearLayout>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_adult_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_adult_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/colorWhite"
+                android:layout_gravity="center" />
 
-    <LinearLayout
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/fare_senior_txt"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/fare_adult_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:text="@string/fare_senior_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_gravity="center"
-            android:textColor="@color/colorWhite" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_senior_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_senior_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_gravity="center"
+                android:textColor="@color/colorWhite" />
+            <TextView
+                android:id="@+id/fare_senior_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
 
-        <Spinner
-            android:id="@+id/fare_senior_spinner"
-            android:layout_width="match_parent"
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:scrollbarStyle="insideInset"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-    </LinearLayout>
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:id="@+id/fare_student_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fare_student_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_gravity="center"
+                android:textColor="@color/colorWhite" />
 
-    <LinearLayout
-        android:layout_width="0dip"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/fare_student_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/fare_student_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_gravity="center"
-            android:textColor="@color/colorWhite" />
+            <TextView
+                android:id="@+id/fare_student_price_txt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAlignment="center"
+                android:gravity="center_vertical"
+                android:layout_margin="5dip"
+                android:minLines="3"
+                android:textColor="@color/colorWhite"
+                android:allowUndo="false"
+                android:background="@drawable/bg_grey_rounded_corners"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        <Spinner
-            android:id="@+id/fare_student_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbarStyle="outsideOverlay"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-    </LinearLayout>
-
-</TableRow>
+    </TableRow>
 
     <!-- just draw a red line -->
 <View
