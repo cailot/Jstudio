@@ -347,7 +347,9 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 }else{
                     mRearVehicle.setId(""); // set ID as empty not to update any more
                 }
-                Log.d(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+                MDCUtils.put(mContext, Constants.VEHICLE_FRONT, mFrontVehicle.getId());
+                MDCUtils.put(mContext, Constants.VEHICLE_REAR, mRearVehicle.getId());
+                Log.e(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {

@@ -172,16 +172,44 @@ public class SettingFragment extends Fragment{
      * 2. update trip info by adding tripEndTime
      * 3. remove vehicle info under routes/{routeId}/vehicles/{vehicleId}
      * 4. Update tripOn to false
-     * 5. show Toast message
+     *
+     * 5. Update rearVehicle's frontVehicle
+     *
      * 6. disable all component except Log Out
      */
     private void setTripOff() {
-        // 1. update Vehicle info under 'vehicles'
+        // 1-1. get rearVehicle on currentVehicle and save it into preferences
+        // 1-2. update Vehicle info under 'vehicles'
+
         Firebase currentVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
+//        Query query = currentVehicle.orderByChild(Constants.VEHICLE_REAR);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.getValue()!=null){// there is a registered rearVehicle
+//                    String rearVehicleId = dataSnapshot.getValue().toString();
+//                    MDCUtils.put(mContext, Constants.VEHICLE_REAR, rearVehicleId);
+//                    Log.d(LOG_TAG, "RearVehicle is " + rearVehicleId);
+//                }
+//            }
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+
         Map<String, Object> currentTripOn = new HashMap<String, Object>();
         currentTripOn.put(Constants.VEHICLE_TRIP_ON, false);
         currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
         currentVehicle.updateChildren(currentTripOn);
+
+
+
+
+
+
+
+
 
         // 2. update trip info
         if(StringUtils.isNotBlank(mTripPath)) {
@@ -200,8 +228,13 @@ public class SettingFragment extends Fragment{
         // 4. Sturn off 'Trip On'
         MDCUtils.put(mContext, Constants.VEHICLE_TRIP_ON, false);
 
-        // notify user
-//        Toast.makeText(mContext, "Trip Off Completed", Toast.LENGTH_SHORT).show();
+        // 5. Update rearVehicle's frontVehicle info
+//        Firebase
+
+
+
+
+
 
         // disable components except Log Out
         disableComponents();

@@ -96,6 +96,16 @@ public class LogOutDialog extends DialogFragment {
                     frontVehicle.updateChildren(frontTripOn);
                 }
 
+                // update rear Vehicle's frontVehicle value as "" if exists
+                String rearCar = MDCUtils.getValue(mActivity.getApplicationContext(), Constants.VEHICLE_REAR, "");
+                if(!rearCar.equalsIgnoreCase("")){
+                    Firebase rearVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + rearCar);
+                    Map<String, Object> rearTripOn = new HashMap<String, Object>();
+                    rearTripOn.put(Constants.VEHICLE_FRONT, "");
+                    //frontTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
+                    rearVehicle.updateChildren(rearTripOn);
+                }
+
                 // logout
                 FirebaseAuth.getInstance().signOut();
 
