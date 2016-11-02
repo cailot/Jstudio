@@ -1,5 +1,6 @@
 package com.creapple.tms.mobiledriverconsole.fragments;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 import com.creapple.tms.mobiledriverconsole.MDCMainActivity;
 import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.dialog.LogOutDialog;
+import com.creapple.tms.mobiledriverconsole.dialog.TripOffDialog;
+import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
+import com.creapple.tms.mobiledriverconsole.print.PrinterViewAction;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.LocaleHelper;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
@@ -34,7 +38,7 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class SettingFragment extends Fragment{
+public class SettingFragment extends Fragment implements PrinterViewAction{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(SettingFragment.class);
 
@@ -56,6 +60,8 @@ public class SettingFragment extends Fragment{
 
     private MDCMainActivity mActivity;
 
+    private PrinterAdapter mPrinterAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,6 +75,10 @@ public class SettingFragment extends Fragment{
         mTripPath = MDCUtils.getValue(mContext, Constants.TRIP_PATH, "");
 
         initialiseUI(view);
+
+        // set up bluetooth printer
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
 
         return view;
     }
@@ -136,7 +146,7 @@ public class SettingFragment extends Fragment{
     private void settingEvents(View view){
         switch(view.getId()){
             case R.id.setting_hand_over_txt :
-                setTripOff();
+                tripOff();
                 break;
             case R.id.setting_log_out_txt :
                 logOut();
@@ -166,6 +176,13 @@ public class SettingFragment extends Fragment{
     }
 
 
+    private void tripOff(){
+        Log.d(LOG_TAG, "tripOff");
+        TripOffDialog tripOffDialog = new TripOffDialog(this, mPrinterAdapter);
+        tripOffDialog.show(mActivity.getFragmentManager(), Constants.TRIPOFF_DIALOG_TAG);
+    }
+
+
     /**
      * Trip Off events
      * 1. update vechicle info  such as changing to false on tripOn
@@ -177,39 +194,15 @@ public class SettingFragment extends Fragment{
      *
      * 6. disable all component except Log Out
      */
-    private void setTripOff() {
+    public void tripOffHandle() {
         // 1-1. get rearVehicle on currentVehicle and save it into preferences
         // 1-2. update Vehicle info under 'vehicles'
 
         Firebase currentVehicle = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mVehicleId);
-//        Query query = currentVehicle.orderByChild(Constants.VEHICLE_REAR);
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.getValue()!=null){// there is a registered rearVehicle
-//                    String rearVehicleId = dataSnapshot.getValue().toString();
-//                    MDCUtils.put(mContext, Constants.VEHICLE_REAR, rearVehicleId);
-//                    Log.d(LOG_TAG, "RearVehicle is " + rearVehicleId);
-//                }
-//            }
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-
         Map<String, Object> currentTripOn = new HashMap<String, Object>();
         currentTripOn.put(Constants.VEHICLE_TRIP_ON, false);
         currentTripOn.put(Constants.VEHICLE_UPDATED, ServerValue.TIMESTAMP);
         currentVehicle.updateChildren(currentTripOn);
-
-
-
-
-
-
-
-
 
         // 2. update trip info
         if(StringUtils.isNotBlank(mTripPath)) {
@@ -230,11 +223,6 @@ public class SettingFragment extends Fragment{
 
         // 5. Update rearVehicle's frontVehicle info
 //        Firebase
-
-
-
-
-
 
         // disable components except Log Out
         disableComponents();
@@ -298,5 +286,15 @@ public class SettingFragment extends Fragment{
         mLanguageDescTxt.setTextColor(Color.BLACK);
         mEmailTxt.setTextColor(Color.BLACK);
         mDriverImg.setImageResource(R.drawable.driver_off);
+    }
+
+    @Override
+    public void showConnected() {
+
+    }
+
+    @Override
+    public void showFailed() {
+
     }
 }

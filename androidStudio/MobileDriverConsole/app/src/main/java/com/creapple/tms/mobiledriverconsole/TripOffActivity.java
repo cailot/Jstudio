@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.creapple.tms.mobiledriverconsole.dialog.LogOutDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.RouteDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.VehicleDialog;
-import com.creapple.tms.mobiledriverconsole.model.vo.RouteVO;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopGroupVO;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
@@ -35,7 +34,10 @@ import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -468,9 +470,10 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                 List routeIds = new ArrayList();
                 List routeNames = new ArrayList();
                 for (DataSnapshot shot : snapshot.getChildren()) {
-                    RouteVO route = shot.getValue(RouteVO.class);
+                    String routeName = (String) shot.child(Constants.ROUTE_NAME).getValue();
                     routeIds.add(shot.getKey());
-                    routeNames.add(route.getName());
+                    routeNames.add(routeName);
+
                 }
                 if(routeIds.size()>0 && routeNames.size()>0){
                     mRouteIds = MDCUtils.convertListToStringArray(routeIds);
@@ -665,17 +668,41 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * Bring stop groups info - fareStops - from firebase and save into Arraylist
      */
     private void getStopGroupsDetail(){
+//        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareStops");
+//        Query queryRef = ref.orderByKey();
+//        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                List<StopGroupVO> list = new ArrayList<StopGroupVO>();
+//                for(DataSnapshot shot : dataSnapshot.getChildren()){
+//                    list.add(new StopGroupVO(Integer.parseInt(shot.getKey()), shot.getValue()+""));
+//                }
+//                mStopGroups = new StopGroupVO[list.size()];
+//                mStopGroups = list.toArray(mStopGroups);
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareStops");
-        Query queryRef = ref.orderByKey();
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 List<StopGroupVO> list = new ArrayList<StopGroupVO>();
-                for(DataSnapshot shot : dataSnapshot.getChildren()){
-                    list.add(new StopGroupVO(Integer.parseInt(shot.getKey()), shot.getValue()+""));
+                Map<String, Object> td = (HashMap<String, Object>) dataSnapshot.getValue();
+
+                for(Map.Entry<String, Object> entry : td.entrySet()){
+                    Map single = (Map) entry.getValue();
+                    int index = Integer.parseInt(single.get(Constants.FARESTOP_SORT_INDEXT)+"");
+                    String name = (String) single.get(Constants.FARESTOP_NAME);
+                    list.add(new StopGroupVO(index, name));
                 }
                 mStopGroups = new StopGroupVO[list.size()];
                 mStopGroups = list.toArray(mStopGroups);
+                Log.d(LOG_TAG, Arrays.toString(list.toArray()));
             }
 
             @Override
@@ -687,46 +714,27 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
 
 
     /**
-     * Bring fares info - fares/{route_ID}/fareSets/CASH/ADULT/fare - from firebase and save into Arraylist
+     * Bring fares info - fares/{route_ID}/fareSets - from firebase and save into Arraylist
      */
     private void getFaresDetail(){
-        Firebase ref1 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/ADULT");
-        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId + "/fareSets");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                mAdultFares = (String) dataSnapshot.child("fare").getValue();
-//                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
-//                mStudentFares = (String) dataSnapshot.child("fare").getValue();
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        Firebase ref2 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/SENIOR");
-        ref2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mAdultFares = (String) dataSnapshot.child("fare").getValue();
-                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
-//                mStudentFares = (String) dataSnapshot.child("fare").getValue();
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        Firebase ref3 = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareSets/CASH/STUDENT");
-        ref3.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-//                mAdultFares = (String) dataSnapshot.child("fare").getValue();
-//                mSeniorFares = (String) dataSnapshot.child("fare").getValue();
-                mStudentFares = (String) dataSnapshot.child("fare").getValue();
+                Map<String, Object> td = (HashMap<String, Object>) dataSnapshot.getValue();
+                for(Map.Entry<String, Object> entry : td.entrySet()){
+                    Map single = (Map) entry.getValue();
+                    String tag = (String) single.get(Constants.FARESET_PASSENGER_TAG);
+                    String fare = (String) single.get(Constants.FARESET_FARESET);
+                    if(StringUtils.equalsIgnoreCase(tag, Constants.FARESET_ADULT)){
+                        mAdultFares = fare;
+                    }else if(StringUtils.equalsIgnoreCase(tag, Constants.FARESET_SENIOR)){
+                        mSeniorFares = fare;
+                    }else if(StringUtils.equalsIgnoreCase(tag, Constants.FARESET_STUDENT)){
+                        mStudentFares = fare;
+                    }
+                }
             }
 
             @Override

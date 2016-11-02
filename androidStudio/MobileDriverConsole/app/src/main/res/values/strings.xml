@@ -41,8 +41,11 @@
 
     <!-- Dialog -->
     <string name="log_off_confirm_title">Do you want to log out ?</string>
-    <string name="log_off_confirm">Confirm</string>
-    <string name="log_off_cancel">Cancel</string>
+    <string name="trip_off_confirm_title">Do you want to generate Trip report ?</string>
+    <string name="fare_ask_title">Do you want to print the information below ?</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+
 
 
     <!-- Trip Off Tab -->
@@ -79,14 +82,8 @@
     <string name="setting_english_language">\t\tEnglish</string>
     <string name="setting_language_title">Change Language</string>
     <string name="setting_user_info">Driver Info</string>
-    <string name="setting_hand_over">Hand Over</string>
+    <string name="setting_hand_over">Trip Off</string>
     <string name="setting_log_out">Log Out</string>
-
-    <!-- Confirm Dialog -->
-    <string name="fare_ask_title">Do you want to print the information below ?</string>
-    <string name="dialog_confirm">Confirm</string>
-    <string name="dialog_cancel">Cancel</string>
-
 
     <string name="oauth_client_id">765954447697-v375b8de0k5p5sq5f35arhqsje3sghgg.apps.googleusercontent.com</string>
 

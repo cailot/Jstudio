@@ -22,6 +22,8 @@ public interface Constants {
 
     public static final String ROUTE_ID = "route_id";
 
+    public static final String ROUTE_NAME = "name";
+
     public static final String STOPS_TYPE = "stop";
 
     public static final String STRING_ARRAY_SEPARATOR = " *$#@^! ";
@@ -76,6 +78,21 @@ public interface Constants {
 
     public static final String STOP_UPDATED = "updated";
 
+    public static final String FARESTOP_NAME = "name";
+
+    public static final String FARESTOP_SORT_INDEXT = "sortIndex";
+
+    public static final String FARESET_FARESET = "fareSet";
+
+    public static final String FARESET_PASSENGER_TAG = "passengerTag";
+
+    public static final String FARESET_PAYTYPE_TAG = "payTypeTag";
+
+    public static final String FARESET_ADULT = "ADULT";
+
+    public static final String FARESET_STUDENT = "STUDENT";
+
+    public static final String FARESET_SENIOR = "SENIOR";
 
 
 
@@ -260,6 +277,8 @@ public interface Constants {
     public static final String PASSENGER_DIALOG_TAG = "Passenger Dialog";
 
     public static final String LOGOUT_DIALOG_TAG = "Logout Dialog";
+
+    public static final String TRIPOFF_DIALOG_TAG = "TripOff Dialog";
 
 
     ////////////////////////////////

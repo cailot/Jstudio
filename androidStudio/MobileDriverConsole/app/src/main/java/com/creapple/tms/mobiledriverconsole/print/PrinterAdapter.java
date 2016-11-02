@@ -132,7 +132,11 @@ public class PrinterAdapter {
         }
     }
 
-    public void print(Map map) {
+    public void printTripOff(Map map){
+
+    }
+
+    public void printTicket(Map map) {
 
         HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
         hsBluetoothPrintDriver.Begin();

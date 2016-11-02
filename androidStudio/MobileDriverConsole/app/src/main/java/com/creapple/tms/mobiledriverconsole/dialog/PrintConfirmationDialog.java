@@ -47,7 +47,7 @@ public class PrintConfirmationDialog extends Dialog {
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPrinterAdapter.print(map);
+                mPrinterAdapter.printTicket(map);
                 Map params = map;
                 int adultCount = Integer.parseInt(params.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());
                 int adultFare = Integer.parseInt(params.get(Constants.PRINT_ADULT_TOTAL).toString());
