@@ -37,7 +37,6 @@ import com.firebase.client.ValueEventListener;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -156,7 +155,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * Just want to get GPS permission before showing Map
      */
     private void preparePermission(){
-        Log.d(LOG_TAG, "Prepare Permission at TripOffActivity");
+//        Log.d(LOG_TAG, "Prepare Permission at TripOffActivity");
     }
 
 
@@ -224,22 +223,18 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         switch(view.getId()){
             case R.id.trip_off_route_txt :
 //                Log.d(LOG_TAG, "Route Event");
-                Log.d(LOG_TAG, "Route Event");
                 showRouteDialog();
                 break;
             case R.id.trip_off_vehicle_txt :
 //                Log.d(LOG_TAG, "Vehicle Event");
-                Log.d(LOG_TAG, "Vehicle Event");
                 showVehicleDialog();
                 break;
             case R.id.trip_off_logout_btn :
 //                Log.d(LOG_TAG, "Logout Event");
-                Log.d(LOG_TAG, "Logout Event");
                 logOut();
                 break;
             case R.id.trip_off_tripon_btn :
 //                Log.d(LOG_TAG, "TripOn Event");
-                Log.d(LOG_TAG, "TripOn Event");
                 turnOnTripOn();
                 break;
         }
@@ -249,7 +244,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.d(LOG_TAG, "onConfigurationChanged");
+//        Log.d(LOG_TAG, "onConfigurationChanged");
     }
 
 
@@ -338,7 +333,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      *  logout
      */
     private void logOut(){
-        Log.d(LOG_TAG, "logOut()");
+//        Log.d(LOG_TAG, "logOut()");
         LogOutDialog logOutDialog = new LogOutDialog(this);
         logOutDialog.show(getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
 //        finishAffinity();
@@ -479,7 +474,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                     mRouteIds = MDCUtils.convertListToStringArray(routeIds);
                     mRouteNames = MDCUtils.convertListToStringArray(routeNames);
                 }
-                Log.d(LOG_TAG, routeIds.toString());
+//                Log.d(LOG_TAG, routeIds.toString());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -511,7 +506,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                 if(vehicles.size()>0){
                     mVehicles = MDCUtils.convertListToStringArray(vehicles);
                 }
-                Log.d(LOG_TAG, vehicles.toString());
+//                Log.d(LOG_TAG, vehicles.toString());
 
             }
             @Override
@@ -640,7 +635,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      */
     private void getStopsDetail(){
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_ROUTE_LIST_PATH + "/" + mRouteId +"/routeStop");
-        Query queryRef = ref.orderByChild("sortIndex");
+        Query queryRef = ref.orderByChild(Constants.FARESTOP_SORT_INDEX);
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -696,13 +691,13 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
 
                 for(Map.Entry<String, Object> entry : td.entrySet()){
                     Map single = (Map) entry.getValue();
-                    int index = Integer.parseInt(single.get(Constants.FARESTOP_SORT_INDEXT)+"");
+                    int index = Integer.parseInt(single.get(Constants.FARESTOP_SORT_INDEX)+"");
                     String name = (String) single.get(Constants.FARESTOP_NAME);
                     list.add(new StopGroupVO(index, name));
                 }
                 mStopGroups = new StopGroupVO[list.size()];
                 mStopGroups = list.toArray(mStopGroups);
-                Log.d(LOG_TAG, Arrays.toString(list.toArray()));
+//                Log.d(LOG_TAG, Arrays.toString(list.toArray()));
             }
 
             @Override

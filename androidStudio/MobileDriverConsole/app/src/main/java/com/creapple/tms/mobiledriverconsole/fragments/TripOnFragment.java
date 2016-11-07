@@ -166,7 +166,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnected");
+//        Log.d(LOG_TAG, "GoogleApiClient onConnected");
 
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -197,13 +197,13 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnectionSuspended");
+//        Log.d(LOG_TAG, "GoogleApiClient onConnectionSuspended");
         mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.d(LOG_TAG, "GoogleApiClient onConnectionFailed");
+//        Log.d(LOG_TAG, "GoogleApiClient onConnectionFailed");
     }
 
     @Override
@@ -211,7 +211,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         super.onStart();
         if(!mGoogleApiClient.isConnecting() || !mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            Log.d(LOG_TAG, "GoogleApiClient is now connected");
+//            Log.d(LOG_TAG, "GoogleApiClient is now connected");
         }
     }
 
@@ -243,7 +243,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         boolean isKeepOn = MDCUtils.getValue(mContext, Constants.VEHICLE_TRIP_ON, false);
         if(!isKeepOn){
             // release resource and exit
-            Log.d(LOG_TAG, "Release resouces and going to exit");
+//            Log.d(LOG_TAG, "Release resouces and going to exit");
             // stop searching location
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             // disconnect google api client
@@ -257,7 +257,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
         if(mGpsCount > Constants.GPS_UPDATE_MAXIMUM){ // just in case, prevent count going out of int range
             mGpsCount=0;
         }
-        Log.d(LOG_TAG, mGpsCount+"");
+//        Log.d(LOG_TAG, mGpsCount+"");
         if(mGpsCount%10==0){ // make sure it already got the front/rear vehicle id from initialiseTripInfo(), is there more elegant way to implement ??
             updateFrontAndBackVehicles();
 
@@ -349,7 +349,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                 }
                 MDCUtils.put(mContext, Constants.VEHICLE_FRONT, mFrontVehicle.getId());
                 MDCUtils.put(mContext, Constants.VEHICLE_REAR, mRearVehicle.getId());
-                Log.e(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+//                Log.e(LOG_TAG, "Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
@@ -363,7 +363,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
      */
     private void updateFrontAndBackVehicles() {
         // update front gps
-        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
+//        Log.d(LOG_TAG, "==> Front : " + mFrontVehicle.getId() + " - Rear :" + mRearVehicle.getId());
         if(mFrontVehicle.getId()!=null && !mFrontVehicle.getId().equalsIgnoreCase("")) {
             Firebase frontRef = mFirebase.child(Constants.FIREBASE_VEHICLE_LIST_PATH + "/" + mFrontVehicle.getId());
             frontRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -375,7 +375,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mFrontVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
+//                    Log.d(LOG_TAG, "Front Vehicle's  Id : " + mFrontVehicle.getId() +  " , lat : "  + mFrontVehicle.getLat() + " , lon : " + mFrontVehicle.getLon());
                 }
 
                 @Override
@@ -397,7 +397,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
                     if (dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue() != null) {
                         mRearVehicle.setLon((Double) dataSnapshot.child(Constants.VEHICLE_LONGITUDE).getValue());
                     }
-                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
+//                    Log.d(LOG_TAG, "Rear Vehicle's  Id : " + mRearVehicle.getId() +  " , lat : "  + mRearVehicle.getLat() + " , lon : " + mRearVehicle.getLon());
                 }
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
@@ -497,7 +497,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 //            String front = "\tSV580003";
 
             String front = mFrontVehicle.getId();
-            Log.d(LOG_TAG, "Front - " + front);
+//            Log.d(LOG_TAG, "Front - " + front);
 
             if(StringUtils.isNotBlank(front)) {
                 SpannableString frontS = new SpannableString(front);
@@ -523,7 +523,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
 
 //            String rear = "\tSV580005";
             String rear = mRearVehicle.getId();
-            Log.d(LOG_TAG, "Rear - " + rear);
+//            Log.d(LOG_TAG, "Rear - " + rear);
             if(StringUtils.isNotBlank(rear)) {
                 SpannableString rearS = new SpannableString(rear);
                 rearS.setSpan(new StyleSpan(Typeface.BOLD), 0, rear.length(), 0);

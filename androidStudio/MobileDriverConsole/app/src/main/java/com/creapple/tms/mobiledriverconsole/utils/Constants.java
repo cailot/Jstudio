@@ -26,7 +26,7 @@ public interface Constants {
 
     public static final String STOPS_TYPE = "stop";
 
-    public static final String STRING_ARRAY_SEPARATOR = " *$#@^! ";
+    public static final String FARE_SEPARATOR = " *$#@^! ";
 
     public static final String STOPS_DETAIL_IN_ROUTE = "stops_detail";
 
@@ -42,7 +42,7 @@ public interface Constants {
 
     public static final String STOPS_LATITUDE_IN_ROUTE = "stops_latitude";
 
-    public static final String STOPS_LONGITUDE_IN_ROUTE = "stops_longitude";
+    public static final String STOPS_LONGIADULT_FARE_REQUESTTUDE_IN_ROUTE = "stops_longitude";
 
     public static final String VEHICLE_NAME = "vehicle_name";
 
@@ -80,7 +80,7 @@ public interface Constants {
 
     public static final String FARESTOP_NAME = "name";
 
-    public static final String FARESTOP_SORT_INDEXT = "sortIndex";
+    public static final String FARESTOP_SORT_INDEX = "sortIndex";
 
     public static final String FARESET_FARESET = "fareSet";
 
@@ -198,7 +198,9 @@ public interface Constants {
 
     public static final String PRINT_FARE_PER_PERSON = "print_fare_per_person";
 
-    public static final String PRINT_TOTAL = "print_total";
+    public static final String PRINT_TICKET_TOTAL_NUMBER = "print_ticket_total";
+
+    public static final String PRINT_FARE_TOTAL = "print_fare_total";
 
 
 
@@ -242,11 +244,11 @@ public interface Constants {
 
     public static final int REQUEST_ENABLE_BT = STATUS_BASE + 6;
 
-    public static final int ADULT_FARE_REQUEST = STATUS_BASE + 7;
+    public static final int ADULT_FARE_REQUEST = 0;
 
-    public static final int SENIOR_FARE_REQUEST = STATUS_BASE + 8;
+    public static final int STUDENT_FARE_REQUEST = 1;
 
-    public static final int STUDENT_FARE_REQUEST = STATUS_BASE + 9;
+    public static final int SENIOR_FARE_REQUEST = 2;
 
 
 

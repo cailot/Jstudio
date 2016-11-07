@@ -57,7 +57,7 @@ public class LoginManager extends ProgressActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "Start");
+//        Log.d(LOG_TAG, "Start");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
@@ -77,11 +77,11 @@ public class LoginManager extends ProgressActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null && isFirst){ // user is signed in
-                    Log.d(LOG_TAG, "Signed in - " + user.getUid());
+//                    Log.d(LOG_TAG, "Signed in - " + user.getUid());
                     isFirst = false;
 
                 }else { // user is signed out
-                    Log.d(LOG_TAG, "Signed out");
+//                    Log.d(LOG_TAG, "Signed out");
                 }
             }
         };
@@ -103,7 +103,7 @@ public class LoginManager extends ProgressActivity {
         auth.put(Constants.AUTH_LOG_IN_TIME, ServerValue.TIMESTAMP);
         userPost.setValue(auth);
         String keyId = userPost.getKey();
-        Log.d(LOG_TAG, " Key ID :::::  --> " + keyId);
+//        Log.d(LOG_TAG, " Key ID :::::  --> " + keyId);
 
         // save user info for other Activity
         MDCUtils.put(this, Constants.USER_UID, user.getUid());
@@ -129,9 +129,9 @@ public class LoginManager extends ProgressActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(LOG_TAG, "logIn : onComplete - " + task.isSuccessful());
+//                        Log.d(LOG_TAG, "logIn : onComplete - " + task.isSuccessful());
                         if(!task.isSuccessful()){
-                            Log.w(LOG_TAG, "logIn exception - " + task.getException());
+//                            Log.w(LOG_TAG, "logIn exception - " + task.getException());
                             hideProgressDialog();
                             Toast.makeText(LoginManager.this, "Email and Password does not match", Toast.LENGTH_SHORT).show();
                         }else{
@@ -152,7 +152,7 @@ public class LoginManager extends ProgressActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(Constants.USER_LOGIN).getValue() != null) {
                     alreadyLogIn = Boolean.toString((Boolean) dataSnapshot.child(Constants.USER_LOGIN).getValue());
-                    Log.d(LOG_TAG, "************* " + alreadyLogIn);
+//                    Log.d(LOG_TAG, "************* " + alreadyLogIn);
                 }
             }
             @Override
@@ -231,7 +231,7 @@ public class LoginManager extends ProgressActivity {
 
             boolean isDone = false;
             while(!isDone){
-                Log.d(LOG_TAG, "checking status ....... isDone ? " + isDone);
+//                Log.d(LOG_TAG, "checking status ....... isDone ? " + isDone);
                 if(!StringUtils.defaultString(alreadyLogIn).equalsIgnoreCase("")){
                     isDone = true;
                 }
@@ -251,7 +251,7 @@ public class LoginManager extends ProgressActivity {
             hideProgressDialog();
 
             if(StringUtils.defaultString(alreadyLogIn).equalsIgnoreCase("true")){ // someone is already using this account
-                Log.w(LOG_TAG, "logIn exception - Account is locked ");
+//                Log.w(LOG_TAG, "logIn exception - Account is locked ");
                 Toast.makeText(LoginManager.this, "Account is locked by another user", Toast.LENGTH_SHORT).show();
             }else{ // everything is fine and ready to GO !!!!
                 updateLoginRecord(mAuth.getCurrentUser());

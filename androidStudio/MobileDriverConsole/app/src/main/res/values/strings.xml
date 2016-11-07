@@ -67,14 +67,15 @@
 
     <!-- Fare Tab -->
     <string name="fare_origin_legend">Origin : </string>
-    <string name="fare_destination_legend">Destination : </string>
+    <string name="fare_destination_legend">Destination Zone : </string>
     <string name="fare_passenger_legend">Passenger Count : </string>
     <string name="fare_payment_title">Payment</string>
     <string name="fare_origin_title">Please Select Origin Stop</string>
-    <string name="fare_destination_title">Please Select Destination Stop</string>
-    <string name="fare_adult_title">Adult</string>
-    <string name="fare_senior_title">Senior</string>
-    <string name="fare_student_title">Student</string>
+    <string name="fare_destination_title">Please Select Destination Group</string>
+    <string name="fare_passenger_title">ADULT</string>
+    <string name="fare_adult_title">ADULT</string>
+    <string name="fare_senior_title">SENIOR</string>
+    <string name="fare_student_title">STUDENT</string>
     <string name="fare_price_title">Fare</string>
 
     <!-- Setting Tab -->

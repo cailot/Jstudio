@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -170,15 +169,22 @@ public class SettingFragment extends Fragment implements PrinterViewAction{
      * Launch Logout Dialog
      */
     private void logOut() {
-        Log.d(LOG_TAG, "logOut()");
+//        Log.d(LOG_TAG, "logOut()");
         LogOutDialog logOutDialog = new LogOutDialog(mActivity);
         logOutDialog.show(mActivity.getFragmentManager(), Constants.LOGOUT_DIALOG_TAG);
     }
 
 
     private void tripOff(){
-        Log.d(LOG_TAG, "tripOff");
-        TripOffDialog tripOffDialog = new TripOffDialog(this, mPrinterAdapter);
+//        Log.d(LOG_TAG, "tripOff");
+        Map<String, String> params = new HashMap<String, String>();
+        params.put(Constants.PRINT_DATE, MDCUtils.getTimestamp());
+        params.put(Constants.PRINT_ROUTE, mRouteId);
+        params.put(Constants.PRINT_BUS, mVehicleId);
+        params.put(Constants.TRIP_PATH, mTripPath);
+        params.put(Constants.PRINT_TICKET_TOTAL_NUMBER, MDCMainActivity.mPassengerCountSum +"");
+        params.put(Constants.PRINT_FARE_TOTAL, MDCMainActivity.mFareCashSum +"");
+        TripOffDialog tripOffDialog = new TripOffDialog(this, mPrinterAdapter, params);
         tripOffDialog.show(mActivity.getFragmentManager(), Constants.TRIPOFF_DIALOG_TAG);
     }
 
@@ -211,7 +217,7 @@ public class SettingFragment extends Fragment implements PrinterViewAction{
             tripInfo.put(Constants.TRIP_STOP_TIME, ServerValue.TIMESTAMP);
             tripInfo.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
             currentTrip.updateChildren(tripInfo);
-            Log.d(LOG_TAG, "Trip Path : " + currentTrip.getPath());
+//            Log.d(LOG_TAG, "Trip Path : " + currentTrip.getPath());
         }
 
         // 3. delete car under routes/554/vehicles
@@ -251,7 +257,7 @@ public class SettingFragment extends Fragment implements PrinterViewAction{
            LocaleHelper.setLocale(mContext.getApplicationContext(), Constants.LANGUAGE_ENGLISH);
        }
         MDCUtils.put(mContext, Constants.SELECTED_LANGUAGE, lang);
-        Log.d(LOG_TAG, lang + " is now saved");
+//        Log.d(LOG_TAG, lang + " is now saved");
         applyLanguageSetting();
     }
 

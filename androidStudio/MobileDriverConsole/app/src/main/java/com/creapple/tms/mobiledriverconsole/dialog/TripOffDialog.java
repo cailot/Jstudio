@@ -17,6 +17,8 @@ import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.fragments.SettingFragment;
 import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
 
+import java.util.Map;
+
 /**
  * Created by jinseo on 2016. 7. 17..
  */
@@ -30,13 +32,16 @@ public class TripOffDialog extends DialogFragment {
 
     private PrinterAdapter mPrinterAdapter;
 
+    private Map<String, String> mParams;
+
     public TripOffDialog() {
     }
 
     @SuppressLint("ValidFragment")
-    public TripOffDialog(Fragment fragment, PrinterAdapter printerAdapter) {
+    public TripOffDialog(Fragment fragment, PrinterAdapter printerAdapter, Map<String, String> map) {
         mFragment = (SettingFragment) fragment;
         mPrinterAdapter = printerAdapter;
+        mParams = map;
     }
 
     @Override
@@ -68,7 +73,7 @@ public class TripOffDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
             //print
-            mPrinterAdapter.printTripOff(null);
+            mPrinterAdapter.printTripOff(mParams);
             // tripOff Handle
             mFragment.tripOffHandle();
             // disappear

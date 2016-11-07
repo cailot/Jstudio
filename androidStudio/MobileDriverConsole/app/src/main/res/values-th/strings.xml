@@ -55,11 +55,12 @@
 
     <!-- Fare Tab -->
     <string name="fare_origin_legend">ต้นทาง : </string>
-    <string name="fare_destination_legend">ปลายทาง : </string>
+    <string name="fare_destination_legend">ปลายทาง โซน : </string>
     <string name="fare_passenger_legend">จำนวนผู้โดยสาร : </string>
     <string name="fare_payment_title">ชำระเงิน</string>
     <string name="fare_origin_title">เลือกป้ายต้นทาง</string>
     <string name="fare_destination_title">เลือกป้ายปลายทาง</string>
+    <string name="fare_passenger_title">ผู้ใหญ่</string>
     <string name="fare_adult_title">ผู้ใหญ่</string>
     <string name="fare_senior_title">ระดับอาวุโส</string>
     <string name="fare_student_title">นักเรียน</string>

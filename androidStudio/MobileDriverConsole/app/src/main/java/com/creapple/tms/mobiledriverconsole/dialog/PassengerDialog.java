@@ -1,6 +1,7 @@
 package com.creapple.tms.mobiledriverconsole.dialog;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,9 +21,11 @@ import com.creapple.tms.mobiledriverconsole.R;
  */
 public class PassengerDialog extends DialogFragment{
 
+    private Activity mActivity;
+
     // Bind the value between user selection in dialog and stop name on FareFragment
     public interface PassValueFromPassengerDialogListener{
-        void sendPassengerCount(String name, int requestCode);
+        void sendPassengerCount(int name);
     }
 
     public PassengerDialog(){
@@ -30,12 +33,13 @@ public class PassengerDialog extends DialogFragment{
     }
 
     @SuppressLint("ValidFragment")
-    public PassengerDialog(int requestCode) {
-        this.requestCode = requestCode;
-        mCount = new String[30];
-        for(int i=0; i<mCount.length; i++){
-            mCount[i] = i + "";
-        }
+    public PassengerDialog(Activity activity) {
+//        this.requestCode = requestCode;
+        mActivity = activity;
+        mCount = new String[3];
+        mCount[0] = mActivity.getResources().getString(R.string.fare_adult_title);
+        mCount[1] = mActivity.getResources().getString(R.string.fare_student_title);
+        mCount[2] = mActivity.getResources().getString(R.string.fare_senior_title);
     }
 
     /**
@@ -45,7 +49,7 @@ public class PassengerDialog extends DialogFragment{
      */
     PassValueFromPassengerDialogListener mPassValueFromPassengerDialogListener;
 
-    int requestCode;
+//    int requestCode;
 
     String[] mCount;
 
@@ -84,7 +88,8 @@ public class PassengerDialog extends DialogFragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
 //                String stopInfo = names[pos] + " : " + zones[pos];
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromPassengerDialogListener.sendPassengerCount(mCount[pos], requestCode);
+//                mPassValueFromPassengerDialogListener.sendPassengerCount(mCount[pos]);
+                mPassValueFromPassengerDialogListener.sendPassengerCount(pos);
                 dismiss();
             }
         });

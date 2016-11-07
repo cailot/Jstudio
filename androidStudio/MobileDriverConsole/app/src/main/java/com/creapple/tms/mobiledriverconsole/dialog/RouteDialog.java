@@ -37,11 +37,11 @@ public class RouteDialog extends DialogFragment{
 
     @SuppressLint("ValidFragment")
     public RouteDialog(String[] ids, String[] names) {
-        this.mRouteIds = ids;
+        this.mIds = ids;
         this.mNames = names;
     }
 
-    String[] mRouteIds;// = {"อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3", "อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3"};
+    String[] mIds;// = {"อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3", "อู่บางพลี", "ทางเข้าสนามบิน", "าง้าสนามน", "ทาโค้ง 1", "โค้ง 2", "แยกสนามบิน", "โค้ง 3"};
     String[] mNames;// = {"Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2", "Zone 1", "Zone 2", "Zone 1", "Zone 1", "Zone 1", "Zone 2", "Zone 2"};
 
 
@@ -73,13 +73,13 @@ public class RouteDialog extends DialogFragment{
         View view = inflater.inflate(R.layout.routes_dialog, container, false);
 
         GridView gridView = (GridView) view.findViewById(R.id.route_grid_view);
-        RouteCustomAdapter stopsCustomAdapter = new RouteCustomAdapter(getActivity(), mRouteIds, mNames);
+        RouteCustomAdapter stopsCustomAdapter = new RouteCustomAdapter(getActivity(), mIds, mNames);
         gridView.setAdapter(stopsCustomAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 // update TexView in FareFragment according to user's choice
-                mPassValueFromRouteDialogListener.sendRouteName(mRouteIds==null ? "" : mRouteIds[pos], mNames==null ? "" : mNames[pos]);
+                mPassValueFromRouteDialogListener.sendRouteName(mIds ==null ? "" : mIds[pos], mNames ==null ? "" : mNames[pos]);
                 dismiss();
             }
         });

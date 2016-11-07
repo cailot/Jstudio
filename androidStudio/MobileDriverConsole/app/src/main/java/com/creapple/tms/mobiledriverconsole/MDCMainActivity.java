@@ -191,7 +191,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         super.onStart();
         if(!mGoogleApiClient.isConnecting()||!mGoogleApiClient.isConnected()){
             mGoogleApiClient.connect();
-            Log.d(LOG_TAG, "GoogleApiClient is now connected");
+//            Log.d(LOG_TAG, "GoogleApiClient is now connected");
         }
     }
 
@@ -199,7 +199,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "onStop()");
+//        Log.d(LOG_TAG, "onStop()");
     }
 
 
@@ -211,7 +211,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
             mGoogleApiClient.disconnect();
         }
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy()");
+//        Log.d(LOG_TAG, "onDestroy()");
     }
 
 
@@ -301,7 +301,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d(LOG_TAG, "onConnected()");
+//        Log.d(LOG_TAG, "onConnected()");
         startIntentService();
     }
 
@@ -370,7 +370,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             }); // Result processed in onResult().
         } catch (SecurityException en) {
-            Log.d(LOG_TAG, en.getMessage());
+            Log.e(LOG_TAG, en.getMessage());
         }
     }
 
@@ -399,7 +399,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                 }
             });
         } catch (SecurityException securityException) {
-            Log.d(LOG_TAG, securityException.getMessage());
+            Log.e(LOG_TAG, securityException.getMessage());
         }
     }
 
@@ -555,7 +555,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Log.e(LOG_TAG, "onConfigurationChanged");
+//        Log.e(LOG_TAG, "onConfigurationChanged");
     }
 
 
@@ -706,7 +706,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         // save tripPath for other activities
         MDCUtils.put(getApplicationContext(), Constants.TRIP_PATH, mTripPath);
 
-        Log.d(LOG_TAG, "Trip Path : " + mTripPath);
+//        Log.d(LOG_TAG, "Trip Path : " + mTripPath);
 
         Map<String, Object> currentTripOn = new HashMap<String, Object>();
         currentTripOn.put(Constants.TRIP_CURRENT_STOP_NAME, currentStopName);
@@ -720,7 +720,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         currentTripOn.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
         currentTripOn.put(Constants.TRIP_VEHICLE_ID, mVehicleId);
         tripVehicle.updateChildren(currentTripOn);
-        Log.d(LOG_TAG, "auditTx");
+//        Log.d(LOG_TAG, "auditTx");
 
     }
 

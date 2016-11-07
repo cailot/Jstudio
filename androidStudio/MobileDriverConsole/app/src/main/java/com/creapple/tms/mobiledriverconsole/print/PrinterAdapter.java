@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
@@ -48,7 +47,7 @@ public class PrinterAdapter {
 
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         for(BluetoothDevice device : devices){
-            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
+//            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
             if(device.getName().equalsIgnoreCase("820USEB")){
                 connectBluetooth(device);
                 return;
@@ -133,6 +132,73 @@ public class PrinterAdapter {
     }
 
     public void printTripOff(Map map){
+        HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
+        hsBluetoothPrintDriver.Begin();
+        hsBluetoothPrintDriver.setCharsetName(CHARSET);
+        try {
+
+            //TITIE
+            String title = "TRIP OFF";
+            hsBluetoothPrintDriver.SetUnderline((byte)0x01);
+            hsBluetoothPrintDriver.SetBold((byte)0x50);
+            hsBluetoothPrintDriver.SetAlignMode((byte) 0x01);
+            hsBluetoothPrintDriver.printString(title);
+
+            //line1
+            String date = StringUtils.defaultString(map.get(Constants.PRINT_DATE).toString());//"26/07/2016 17.17";
+            String line1 = "\n" + "         วันที่ " + date + "\n";
+
+            //line 2
+            String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString());;//"554F";
+            String bus = StringUtils.defaultString(map.get(Constants.PRINT_BUS).toString());//"SV580004";
+            String line2 = "สาย: " + route + "    " + "หมายเลขรถ: " + bus;
+            line2 = getThaiFormat(line2);
+
+            //line 3
+            String trip = StringUtils.defaultString(map.get(Constants.TRIP_PATH).toString());// 201610180615_SV123456
+            String line3 = "การเดินทาง: " + trip;
+            line3 = getThaiFormat(line3);
+
+            //line 4
+            String ticketNum = StringUtils.defaultString(map.get(Constants.PRINT_TICKET_TOTAL_NUMBER).toString());// 89
+            String line4 = "                  นับตั๋ว: " + ticketNum;
+            line3 = getThaiFormat(line4);
+
+            //line 5
+            String fareSum = StringUtils.defaultString(map.get(Constants.PRINT_FARE_TOTAL).toString());// 3782
+            String line5 = "                  ผลรวมค่าโดยสาร: " + fareSum;
+            line3 = getThaiFormat(line5);
+
+            //line 7
+            byte[] line7_vowelByteArray0 = (new byte[]{(byte) 0xD8}); //ุ
+            byte[] line7_vowelByteArray1 = (new byte[]{(byte) 0x9B}); //ี่
+            byte[] line7_vowelByteArray2 = (new byte[]{(byte) 0xE9}); // ้
+            byte[] line7_vowelByteArray3 = (new byte[]{(byte) 0xD4}); //ิ
+            String line_bottom_vowel = "   " + new String(line7_vowelByteArray0, CHARSET);
+            String line_top_vowel   =   "     " + new String(line7_vowelByteArray1, CHARSET) + " "+  new String(line7_vowelByteArray2, CHARSET)
+                    + " " +  new String(line7_vowelByteArray3, CHARSET);
+            String line7 = line_top_vowel + "\n" + "ขอบคณทใชบรการ" + "\n" + line_bottom_vowel;
+
+            hsBluetoothPrintDriver.SetAlignMode((byte) 0x00);
+            hsBluetoothPrintDriver.SetUnderline((byte)0x00);
+            hsBluetoothPrintDriver.printString(line1);
+            hsBluetoothPrintDriver.printString(line2);
+            hsBluetoothPrintDriver.printString(line3);
+            hsBluetoothPrintDriver.printString(line4);
+            hsBluetoothPrintDriver.printString(line5);
+            hsBluetoothPrintDriver.printString(line7);
+            hsBluetoothPrintDriver.SetHRIPosition((byte) 0x02);
+            hsBluetoothPrintDriver.LF();
+            hsBluetoothPrintDriver.CR();
+            hsBluetoothPrintDriver.LF();
+            hsBluetoothPrintDriver.CR();
+            hsBluetoothPrintDriver.LF();
+            hsBluetoothPrintDriver.CR();
+            hsBluetoothPrintDriver.CutPaper();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -159,7 +225,7 @@ public class PrinterAdapter {
             String ticket_out = "หมายเลขตว: " + ticketNumber;
             String date_out = "วนเวลา: " + date;
             String line1 = vowel + "\n" + ticket_out + "    " + date_out + "\n";
-            Log.d("#######", line1);
+//            Log.d("#######", line1);
 
 
 
@@ -245,7 +311,7 @@ public class PrinterAdapter {
             for (int i = 0; i < b.length; i++) {
 
                 byte ascii = b[i];
-                Log.d("--> ", ascii + " ");
+//                Log.d("--> ", ascii + " ");
                 if (ascii == (byte) 0xE8 || ascii == (byte) 0xE9 || ascii == (byte) 0xEA ||
                         ascii == (byte) 0xEB || ascii == (byte) 0xEC || ascii == (byte) 0xED || ascii == (byte) 0xEE) { //่้๊๋
                     int position;
@@ -290,7 +356,7 @@ public class PrinterAdapter {
                 if (j >= vowels.size()) break;
                 Format format = vowels.get(j);
                 if (format.position == i) {
-                    Log.d("==> ", i + " " + format.ascii);
+//                    Log.d("==> ", i + " " + format.ascii);
                     if (format.isTop)
                         line_top_vowel += new String(new byte[]{format.ascii}, CHARSET);
                     else line_bottom_vowel += new String(new byte[]{format.ascii}, CHARSET);

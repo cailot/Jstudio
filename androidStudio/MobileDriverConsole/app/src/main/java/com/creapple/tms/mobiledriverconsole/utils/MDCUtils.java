@@ -328,4 +328,15 @@ public class MDCUtils {
         return (int)(difference/1000);
     }
 
+    /**
+     * Return timestamp to print
+     * @return
+     */
+    public static String getTimestamp(){
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH.mm");
+        String format = simpleDateFormat.format(date);
+        return format;
+    }
+
 }
