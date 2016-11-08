@@ -13,6 +13,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +74,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     private int mDestinationGroup; // destination group
 
     private int mAdultPrice, mSeniorPrice, mStudentPrice; // price per each
+
+    private int mAdultCount, mSeniorCount, mStudentCount; // count for each
 
     private int mAdultTotalFare, mSeniorTotalFare, mStudentTotalFare, mTotalFare;
 
@@ -213,12 +217,21 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         map.put(Constants.PRINT_BUS, mVehicleId);
         map.put(Constants.PRINT_FROM, mOriginStop);
         map.put(Constants.PRINT_TO, mDestinationZone);
-        map.put(Constants.PRINT_ADULT_FARE_PER_PERSON, mAdultPrice + "");
+        map.put(Constants.PRINT_ADULT_NUMBER_OF_PERSON,  mAdultCount + "");
         map.put(Constants.PRINT_ADULT_TOTAL, mAdultTotalFare + "");
-        map.put(Constants.PRINT_SENIOR_FARE_PER_PERSON, mSeniorPrice + "");
+        map.put(Constants.PRINT_SENIOR_NUMBER_OF_PERSON,  mSeniorCount + "");
         map.put(Constants.PRINT_SENIOR_TOTAL, mSeniorTotalFare + "");
-        map.put(Constants.PRINT_STUDENT_FARE_PER_PERSON, mStudentPrice + "");
+        map.put(Constants.PRINT_STUDENT_NUMBER_OF_PERSON, mStudentCount + "");
         map.put(Constants.PRINT_STUDENT_TOTAL, mStudentTotalFare + "");
+
+        Iterator iterator = map.keySet().iterator();
+
+        while (iterator.hasNext()) {
+            String key = iterator.next().toString();
+            String value = map.get(key).toString();
+
+            Log.d(LOG_TAG, key + " " + value);
+        }
 
         PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map);
         printConfirmationDialog.setMainActivity(mMainActivity);
@@ -573,14 +586,29 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         switch (requestCode) {
             case Constants.ADULT_FARE_REQUEST:
                 name = getString(R.string.fare_adult_title);
+                mSeniorPrice = 0;
+                mStudentPrice = 0;
+                mAdultCount = 1;
+                mSeniorCount = 0;
+                mStudentCount = 0;
                 fare = calculateAdultFare();
                 break;
             case Constants.SENIOR_FARE_REQUEST:
                 name = getString(R.string.fare_senior_title);
+                mAdultPrice = 0;
+                mStudentPrice = 0;
+                mAdultCount = 0;
+                mSeniorCount = 1;
+                mStudentCount = 0;
                 fare = calculateSeniorFare();
                 break;
             case Constants.STUDENT_FARE_REQUEST:
                 name = getString(R.string.fare_student_title);
+                mAdultPrice = 0;
+                mSeniorPrice = 0;
+                mAdultCount = 0;
+                mSeniorCount = 0;
+                mStudentCount = 1;
                 fare = calculateStudentFare();
                 break;
         }

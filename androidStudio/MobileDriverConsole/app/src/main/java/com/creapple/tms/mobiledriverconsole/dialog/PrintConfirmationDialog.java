@@ -48,6 +48,7 @@ public class PrintConfirmationDialog extends Dialog {
             @Override
             public void onClick(View view) {
                 mPrinterAdapter.printTicket(map);
+
                 Map params = map;
                 int adultCount = Integer.parseInt(params.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());
                 int adultFare = Integer.parseInt(params.get(Constants.PRINT_ADULT_TOTAL).toString());
@@ -55,12 +56,6 @@ public class PrintConfirmationDialog extends Dialog {
                 int seniorFare = Integer.parseInt(params.get(Constants.PRINT_SENIOR_TOTAL).toString());
                 int studentCount = Integer.parseInt(params.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString());
                 int studentFare = Integer.parseInt(params.get(Constants.PRINT_STUDENT_TOTAL).toString());
-
-//                MDCMainActivity.mPassengerCount += count;
-//                MDCMainActivity.mPassengerCountSum += count;
-//                MDCMainActivity.mFareCash += fare;
-//                MDCMainActivity.mFareCashSum += fare;
-//                MDCMainActivity.fareTransactionId++;
 
                 // add transactions under trips
                 TransactionVO transactionVO = new TransactionVO();
@@ -74,7 +69,7 @@ public class PrintConfirmationDialog extends Dialog {
                 transactionVO.setOriginName(params.get(Constants.PRINT_FROM)+"");
                 transactionVO.setOriginId(mMainActivity.getStopId(params.get(Constants.PRINT_FROM)+""));
                 transactionVO.setDestinationName(params.get(Constants.PRINT_TO)+"");
-                transactionVO.setDestinationId(mMainActivity.getStopId(params.get(Constants.PRINT_TO)+""));
+//                transactionVO.setDestinationId(mMainActivity.getStopId(params.get(Constants.PRINT_TO)+""));
 
                 mMainActivity.logTransaction(transactionVO);
 
