@@ -34,6 +34,7 @@
     <!-- Dialog -->
     <string name="log_off_confirm_title">คุณต้องการออกจากระบบหรือไม่ ?</string>
     <string name="trip_off_confirm_title">คุณต้องการที่จะสร้างรายงานการเดินทาง?</string>
+    <string name="fare_ask_title">คุณต้องการที่จะพิมพ์ข้อมูลดังต่อไปนี้?</string>
     <string name="dialog_confirm">ยืนยัน</string>
     <string name="dialog_cancel">ยกเลิก</string>
 

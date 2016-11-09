@@ -587,7 +587,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             case Constants.ADULT_FARE_REQUEST:
                 name = getString(R.string.fare_adult_title);
                 mSeniorPrice = 0;
+                mSeniorTotalFare = 0;
                 mStudentPrice = 0;
+                mStudentTotalFare = 0;
                 mAdultCount = 1;
                 mSeniorCount = 0;
                 mStudentCount = 0;
@@ -596,7 +598,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             case Constants.SENIOR_FARE_REQUEST:
                 name = getString(R.string.fare_senior_title);
                 mAdultPrice = 0;
+                mAdultTotalFare = 0;
                 mStudentPrice = 0;
+                mStudentTotalFare = 0;
                 mAdultCount = 0;
                 mSeniorCount = 1;
                 mStudentCount = 0;
@@ -605,7 +609,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             case Constants.STUDENT_FARE_REQUEST:
                 name = getString(R.string.fare_student_title);
                 mAdultPrice = 0;
+                mAdultTotalFare = 0;
                 mSeniorPrice = 0;
+                mSeniorTotalFare = 0;
                 mAdultCount = 0;
                 mSeniorCount = 0;
                 mStudentCount = 1;
@@ -733,10 +739,10 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append(" นักเรียนราคารวม : ");
         spannable.append(getSpannableString(Integer.toString(mStudentTotalFare)));
         spannable.append("\n");
-        // Total
-        spannable.append(" ราคารวม : ");// total price
-        spannable.append(getSpannableString(Integer.toString(mTotalFare)));
-        spannable.append("\n");
+//        // Total
+//        spannable.append(" ราคารวม : ");// total price
+//        spannable.append(getSpannableString(Integer.toString(mTotalFare)));
+//        spannable.append("\n");
         spannable.append("      ขอบคุณที่ใช้บริการ");
 
         return spannable;
