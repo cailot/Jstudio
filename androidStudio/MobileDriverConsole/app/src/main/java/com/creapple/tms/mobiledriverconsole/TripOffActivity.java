@@ -37,6 +37,9 @@ import com.firebase.client.ValueEventListener;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -695,6 +698,18 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                     String name = (String) single.get(Constants.FARESTOP_NAME);
                     list.add(new StopGroupVO(index, name));
                 }
+
+                Log.d(LOG_TAG, "Before : " + Arrays.toString(list.toArray()));
+                // Need to sort by sortIndex
+                Collections.sort(list, new Comparator<StopGroupVO>() {
+                    @Override
+                    public int compare(StopGroupVO stop1, StopGroupVO stop2) {
+                        // notice the cast to (Integer) to invoke compareTo
+                        return ((Integer)stop1.getIndex()).compareTo(stop2.getIndex());
+                    }
+                });
+                Log.d(LOG_TAG, "After : " + Arrays.toString(list.toArray()));
+
                 mStopGroups = new StopGroupVO[list.size()];
                 mStopGroups = list.toArray(mStopGroups);
 //                Log.d(LOG_TAG, Arrays.toString(list.toArray()));

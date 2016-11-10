@@ -73,7 +73,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private int mDestinationGroup; // destination group
 
-    private int mAdultPrice, mSeniorPrice, mStudentPrice; // price per each
+//    private int mAdultPrice, mSeniorPrice, mStudentPrice; // price per each
 
     private int mAdultCount, mSeniorCount, mStudentCount; // count for each
 
@@ -334,7 +334,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     }
 
     private int calculateAdultFare(int destinationGroup) {
-        mAdultPrice = 0;
+//        mAdultPrice = 0;
 
         // 1. get origin group index
         int originGroup = getStopTag(mOriginStop);
@@ -358,17 +358,19 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        mAdultPrice = Integer.parseInt(fares[difference].trim());
+//        mAdultPrice = Integer.parseInt(fares[difference].trim());
+        mAdultTotalFare = Integer.parseInt(fares[difference].trim());
+
 
         //        Log.e(LOG_TAG, "price ==> " + price);
         // 7. check how many passengers need the fare
         // 8. return fare in total
-        mAdultTotalFare = mAdultPrice * 1;
+//        mAdultTotalFare = mAdultPrice * 1;
         return mAdultTotalFare;
     }
 
     private int calculateAdultFare() {
-        mAdultPrice = 0;
+//        mAdultPrice = 0;
 
         // 1. get origin group index
         int originGroup = getStopTag(mOriginStop);
@@ -393,17 +395,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        mAdultPrice = Integer.parseInt(fares[difference].trim());
+        mAdultTotalFare = Integer.parseInt(fares[difference].trim());
 
         // 7. check how many passengers need the fare
         // 8. return fare in total
-        mAdultTotalFare = mAdultPrice * 1;
+//        mAdultTotalFare = mAdultPrice * 1;
         return mAdultTotalFare;
 //        }
     }
 
     private int calculateSeniorFare() {
-        mSeniorPrice = 0;
+//        mSeniorPrice = 0;
         // 1. get origin group index
         int originGroup = getStopTag(mOriginStop);
         // 2. get destination group index
@@ -427,17 +429,17 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        mSeniorPrice = Integer.parseInt(fares[difference].trim());
+        mSeniorTotalFare = Integer.parseInt(fares[difference].trim());
 
         // 7. check how many passengers need the fare
         // 8. return fare in total
-        mSeniorTotalFare = mSeniorPrice * 1;
+//        mSeniorTotalFare = mSeniorPrice * 1;
         return mSeniorTotalFare;
 //        }
     }
 
     private int calculateStudentFare() {
-        mStudentPrice = 0;
+//        mStudentPrice = 0;
 
         // 1. get origin group index
         int originGroup = getStopTag(mOriginStop);
@@ -462,11 +464,11 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
             difference = 0;
         }
         // 6. calculate final fare per person
-        mStudentPrice = Integer.parseInt(fares[difference].trim());
+        mStudentTotalFare = Integer.parseInt(fares[difference].trim());
 
         // 7. check how many passengers need the fare
         // 8. return fare in total
-        mStudentTotalFare = mStudentPrice * 1;
+//        mStudentTotalFare = mStudentPrice * 1;
         return mStudentTotalFare;
 //        }
     }
@@ -476,6 +478,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for origin stop
      */
     private void showOriginDialog() {
+        mPassengerTxt.setText(getResources().getString(R.string.fare_adult_title));
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
         StopDialog stopsDialog = new StopDialog(mNames, mStopGroups);
         // link itself to be updated via 'PassValueFromDialogListener.sendStopName()'
@@ -489,13 +492,13 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      * Pop up dialog for destination stop
      */
     private void showDestinationDialog() {
+        mPassengerTxt.setText(getResources().getString(R.string.fare_adult_title));
         mPriceTxt.setText(getResources().getString(R.string.fare_price_title));
-
         List<String> fareInfo = listAdultFare();
         int[] adultFares = new int[fareInfo.size()];
         String[] fareZones = new String[fareInfo.size()];
         for(int i=0; i<fareInfo.size(); i++){
-            String[] value = StringUtils.split((String)fareInfo.get(i), Constants.FARE_SEPARATOR);
+            String[] value = StringUtils.splitByWholeSeparator((String)fareInfo.get(i), Constants.FARE_SEPARATOR);
             adultFares[i] = Integer.parseInt(value[0]);
             fareZones[i] = value[1];
 //            Log.d(LOG_TAG, adultFares[i] + "\t" + fareZones[i]);
@@ -552,6 +555,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append(groupSO);
 
         mOriginTxt.setText(spannable);
+        mDestinationTxt.setText(getResources().getString(R.string.fare_destination_title));
+        mPassengerTxt.setClickable(false);
+        mPaymentTxt.setClickable(false);
     }
 
     @Override
@@ -570,8 +576,21 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         nameSD.setSpan(new ForegroundColorSpan(Color.WHITE), 0, zone.length(), 0);
         nameSD.setSpan(new StyleSpan(Typeface.BOLD), 0, zone.length(), 0);
         spannable.append(nameSD);
+
+//        mAdultPrice = fare;
+        mAdultTotalFare = fare;
+//        mSeniorPrice = 0;
+        mSeniorTotalFare = 0;
+//        mStudentPrice = 0;
+        mStudentTotalFare = 0;
+        mAdultCount = 1;
+        mSeniorCount = 0;
+        mStudentCount = 0;
+
         mDestinationTxt.setText(spannable);
+        updateFareText(fare);
         mPassengerTxt.setClickable(true);
+        mPaymentTxt.setClickable(true);
     }
 
     /**
@@ -586,9 +605,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         switch (requestCode) {
             case Constants.ADULT_FARE_REQUEST:
                 name = getString(R.string.fare_adult_title);
-                mSeniorPrice = 0;
+//                mSeniorPrice = 0;
                 mSeniorTotalFare = 0;
-                mStudentPrice = 0;
+//                mStudentPrice = 0;
                 mStudentTotalFare = 0;
                 mAdultCount = 1;
                 mSeniorCount = 0;
@@ -597,9 +616,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 break;
             case Constants.SENIOR_FARE_REQUEST:
                 name = getString(R.string.fare_senior_title);
-                mAdultPrice = 0;
+//                mAdultPrice = 0;
                 mAdultTotalFare = 0;
-                mStudentPrice = 0;
+//                mStudentPrice = 0;
                 mStudentTotalFare = 0;
                 mAdultCount = 0;
                 mSeniorCount = 1;
@@ -608,9 +627,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
                 break;
             case Constants.STUDENT_FARE_REQUEST:
                 name = getString(R.string.fare_student_title);
-                mAdultPrice = 0;
+//                mAdultPrice = 0;
                 mAdultTotalFare = 0;
-                mSeniorPrice = 0;
+//                mSeniorPrice = 0;
                 mSeniorTotalFare = 0;
                 mAdultCount = 0;
                 mSeniorCount = 0;
@@ -630,6 +649,14 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
      */
     public void updateFareText() {
         String price = " ฿ " + mTotalFare + "";
+        SpannableString fare = new SpannableString(price);
+        fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
+        fare.setSpan(new StyleSpan(Typeface.BOLD), 0, price.length(), 0);
+        mPriceTxt.setText(fare);
+    }
+
+    private void updateFareText(int cost) {
+        String price = " ฿ " + cost + "";
         SpannableString fare = new SpannableString(price);
         fare.setSpan(new RelativeSizeSpan(2f), 0, price.length(), 0);
         fare.setSpan(new StyleSpan(Typeface.BOLD), 0, price.length(), 0);
@@ -730,19 +757,21 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         spannable.append("   ปลายทาง : ");
         spannable.append(getSpannableString(mDestinationZone));
         spannable.append("\n");
-        spannable.append(" ค่าโดยสารรวมผู้ใหญ่ : ");// sum
-        spannable.append(getSpannableString(Integer.toString(mAdultTotalFare)));
-        spannable.append("\n");
-        spannable.append(" ค่าโดยสารอาวุโสทั้งหมด : ");
-        spannable.append(getSpannableString(Integer.toString(mSeniorTotalFare)));
-        spannable.append("\n");
-        spannable.append(" นักเรียนราคารวม : ");
-        spannable.append(getSpannableString(Integer.toString(mStudentTotalFare)));
-        spannable.append("\n");
-//        // Total
-//        spannable.append(" ราคารวม : ");// total price
-//        spannable.append(getSpannableString(Integer.toString(mTotalFare)));
-//        spannable.append("\n");
+        if(mAdultCount > 0) {
+            spannable.append(" ค่าโดยสารรวมผู้ใหญ่ : ");// sum
+            spannable.append(getSpannableString(Integer.toString(mAdultTotalFare)));
+            spannable.append("\n");
+        }
+        if(mSeniorCount > 0) {
+            spannable.append(" ค่าโดยสารอาวุโสทั้งหมด : ");
+            spannable.append(getSpannableString(Integer.toString(mSeniorTotalFare)));
+            spannable.append("\n");
+        }
+        if(mStudentCount > 0) {
+            spannable.append(" นักเรียนราคารวม : ");
+            spannable.append(getSpannableString(Integer.toString(mStudentTotalFare)));
+            spannable.append("\n");
+        }
         spannable.append("      ขอบคุณที่ใช้บริการ");
 
         return spannable;

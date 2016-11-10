@@ -145,29 +145,29 @@ public class PrinterAdapter {
             hsBluetoothPrintDriver.printString(title);
 
             //line1
-            String date = StringUtils.defaultString(map.get(Constants.PRINT_DATE).toString());//"26/07/2016 17.17";
+            String date = StringUtils.defaultString(map.get(Constants.PRINT_DATE).toString(), Constants.PRINT_NO_DATE);//"26/07/2016 17.17";
             String line1 = "\n" + "         วันที่ " + date + "\n";
 
             //line 2
-            String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString());;//"554F";
-            String bus = StringUtils.defaultString(map.get(Constants.PRINT_BUS).toString());//"SV580004";
+            String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString(), Constants.PRINT_NO_ROUTE);;//"554F";
+            String bus = StringUtils.defaultString(map.get(Constants.PRINT_BUS).toString(), Constants.PRINT_NO_BUS);//"SV580004";
             String line2 = "สาย: " + route + "    " + "หมายเลขรถ: " + bus;
             line2 = getThaiFormat(line2);
 
             //line 3
-            String trip = StringUtils.defaultString(map.get(Constants.TRIP_PATH).toString());// 201610180615_SV123456
+            String trip = StringUtils.defaultString(map.get(Constants.TRIP_PATH).toString(), Constants.PRINT_NO_TRIP_PATH);// 201610180615_SV123456
             String line3 = "การเดินทาง: " + trip;
             line3 = getThaiFormat(line3);
 
             //line 4
-            String ticketNum = StringUtils.defaultString(map.get(Constants.PRINT_TICKET_TOTAL_NUMBER).toString());// 89
+            String ticketNum = StringUtils.defaultString(map.get(Constants.PRINT_TICKET_TOTAL_NUMBER).toString(), Constants.PRINT_NO_TICKET_TOTAL_NUMBER);// 89
             String line4 = "                  นับตั๋ว: " + ticketNum;
-            line3 = getThaiFormat(line4);
+            line4 = getThaiFormat(line4);
 
             //line 5
-            String fareSum = StringUtils.defaultString(map.get(Constants.PRINT_FARE_TOTAL).toString());// 3782
+            String fareSum = StringUtils.defaultString(map.get(Constants.PRINT_FARE_TOTAL).toString(), Constants.PRINT_NO_FARE_TOTAL);// 3782
             String line5 = "                  ผลรวมค่าโดยสาร: " + fareSum;
-            line3 = getThaiFormat(line5);
+            line5 = getThaiFormat(line5);
 
             //line 7
             byte[] line7_vowelByteArray0 = (new byte[]{(byte) 0xD8}); //ุ
@@ -217,56 +217,59 @@ public class PrinterAdapter {
             hsBluetoothPrintDriver.printString(PREMIUM);
 
             //line1
-            String ticketNumber = StringUtils.defaultString(map.get(Constants.PRINT_TICKET_NUMBER).toString());//"00012";
-            String date = StringUtils.defaultString(map.get(Constants.PRINT_DATE).toString());//"26/07/2016 17.17";
+            String ticketNumber = StringUtils.defaultString(map.get(Constants.PRINT_TICKET_NUMBER).toString(), Constants.PRINT_NO_TICKET_NUMBER);//"00012";
+            String date = StringUtils.defaultString(map.get(Constants.PRINT_DATE).toString(), Constants.PRINT_NO_DATE);//"26/07/2016 17.17";
             byte[] ticket_vowelByteArray = (new byte[]{(byte) 0x95}); // ํ๋
             byte[] date_vowelByteArray = (new byte[]{(byte) 0xD1}); // ั
             String vowel = "       " + new String(ticket_vowelByteArray, CHARSET) + "            " + new String(date_vowelByteArray, CHARSET);
             String ticket_out = "หมายเลขตว: " + ticketNumber;
             String date_out = "วนเวลา: " + date;
             String line1 = vowel + "\n" + ticket_out + "    " + date_out + "\n";
-//            Log.d("#######", line1);
-
-
 
             //line 2
-            String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString());;//"554F";
-            String bus = StringUtils.defaultString(map.get(Constants.PRINT_BUS).toString());//"SV580004";
+            String route = StringUtils.defaultString(map.get(Constants.PRINT_ROUTE).toString(), Constants.PRINT_NO_ROUTE);;//"554F";
+            String bus = StringUtils.defaultString(map.get(Constants.PRINT_BUS).toString(), Constants.PRINT_NO_BUS);//"SV580004";
             String line2 = "สาย: " + route + "    " + "หมายเลขรถ: " + bus;
             line2 = getThaiFormat(line2);
 
             //line 3
-            String from = StringUtils.defaultString(map.get(Constants.PRINT_FROM).toString());;//"ด่านทับช้าง";
-            String to = StringUtils.defaultString(map.get(Constants.PRINT_TO).toString());;//"เมืองทอง";
+            String from = StringUtils.defaultString(map.get(Constants.PRINT_FROM).toString(), Constants.PRINT_NO_FROM);;//"ด่านทับช้าง";
+            String to = StringUtils.defaultString(map.get(Constants.PRINT_TO).toString(), Constants.PRINT_NO_TO);;//"เมืองทอง";
             String line3 = "ต้นทาง: " + from + "    " + "ปลายทาง: " + to;
             line3 = getThaiFormat(line3);
 
             //line 4
-//            String numberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_NUMBER_OF_PERSON).toString());//"2";
-//            String farePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_FARE_PER_PERSON).toString());//"20";
-//            String total = StringUtils.defaultString(map.get(Constants.PRINT_TOTAL).toString());//"40";
-//            String line4 = "จำนวน: " + numberOfPerson + "     " + "ราคาต่อคน: " + farePerPerson + "    " + "ราคารวม: " + total;
-//            line4 = getThaiFormat(line4);
-            String adultNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());//"2";
-            String adultFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_FARE_PER_PERSON).toString());//"20";
-            String adultTotal = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_TOTAL).toString());//"40";
-//            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ผราคาของผู้ใหญ่: " + adultFarePerPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
-            String line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
-            line4 = getThaiFormat(line4);
+            String line4 = "";
+            int adultCount = Integer.parseInt(StringUtils.defaultString(map.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString(),"0"));
+            boolean isAdult = (adultCount > 0);
+            if(isAdult) {
+                String adultNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString(), Constants.PRINT_NO_ADULT_NUMBER_OF_PERSON);//"2";
+                String adultTotal = StringUtils.defaultString(map.get(Constants.PRINT_ADULT_TOTAL).toString(), Constants.PRINT_NO_ADULT_TOTAL);//"40";
+                line4 = "จำนวนผู้ใหญ่: " + adultNumberOfPerson + "  " + "ค่าโดยสารรวมผู้ใหญ่: " + adultTotal;
+                line4 = getThaiFormat(line4);
+            }
 
-            String seniorNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString());//"2";
-            String seniorFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_FARE_PER_PERSON).toString());//"20";
-            String seniorTotal = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_TOTAL).toString());//"40";
-//            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ราคาของอาวุโส: " + seniorFarePerPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
-            String line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
-            line5 = getThaiFormat(line5);
+            //line 5
+            String line5 = "";
+            int seniorCount = Integer.parseInt(StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString(),"0"));
+            boolean isSenior = (seniorCount > 0);
+            if(isSenior) {
+                String seniorNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString(), Constants.PRINT_NO_SENIOR_NUMBER_OF_PERSON);//"2";
+                String seniorTotal = StringUtils.defaultString(map.get(Constants.PRINT_SENIOR_TOTAL).toString(), Constants.PRINT_NO_SENIOR_TOTAL);//"40";
+                line5 = "จำนวนอาวุโส: " + seniorNumberOfPerson + "  " + "ค่าโดยสารอาวุโสทั้งหมด: " + seniorTotal;
+                line5 = getThaiFormat(line5);
+            }
 
-            String studentNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString());//"2";
-            String studentFarePerPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_FARE_PER_PERSON).toString());//"20";
-            String studentTotal = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_TOTAL).toString());//"40";
-//            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "ค่าโดยสารนักเรียน: " + studentFarePerPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
-            String line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
-            line6 = getThaiFormat(line6);
+            //line 6
+            String line6 = "";
+            int studentCount = Integer.parseInt(StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString(),"0"));
+            boolean isStudent = (studentCount > 0);
+            if(isStudent) {
+                String studentNumberOfPerson = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_NUMBER_OF_PERSON).toString(), Constants.PRINT_NO_STUDENT_NUMBER_OF_PERSON);//"2";
+                String studentTotal = StringUtils.defaultString(map.get(Constants.PRINT_STUDENT_TOTAL).toString(), Constants.PRINT_NO_STUDENT_TOTAL);//"40";
+                line6 = "จำนวนนักเรียน: " + studentNumberOfPerson + "  " + "นักเรียนราคารวม: " + studentTotal;
+                line6 = getThaiFormat(line6);
+            }
 
             //line 7
             byte[] line7_vowelByteArray0 = (new byte[]{(byte) 0xD8}); //ุ
@@ -283,9 +286,15 @@ public class PrinterAdapter {
             hsBluetoothPrintDriver.printString(line1);
             hsBluetoothPrintDriver.printString(line2);
             hsBluetoothPrintDriver.printString(line3);
-            hsBluetoothPrintDriver.printString(line4);
-            hsBluetoothPrintDriver.printString(line5);
-            hsBluetoothPrintDriver.printString(line6);
+            if(isAdult){
+                hsBluetoothPrintDriver.printString(line4);
+            }
+            if(isSenior){
+                hsBluetoothPrintDriver.printString(line5);
+            }
+            if(isStudent){
+                hsBluetoothPrintDriver.printString(line6);
+            }
             hsBluetoothPrintDriver.printString(line7);
             hsBluetoothPrintDriver.SetHRIPosition((byte) 0x02);
             hsBluetoothPrintDriver.LF();

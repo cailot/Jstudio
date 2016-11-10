@@ -202,6 +202,36 @@ public interface Constants {
 
     public static final String PRINT_FARE_TOTAL = "print_fare_total";
 
+    public static final String PRINT_NO_TICKET_NUMBER = "No Ticket Number";
+
+    public static final String PRINT_NO_DATE = "No Date";
+
+    public static final String PRINT_NO_ROUTE = "No Route";
+
+    public static final String PRINT_NO_BUS = "No Vehicle";
+
+    public static final String PRINT_NO_FROM = "No Origin Stop";
+
+    public static final String PRINT_NO_TO = "No Destination Zone";
+
+    public static final String PRINT_NO_ADULT_NUMBER_OF_PERSON = "No Adult Number";
+
+    public static final String PRINT_NO_ADULT_TOTAL = "No Adult Fare";
+
+    public static final String PRINT_NO_SENIOR_NUMBER_OF_PERSON = "No Senior Number";
+
+    public static final String PRINT_NO_SENIOR_TOTAL = "No Senior Fare";
+
+    public static final String PRINT_NO_STUDENT_NUMBER_OF_PERSON = "No Student Number";
+
+    public static final String PRINT_NO_STUDENT_TOTAL = "No Student Fare";
+
+    public static final String PRINT_NO_TRIP_PATH = "NO Trip Path";
+
+    public static final String PRINT_NO_TICKET_TOTAL_NUMBER = "NO Ticket Total Number";
+
+    public static final String PRINT_NO_FARE_TOTAL = "NO FARE TOTAL";
+
 
 
 
