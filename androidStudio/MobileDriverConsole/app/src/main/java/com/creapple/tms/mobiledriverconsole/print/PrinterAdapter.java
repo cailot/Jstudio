@@ -64,7 +64,6 @@ public class PrinterAdapter {
         this.bluetoothAdapter = bluetoothAdapter;
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         outter:for(BluetoothDevice device : devices){
-
             ParcelUuid[] uuids = device.getUuids();
             for(ParcelUuid parcelUuid: uuids){
                 Log.e(LOG_TAG, device.getName() + "\t" + device.getAddress() + "\t" + parcelUuid);

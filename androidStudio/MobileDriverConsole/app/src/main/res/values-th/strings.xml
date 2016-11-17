@@ -46,6 +46,7 @@
     <string name="trip_off_wait">โปรดรอสักครู่...</string>
     <string name="trip_off_log_out">ออกจากระบบ</string>
     <string name="trip_off_trip_on">เริ่มเดินทาง</string>
+    <string name="trip_off_process">ที่เริ่มต้น...</string>
 
     <!-- MDC Main -->
     <string name="gps_permission_check">ต้องเปิดใช้ GPS เพื่อเริ่มทำงาน</string>

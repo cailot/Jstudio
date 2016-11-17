@@ -237,7 +237,10 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                 logOut();
                 break;
             case R.id.trip_off_tripon_btn :
-//                Log.d(LOG_TAG, "TripOn Event");
+                // prevent double click
+                mTripOnTxt.setClickable(false);
+                mTripOnTxt.setText(getString(R.string.trip_off_process));
+//                mTripOnTxt.setTextColor(Color.BLACK);
                 turnOnTripOn();
                 break;
         }
@@ -267,7 +270,6 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         saveStopGroupsDetail();
         // save fares into SharedPreferences
         saveFaresDetail();
-
 
         // update DB to indicate starting
         setTripOn();

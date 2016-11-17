@@ -47,6 +47,7 @@
     <string name="trip_off_wait">Please Wait...</string>
     <string name="trip_off_log_out">LOG OUT</string>
     <string name="trip_off_trip_on">TRIP ON</string>
+    <string name="trip_off_process">STARTING...</string>
 
     <!-- MDC Main -->
     <string name="gps_permission_check">GPS permission is required to proceed service</string>
