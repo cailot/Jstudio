@@ -53,7 +53,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
 
     private static final String LOG_TAG = MDCUtils.getLogTag(TripOffActivity.class);
 
-//    private Logger logger = Log÷ger.getLogger(LOG_TAG);
+//    private Logger logger = Logger.getLogger(LOG_TAG);
 
     private TextView mRouteTxt, mVehicleTxt, mLogoutTxt, mTripOnTxt;
 

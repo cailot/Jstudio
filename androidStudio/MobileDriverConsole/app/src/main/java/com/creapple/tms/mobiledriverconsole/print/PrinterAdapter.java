@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ParcelUuid;
+import android.util.Log;
 
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
@@ -34,23 +36,43 @@ public class PrinterAdapter {
 
     private static String CHARSET = "Windows-874";
 
+    private static String UUID_TEST = "00001101-0000-1000-8000-00805F9B34FB";
+
 //    private Logger logger = Logger.getLogger(LOG_TAG);
 
     PrinterViewAction viewAction;
 
     BluetoothAdapter bluetoothAdapter;
 
+
+//    public PrinterAdapter(PrinterViewAction viewAction, BluetoothAdapter bluetoothAdapter){
+//        this.viewAction = viewAction;
+//        this.bluetoothAdapter = bluetoothAdapter;
+//        Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+//        for(BluetoothDevice device : devices){
+//            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
+//            if(device.getName().equalsIgnoreCase("820USEB")){
+////                Toast.makeText(mContext, "1. 820UEB is found", Toast.LENGTH_SHORT).show();
+//                connectBluetooth(device);
+//                return;
+//            }
+//        }
+//    }
+
     public PrinterAdapter(PrinterViewAction viewAction, BluetoothAdapter bluetoothAdapter){
         this.viewAction = viewAction;
-
         this.bluetoothAdapter = bluetoothAdapter;
-
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-        for(BluetoothDevice device : devices){
-//            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
-            if(device.getName().equalsIgnoreCase("820USEB")){
-                connectBluetooth(device);
-                return;
+        outter:for(BluetoothDevice device : devices){
+
+            ParcelUuid[] uuids = device.getUuids();
+            for(ParcelUuid parcelUuid: uuids){
+                Log.e(LOG_TAG, device.getName() + "\t" + device.getAddress() + "\t" + parcelUuid);
+                if(parcelUuid.toString().equalsIgnoreCase(UUID_TEST)){
+                    connectBluetooth(device);
+                    Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress() + "\t" + parcelUuid);
+                    break outter;
+                }
             }
         }
     }
@@ -61,6 +83,9 @@ public class PrinterAdapter {
         hsBluetoothPrintDriver.setHandler(connStateHandler);
         hsBluetoothPrintDriver.start();
         hsBluetoothPrintDriver.connect(bluetoothDevice);
+
+//        Toast.makeText(mContext, "2. 820UEB is connected", Toast.LENGTH_SHORT).show();
+
     }
 
     public void stopConnection(){
@@ -132,6 +157,11 @@ public class PrinterAdapter {
     }
 
     public void printTripOff(Map map){
+
+
+//        Toast.makeText(mContext, "3. printTripOff() starts", Toast.LENGTH_SHORT).show();
+
+
         HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
         hsBluetoothPrintDriver.Begin();
         hsBluetoothPrintDriver.setCharsetName(CHARSET);
@@ -203,6 +233,8 @@ public class PrinterAdapter {
     }
 
     public void printTicket(Map map) {
+
+//        Toast.makeText(mContext, "4. printTicket() starts", Toast.LENGTH_SHORT).show();
 
         HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
         hsBluetoothPrintDriver.Begin();

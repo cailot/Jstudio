@@ -55,7 +55,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
     private TextView mPriceTxt, mOriginTxt, mDestinationTxt, mPassengerTxt, mPaymentTxt;
 
-    Context mContext;
+    public Context mContext;
 
     private StopVO[] mStops; // all stops info as array
 
