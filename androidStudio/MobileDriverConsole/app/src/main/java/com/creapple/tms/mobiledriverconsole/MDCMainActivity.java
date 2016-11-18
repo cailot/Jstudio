@@ -127,11 +127,6 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
      */
     private PrinterAdapter mPrinterAdapter;
 
-    /**
-     * PrinterAdapter shared by FareFragment & SettingFragment
-     */
-    private PrinterAdapter mPrinterAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,10 +172,6 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         // register trip info
         registerTripInfo();
         
-        // set up bluetooth printer
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
-
         // set up bluetooth printer
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
@@ -777,18 +768,6 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         txUpdate.updateChildren(fares);
     }
     
-    /**
-     * Return the instance of PrinterAdatper
-     * @return
-     */
-    public PrinterAdapter getPrinterAdapter(){
-    	if(mPrinterAdapter==null){
-    		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-    		mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
-    	}
-    	return mPrinterAdapter;
-    }
-
     /**
      * Return the instance of PrinterAdatper
      * @return
