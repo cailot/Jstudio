@@ -121,6 +121,11 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
     private Firebase mFirebase;
 
     private String mTripPath;
+    
+    /**
+     * PrinterAdapter shared by FareFragment & SettingFragment
+     */
+    private PrinterAdapter mPrinterAdapter;
 
     /**
      * PrinterAdapter shared by FareFragment & SettingFragment
@@ -171,6 +176,10 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
 
         // register trip info
         registerTripInfo();
+        
+        // set up bluetooth printer
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
 
         // set up bluetooth printer
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -766,6 +775,18 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         fares.put(Constants.TRIP_PASSENGER_SUM, mPassengerCountSum);
         fares.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
         txUpdate.updateChildren(fares);
+    }
+    
+    /**
+     * Return the instance of PrinterAdatper
+     * @return
+     */
+    public PrinterAdapter getPrinterAdapter(){
+    	if(mPrinterAdapter==null){
+    		BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    		mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+    	}
+    	return mPrinterAdapter;
     }
 
     /**
