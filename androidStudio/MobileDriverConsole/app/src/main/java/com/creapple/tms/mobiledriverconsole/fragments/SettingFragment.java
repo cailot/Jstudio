@@ -1,6 +1,5 @@
 package com.creapple.tms.mobiledriverconsole.fragments;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.dialog.LogOutDialog;
 import com.creapple.tms.mobiledriverconsole.dialog.TripOffDialog;
 import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
-import com.creapple.tms.mobiledriverconsole.print.PrinterViewAction;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.LocaleHelper;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
@@ -37,7 +35,7 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class SettingFragment extends Fragment implements PrinterViewAction{
+public class SettingFragment extends Fragment{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(SettingFragment.class);
 
@@ -76,8 +74,9 @@ public class SettingFragment extends Fragment implements PrinterViewAction{
         initialiseUI(view);
 
         // set up bluetooth printer
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+//        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+        mPrinterAdapter = mActivity.getPrinterAdapter();
 
         return view;
     }
@@ -294,13 +293,4 @@ public class SettingFragment extends Fragment implements PrinterViewAction{
         mDriverImg.setImageResource(R.drawable.driver_off);
     }
 
-    @Override
-    public void showConnected() {
-
-    }
-
-    @Override
-    public void showFailed() {
-
-    }
 }

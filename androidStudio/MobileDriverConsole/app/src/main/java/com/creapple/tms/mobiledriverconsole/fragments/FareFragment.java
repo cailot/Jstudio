@@ -1,7 +1,6 @@
 package com.creapple.tms.mobiledriverconsole.fragments;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -28,7 +27,6 @@ import com.creapple.tms.mobiledriverconsole.dialog.ZoneDialog;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopGroupVO;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
 import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
-import com.creapple.tms.mobiledriverconsole.print.PrinterViewAction;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.google.gson.Gson;
@@ -47,7 +45,7 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 6. 25..
  */
-public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, ZoneDialog.PassValueFromZoneDialogListener, PassengerDialog.PassValueFromPassengerDialogListener, PrinterViewAction {
+public class FareFragment extends Fragment implements StopDialog.PassValueFromStopDialogListener, ZoneDialog.PassValueFromZoneDialogListener, PassengerDialog.PassValueFromPassengerDialogListener {
 
     private static final String LOG_TAG = MDCUtils.getLogTag(FareFragment.class);
 
@@ -101,8 +99,9 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
         // load Stops info
         initialiseInfo();
         // set up bluetooth printer
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+//        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+        mPrinterAdapter = mMainActivity.getPrinterAdapter();
 
         return view;
     }
@@ -695,18 +694,6 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 //        Log.d(LOG_TAG, "Adult " + ArrayUtils.toString(mAdultFares));
 //        Log.d(LOG_TAG, "Senior " + ArrayUtils.toString(mSeniorFares));
 //        Log.d(LOG_TAG, "Student " + ArrayUtils.toString(mStudentFares));
-    }
-
-
-    @Override
-    public void showConnected() {
-//        Log.d(LOG_TAG, "Printer connected");
-    }
-
-
-    @Override
-    public void showFailed() {
-//        Log.d(LOG_TAG, "Printer connection fails");
     }
 
 

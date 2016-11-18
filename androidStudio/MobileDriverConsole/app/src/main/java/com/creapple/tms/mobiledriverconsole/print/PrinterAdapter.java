@@ -44,21 +44,6 @@ public class PrinterAdapter {
 
     BluetoothAdapter bluetoothAdapter;
 
-
-//    public PrinterAdapter(PrinterViewAction viewAction, BluetoothAdapter bluetoothAdapter){
-//        this.viewAction = viewAction;
-//        this.bluetoothAdapter = bluetoothAdapter;
-//        Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
-//        for(BluetoothDevice device : devices){
-//            Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress());
-//            if(device.getName().equalsIgnoreCase("820USEB")){
-////                Toast.makeText(mContext, "1. 820UEB is found", Toast.LENGTH_SHORT).show();
-//                connectBluetooth(device);
-//                return;
-//            }
-//        }
-//    }
-
     public PrinterAdapter(PrinterViewAction viewAction, BluetoothAdapter bluetoothAdapter){
         this.viewAction = viewAction;
         this.bluetoothAdapter = bluetoothAdapter;
@@ -82,9 +67,6 @@ public class PrinterAdapter {
         hsBluetoothPrintDriver.setHandler(connStateHandler);
         hsBluetoothPrintDriver.start();
         hsBluetoothPrintDriver.connect(bluetoothDevice);
-
-//        Toast.makeText(mContext, "2. 820UEB is connected", Toast.LENGTH_SHORT).show();
-
     }
 
     public void stopConnection(){
@@ -156,10 +138,6 @@ public class PrinterAdapter {
     }
 
     public void printTripOff(Map map){
-
-
-//        Toast.makeText(mContext, "3. printTripOff() starts", Toast.LENGTH_SHORT).show();
-
 
         HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
         hsBluetoothPrintDriver.Begin();

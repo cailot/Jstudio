@@ -2,6 +2,7 @@ package com.creapple.tms.mobiledriverconsole;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,8 @@ import com.creapple.tms.mobiledriverconsole.geofencing.GeofenceService;
 import com.creapple.tms.mobiledriverconsole.model.MDCViewPager;
 import com.creapple.tms.mobiledriverconsole.model.vo.StopVO;
 import com.creapple.tms.mobiledriverconsole.model.vo.TransactionVO;
+import com.creapple.tms.mobiledriverconsole.print.PrinterAdapter;
+import com.creapple.tms.mobiledriverconsole.print.PrinterViewAction;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
 import com.creapple.tms.mobiledriverconsole.utils.MDCUtils;
 import com.firebase.client.Firebase;
@@ -46,7 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MDCMainActivity extends FullScreeenActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class MDCMainActivity extends FullScreeenActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, PrinterViewAction{
 
     private static final String LOG_TAG = MDCUtils.getLogTag(MDCMainActivity.class);
 
@@ -119,6 +122,11 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
 
     private String mTripPath;
 
+    /**
+     * PrinterAdapter shared by FareFragment & SettingFragment
+     */
+    private PrinterAdapter mPrinterAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +172,10 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         // register trip info
         registerTripInfo();
 
+        // set up bluetooth printer
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+
     }
 
 
@@ -198,7 +210,8 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
     @Override
     protected void onStop() {
         super.onStop();
-//        Log.d(LOG_TAG, "onStop()");
+        // stop connection to BluetoothPrinter
+        mPrinterAdapter.stopConnection();
     }
 
 
@@ -211,6 +224,16 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         }
         super.onDestroy();
 //        Log.d(LOG_TAG, "onDestroy()");
+    }
+
+    @Override
+    public void showConnected() {
+        // just implement PrinterViewAction
+    }
+
+    @Override
+    public void showFailed() {
+        // just implement PrinterViewAction
     }
 
 
@@ -505,15 +528,15 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         ArrayList<Geofence> list = new ArrayList<Geofence>();
         for(StopVO stop : mStops){
             list.add(new Geofence.Builder()
-                .setRequestId(stop.getName())
-                .setCircularRegion(
-                        stop.getLat(), stop.getLon(),
-                        Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-                .setNotificationResponsiveness(Constants.GEOFENCE_NOTIFICATION_RESPONSIVENESS)
-                .build()
+                    .setRequestId(stop.getName())
+                    .setCircularRegion(
+                            stop.getLat(), stop.getLon(),
+                            Constants.GEOFENCE_RADIUS_IN_METERS
+                    )
+                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .setNotificationResponsiveness(Constants.GEOFENCE_NOTIFICATION_RESPONSIVENESS)
+                    .build()
             );
         }
         return list;
@@ -743,6 +766,18 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
         fares.put(Constants.TRIP_PASSENGER_SUM, mPassengerCountSum);
         fares.put(Constants.TRIP_UPDATED, ServerValue.TIMESTAMP);
         txUpdate.updateChildren(fares);
+    }
+
+    /**
+     * Return the instance of PrinterAdatper
+     * @return
+     */
+    public PrinterAdapter getPrinterAdapter(){
+        if(mPrinterAdapter==null){
+            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+        }
+        return mPrinterAdapter;
     }
 
 //
