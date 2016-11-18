@@ -122,7 +122,7 @@ public class MDCMainActivity extends FullScreeenActivity implements GoogleApiCli
     /**
      * PrinterAdapter shared by FareFragment & SettingFragment
      */
-    
+    private PrinterAdapter mPrinterAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
