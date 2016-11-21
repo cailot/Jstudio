@@ -238,7 +238,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
                 break;
             case R.id.trip_off_tripon_btn :
                 // prevent double click
-                mTripOnTxt.setClickable(false);
+                mTripOnTxt.setEnabled(false);
                 mTripOnTxt.setText(getString(R.string.trip_off_process));
 //                mTripOnTxt.setTextColor(Color.BLACK);
                 turnOnTripOn();
@@ -422,6 +422,7 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         mVehicleTxt.setText(spannable);
 
         // change color of Trip On button
+        mTripOnTxt.setEnabled(true);
         mTripOnTxt.setTextColor(Color.WHITE);
     }
 
@@ -816,8 +817,8 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mTripOnTxt.setEnabled(true);
-//            mTripOnTxt.setTextColor(Color.WHITE);
+            mTripOnTxt.setEnabled(false);
+            mTripOnTxt.setTextColor(Color.BLACK);
         }
     }
 }

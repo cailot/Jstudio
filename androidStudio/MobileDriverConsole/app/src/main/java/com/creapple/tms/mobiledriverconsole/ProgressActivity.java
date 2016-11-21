@@ -20,6 +20,8 @@ public class ProgressActivity extends AppCompatActivity {
             mProgressDialog.setMessage("Loading...");
             mProgressDialog.setIndeterminate(true);
         }
+        // prevent background click, which results in disappearing Dialog
+        mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
     }
 
