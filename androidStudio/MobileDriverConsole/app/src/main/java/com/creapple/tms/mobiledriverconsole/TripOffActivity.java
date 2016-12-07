@@ -669,24 +669,6 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
      * Bring stop groups info - fareStops - from firebase and save into Arraylist
      */
     private void getStopGroupsDetail(){
-//        Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareStops");
-//        Query queryRef = ref.orderByKey();
-//        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                List<StopGroupVO> list = new ArrayList<StopGroupVO>();
-//                for(DataSnapshot shot : dataSnapshot.getChildren()){
-//                    list.add(new StopGroupVO(Integer.parseInt(shot.getKey()), shot.getValue()+""));
-//                }
-//                mStopGroups = new StopGroupVO[list.size()];
-//                mStopGroups = list.toArray(mStopGroups);
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
         Firebase ref = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_FARE_LIST_PATH + "/" + mRouteId +"/fareStops");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
