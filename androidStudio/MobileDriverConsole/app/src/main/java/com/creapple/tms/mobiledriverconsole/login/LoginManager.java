@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.creapple.tms.mobiledriverconsole.ProgressActivity;
@@ -37,9 +36,11 @@ import java.util.Map;
  */
 public class LoginManager extends ProgressActivity {
 
-    private EditText mEmailTxt, mPasswordTxt;
+    private EditText mPinTxt, mPasswordTxt;
 
-    private ImageView mLoginImg;
+    private Button[] mButton;
+
+//    private ImageView mLoginImg;
 
     // this is reported bug that 'onAuthStateChanged()' called twice times.
     // http://stackoverflow.com/questions/37674823/firebase-android-onauthstatechanged-fire-twice-after-signinwithemailandpasswor
@@ -57,19 +58,30 @@ public class LoginManager extends ProgressActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        Log.d(LOG_TAG, "Start");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
-        mEmailTxt = (EditText) findViewById(R.id.log_in_email_txt);
+        mPinTxt = (EditText) findViewById(R.id.log_in_pin_txt);
         mPasswordTxt = (EditText) findViewById(R.id.log_in_password_txt);
-        mLoginImg = (ImageView) findViewById(R.id.log_in_img);
-        mLoginImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logIn(mEmailTxt.getText().toString(), mPasswordTxt.getText().toString());
-            }
-        });
+        mPinTxt.requestFocus();
+        mButton = new Button[12];
+        mButton[0] = (Button) findViewById(R.id.login_btn_0);
+        mButton[1] = (Button) findViewById(R.id.login_btn_1);
+        mButton[2] = (Button) findViewById(R.id.login_btn_2);
+        mButton[3] = (Button) findViewById(R.id.login_btn_3);
+        mButton[4] = (Button) findViewById(R.id.login_btn_4);
+        mButton[5] = (Button) findViewById(R.id.login_btn_5);
+        mButton[6] = (Button) findViewById(R.id.login_btn_6);
+        mButton[7] = (Button) findViewById(R.id.login_btn_7);
+        mButton[8] = (Button) findViewById(R.id.login_btn_8);
+        mButton[9] = (Button) findViewById(R.id.login_btn_9);
+        mButton[10] = (Button) findViewById(R.id.login_btn_10); // back
+        mButton[11] = (Button) findViewById(R.id.login_btn_11); // enter
+
+//        Drawable enterImage = getResources().getDrawable(R.drawable.key_enter);
+////        enterImage.setBounds(0,0, (int)(enterImage.getIntrinsicWidth()*0.5), (int)(enterImage.getIntrinsicHeight()*0.5));
+////        ScaleDrawable scaleEnter = new ScaleDrawable(enterImage, 0, enterImage.getIntrinsicWidth(), enterImage.getIntrinsicHeight());
+//        mButton[11].setCompoundDrawables(enterImage, null, null, null);
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener(){
@@ -169,23 +181,38 @@ public class LoginManager extends ProgressActivity {
      */
     private boolean validateForm() {
         boolean valid = true;
-        String email = mEmailTxt.getText().toString();
-        if(TextUtils.isEmpty(email)){
-            mEmailTxt.setError("Required");
-            valid = false;
-        }else if(!StringUtils.contains(email, "@") || !StringUtils.contains(email, ".")) {
-            mEmailTxt.setError("Invalid Email Format");
+//        String email = mEmailTxt.getText().toString();
+//        if(TextUtils.isEmpty(email)){
+//            mEmailTxt.setError("Required");
+//            valid = false;
+//        }else if(!StringUtils.contains(email, "@") || !StringUtils.contains(email, ".")) {
+//            mEmailTxt.setError("Invalid Email Format");
+//            valid = false;
+//        }else{
+//            mEmailTxt.setError(null);
+//        }
+//
+//        String password = mPasswordTxt.getText().toString();
+//        if(TextUtils.isEmpty(password)) {
+//            mPasswordTxt.setError("Required");
+//            valid = false;
+//        }else if(password.length()<6){
+//            mPasswordTxt.setError("Too Short Password");
+//            valid = false;
+//        }else{
+//            mPasswordTxt.setError(null);
+//        }
+        String pinInput = StringUtils.defaultString(mPinTxt.getText().toString()).trim();
+        if(pinInput.length() != 6){
+            mPinTxt.setError("PIN requires 6 Digits");
             valid = false;
         }else{
-            mEmailTxt.setError(null);
+            mPinTxt.setError(null);
         }
 
-        String password = mPasswordTxt.getText().toString();
-        if(TextUtils.isEmpty(password)) {
-            mPasswordTxt.setError("Required");
-            valid = false;
-        }else if(password.length()<6){
-            mPasswordTxt.setError("Too Short Password");
+        String passInput = StringUtils.defaultString(mPasswordTxt.getText().toString()).trim();
+        if(passInput.length() != 6){
+            mPasswordTxt.setError("Password requires 6 Digits");
             valid = false;
         }else{
             mPasswordTxt.setError(null);
@@ -199,7 +226,7 @@ public class LoginManager extends ProgressActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-        mEmailTxt.setError(null);
+        mPinTxt.setError(null);
         mPasswordTxt.setError(null);
     }
 
@@ -259,6 +286,123 @@ public class LoginManager extends ProgressActivity {
                 Intent intent = new Intent(LoginManager.this, TripOffActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        }
+    }
+
+    /** Called when the user touches the button */
+    public void pushButton(View view) {
+        mPinTxt.setError(null);
+        mPasswordTxt.setError(null);
+        int event = view.getId();
+        switch (event){
+            case R.id.login_btn_0 :
+                inputNumber(0);
+                break;
+            case R.id.login_btn_1 :
+                inputNumber(1);
+                break;
+            case R.id.login_btn_2 :
+                inputNumber(2);
+                break;
+            case R.id.login_btn_3 :
+                inputNumber(3);
+                break;
+            case R.id.login_btn_4 :
+                inputNumber(4);
+                break;
+            case R.id.login_btn_5 :
+                inputNumber(5);
+                break;
+            case R.id.login_btn_6 :
+                inputNumber(6);
+                break;
+            case R.id.login_btn_7 :
+                inputNumber(7);
+                break;
+            case R.id.login_btn_8 :
+                inputNumber(8);
+                break;
+            case R.id.login_btn_9 :
+                inputNumber(9);
+                break;
+            case R.id.login_btn_10 : // back
+                backSpace();
+                break;
+            case R.id.login_btn_11 : // enter
+                if(mPinTxt.isFocused()){
+                    // move focus from Pin to Password
+                    mPasswordTxt.requestFocus();
+                }else if(mPasswordTxt.isFocused()){
+                    // submit
+                    logIn("pmbus." + mPinTxt.getText().toString().trim() + "@gmail.com", mPasswordTxt.getText().toString().trim());
+                }
+                break;
+        }
+    }
+
+    /**
+     * When users select any digit from normal keypad
+     * @param num
+     */
+    private void inputNumber(int num){
+        String input = null;
+
+        if(mPinTxt.isFocused()){
+            if(mPinTxt.getText()==null || mPinTxt.getText().toString().trim().equals("")){
+                input = "";
+            }else{
+                input = mPinTxt.getText().toString().trim();
+            }
+            // No more input, if length is already 6
+            if(input.length()>=6){
+                mPinTxt.setError("No More Input");
+            }else{
+                input += num;
+                mPinTxt.setText(input);
+            }
+        }else if(mPasswordTxt.isFocused()){
+            if(mPasswordTxt.getText()==null || mPasswordTxt.getText().toString().trim().equals("")){
+                input = "";
+            }else{
+                input = mPasswordTxt.getText().toString().trim();
+            }
+            // No more input, if length is already 6
+            if(input.length()>=6){
+                mPasswordTxt.setError("No More Input");
+            }else{
+                input += num;
+                mPasswordTxt.setText(input);
+            }
+        }
+
+    }
+
+    /**
+     * When users select backspace key
+     */
+    private void backSpace() {
+        if (mPinTxt.isFocused()) {
+            if (mPinTxt.getText() == null || mPinTxt.getText().toString().trim().equals("") || mPinTxt.getText().length() == 1) {
+                mPinTxt.setText("");
+            } else {
+                String input = mPinTxt.getText().toString().trim();
+                int txtLenght = input.length();
+                if (txtLenght >= 2) {
+                    input = input.substring(0, txtLenght - 1);
+                    mPinTxt.setText(input);
+                }
+            }
+        } else if (mPasswordTxt.isFocused()) {
+            if (mPasswordTxt.getText() == null || mPasswordTxt.getText().toString().trim().equals("") || mPasswordTxt.getText().length() == 1) {
+                mPasswordTxt.setText("");
+            } else {
+                String input = mPasswordTxt.getText().toString().trim();
+                int txtLenght = input.length();
+                if (txtLenght >= 2) {
+                    input = input.substring(0, txtLenght - 1);
+                    mPasswordTxt.setText(input);
+                }
             }
         }
     }

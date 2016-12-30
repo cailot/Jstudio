@@ -2,29 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="#003B6F"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@android:dimen/notification_large_icon_width"
     android:paddingLeft="80dp"
     android:paddingRight="50dp"
-    android:paddingBottom="@android:dimen/notification_large_icon_width"
     android:paddingTop="@dimen/abc_action_bar_progress_bar_size">
 
 
-
     <TextView
+        android:id="@+id/log_in_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Transit Management System"
-        android:id="@+id/log_in_title"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
+        android:paddingBottom="@dimen/abc_action_bar_stacked_max_height"
+        android:text="Transit Management System"
         android:textColor="#ffffff"
-        android:textSize="@dimen/abc_dialog_padding_material"
-        android:paddingBottom="@dimen/abc_action_bar_stacked_max_height" />
-
-
-
+        android:textSize="@dimen/abc_dialog_padding_material" />
 
 
     <LinearLayout
@@ -36,39 +32,35 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_marginRight="50dp"
             android:layout_weight="1.5"
-            android:layout_marginRight="50dp">
+            android:gravity="center"
+            android:orientation="vertical">
 
 
             <EditText
-                android:id="@+id/log_in_email_txt"
+                android:id="@+id/log_in_pin_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:ems="10"
-                android:inputType="textEmailAddress"
-                android:backgroundTint="@color/colorSkyBlue"
-                android:textColorHint="@color/colorWhite"
-                android:focusable="true"
-                android:textColor="@color/colorWhite"
                 android:layout_marginBottom="@dimen/abc_action_bar_stacked_max_height"
-                android:hint="Email" />
+                android:backgroundTint="@color/colorSkyBlue"
+                android:ems="10"
+                android:editable="false"
+                android:hint="Pin Number"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorWhite" />
 
             <EditText
                 android:id="@+id/log_in_password_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:enabled="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/log_in_email_txt"
-                android:textColorHint="@color/colorWhite"
-                android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword"
+                android:layout_marginBottom="@dimen/abc_action_bar_stacked_max_height"
                 android:backgroundTint="@color/colorSkyBlue"
-                android:textColor="@color/colorWhite" />
+                android:ems="10"
+                android:editable="false"
+                android:hint="Password"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorWhite" />
 
 
         </LinearLayout>
@@ -77,29 +69,178 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/bg_navy_rounded_corners">
+            android:gravity="center"
+            android:orientation="horizontal">
 
 
+            <!-- Numeric Key Layout -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.6"
+                android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/log_in_img"
-                android:layout_gravity="center"
-                android:src="@drawable/login"
-                android:layout_marginLeft="@dimen/abc_dialog_padding_material"
-                android:scaleType="centerInside" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/login_btn_1"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="1"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_2"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="00dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="2"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_3"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="3"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/login_btn_4"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="4"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_5"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="00dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="5"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_6"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="6"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/login_btn_7"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="7"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_8"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="00dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="8"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_9"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="9"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/login_btn_10"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:background="@drawable/key_delete"
+                        android:textSize="40dp" />
+
+                    <Button
+                        android:id="@+id/login_btn_0"
+                        style="?android:attr/buttonStyleSmall"
+                        android:layout_width="00dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:text="0"
+                        android:textSize="40dp"
+                        android:background="@drawable/keypad_button_rounded_corners" />
+
+                    <Button
+                        android:id="@+id/login_btn_11"
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="1"
+                        android:onClick="pushButton"
+                        android:background="@drawable/key_enter"
+                        android:textSize="40dp" />
+                </LinearLayout>
+            </LinearLayout>
+
 
         </LinearLayout>
 
 
-
     </LinearLayout>
-
-
 
 
 </LinearLayout>
