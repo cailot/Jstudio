@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class StopVO implements Serializable{
+public class StopVO implements Serializable, Comparable<StopVO>{
     private String direction;
     private int fareStopTag;
     private String id;
@@ -105,5 +105,16 @@ public class StopVO implements Serializable{
         this.name = name;
         this.sortIndex = sortIndex;
         this.type = type;
+    }
+
+    /**
+     * This method will be used for sorting StopVO array by sortIndex
+     * @param stopVO
+     * @return
+     */
+    @Override
+    public int compareTo(StopVO stopVO) {
+        int compareIndex = ((StopVO)stopVO).getSortIndex();
+        return this.sortIndex - compareIndex;
     }
 }

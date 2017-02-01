@@ -47,6 +47,7 @@ import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -295,6 +296,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         SharedPreferences pref = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE);
         String json = pref.getString(key, null);
         StopVO[] stops = new Gson().fromJson(json, StopVO[].class);
+        // make sure sorting by sortIndex for sequential Geofencing
+        Arrays.sort(stops);
         return stops;
     }
 
