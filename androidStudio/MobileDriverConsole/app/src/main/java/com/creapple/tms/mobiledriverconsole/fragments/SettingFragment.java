@@ -63,6 +63,7 @@ public class SettingFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.setting_activity, null);
+
         mContext = container.getContext();
 
         mActivity = (MDCMainActivity) getActivity();

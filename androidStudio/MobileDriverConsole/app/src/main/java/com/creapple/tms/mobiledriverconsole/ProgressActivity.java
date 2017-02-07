@@ -1,13 +1,12 @@
 package com.creapple.tms.mobiledriverconsole;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Created by jinseo on 2016. 7. 26..
  */
-public class ProgressActivity extends AppCompatActivity {
-
+//public class ProgressActivity extends AppCompatActivity {
+public class ProgressActivity extends FullScreeenActivity{
     public ProgressDialog mProgressDialog;
 
 

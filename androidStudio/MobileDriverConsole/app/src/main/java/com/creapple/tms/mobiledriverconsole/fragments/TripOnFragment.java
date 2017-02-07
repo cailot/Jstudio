@@ -111,6 +111,7 @@ public class TripOnFragment extends Fragment implements OnMapReadyCallback, Goog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trip_on_activity, null);
+
         mContext = container.getContext();
 
         // build UI

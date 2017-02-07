@@ -16,6 +16,7 @@ import com.creapple.tms.mobiledriverconsole.R;
  * Created by jinseo on 2016. 7. 8..
  */
 public class SplashActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

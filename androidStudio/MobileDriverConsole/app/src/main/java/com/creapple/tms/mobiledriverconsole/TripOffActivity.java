@@ -390,8 +390,8 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         // enable Trip On button after getting all stop & fare info
         new CheckStopNFareTask().execute();
         // enable Vehicle Txt
-        mVehicleTxt.setEnabled(true);
-        mVehicleTxt.setTextColor(Color.WHITE);
+//        mVehicleTxt.setEnabled(true);
+//        mVehicleTxt.setTextColor(Color.WHITE);
 
     }
 
@@ -438,6 +438,9 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         routeDialog.show(getFragmentManager(), Constants.ROUTE_DIALOG_TAG);
         // rollback original message to Vehicle TextView
         mVehicleTxt.setText(getString(R.string.trip_off_vehicle_title));
+        // disaable Vehicle Txt
+        mVehicleTxt.setEnabled(false);
+        mVehicleTxt.setTextColor(Color.BLACK);
     }
 
 
@@ -799,8 +802,11 @@ public class TripOffActivity extends ProgressActivity implements RouteDialog.Pas
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            mTripOnTxt.setEnabled(false);
-            mTripOnTxt.setTextColor(Color.BLACK);
+            // enable Vehicle Txt
+            mVehicleTxt.setEnabled(true);
+            mVehicleTxt.setTextColor(Color.WHITE);
+//            mTripOnTxt.setEnabled(false);
+//            mTripOnTxt.setTextColor(Color.BLACK);
         }
     }
 }

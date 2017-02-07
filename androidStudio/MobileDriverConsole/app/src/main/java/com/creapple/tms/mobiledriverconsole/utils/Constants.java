@@ -158,8 +158,7 @@ public interface Constants {
 
     public static final String USER_LOGIN = "logIn";
 
-
-
+    public static final String DEVICE_ID = "deviceId";
 
 
     public static final String PRINT_TICKET_NUMBER = "print_ticket_number";

@@ -88,6 +88,7 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fare_activity, null);
+
         mContext = container.getContext();
         mMainActivity = (MDCMainActivity) getActivity();
 

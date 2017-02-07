@@ -3,6 +3,7 @@ package com.creapple.tms.mobiledriverconsole.login;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -108,6 +109,9 @@ public class LoginManager extends ProgressActivity {
         Firebase firebase = new Firebase(Constants.FIREBASE_HOME + Constants.FIREBASE_USER_LIST_PATH + "/" + user.getUid());
         // update logIn flag from false to true
         firebase.child(Constants.USER_LOGIN).setValue(true);
+        //set device Id
+        String deviceID = android.provider.Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        firebase.child(Constants.DEVICE_ID).setValue(deviceID);
 
         // add new node
         Firebase userPost = firebase.push();
