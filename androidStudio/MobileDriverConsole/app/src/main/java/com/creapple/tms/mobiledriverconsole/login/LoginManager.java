@@ -185,38 +185,17 @@ public class LoginManager extends ProgressActivity {
      */
     private boolean validateForm() {
         boolean valid = true;
-//        String email = mEmailTxt.getText().toString();
-//        if(TextUtils.isEmpty(email)){
-//            mEmailTxt.setError("Required");
-//            valid = false;
-//        }else if(!StringUtils.contains(email, "@") || !StringUtils.contains(email, ".")) {
-//            mEmailTxt.setError("Invalid Email Format");
-//            valid = false;
-//        }else{
-//            mEmailTxt.setError(null);
-//        }
-//
-//        String password = mPasswordTxt.getText().toString();
-//        if(TextUtils.isEmpty(password)) {
-//            mPasswordTxt.setError("Required");
-//            valid = false;
-//        }else if(password.length()<6){
-//            mPasswordTxt.setError("Too Short Password");
-//            valid = false;
-//        }else{
-//            mPasswordTxt.setError(null);
-//        }
         String pinInput = StringUtils.defaultString(mPinTxt.getText().toString()).trim();
-        if(pinInput.length() != 6){
-            mPinTxt.setError("PIN requires 6 Digits");
+        if(pinInput.length() != 4){
+            mPinTxt.setError("PIN requires 4 Digits");
             valid = false;
         }else{
             mPinTxt.setError(null);
         }
 
         String passInput = StringUtils.defaultString(mPasswordTxt.getText().toString()).trim();
-        if(passInput.length() != 6){
-            mPasswordTxt.setError("Password requires 6 Digits");
+        if(passInput.length() != 4){
+            mPasswordTxt.setError("Password requires 4 Digits");
             valid = false;
         }else{
             mPasswordTxt.setError(null);
@@ -339,7 +318,7 @@ public class LoginManager extends ProgressActivity {
                     mPasswordTxt.requestFocus();
                 }else if(mPasswordTxt.isFocused()){
                     // submit
-                    logIn("pmbus." + mPinTxt.getText().toString().trim() + "@gmail.com", mPasswordTxt.getText().toString().trim());
+                    logIn("pmbus." + mPinTxt.getText().toString().trim() + "@gmail.com", "pm" + mPasswordTxt.getText().toString().trim());
                 }
                 break;
         }
@@ -358,8 +337,8 @@ public class LoginManager extends ProgressActivity {
             }else{
                 input = mPinTxt.getText().toString().trim();
             }
-            // No more input, if length is already 6
-            if(input.length()>=6){
+            // No more input, if length is already 4
+            if(input.length()>=4){
                 mPinTxt.setError("No More Input");
             }else{
                 input += num;
@@ -371,8 +350,8 @@ public class LoginManager extends ProgressActivity {
             }else{
                 input = mPasswordTxt.getText().toString().trim();
             }
-            // No more input, if length is already 6
-            if(input.length()>=6){
+            // No more input, if length is already 4
+            if(input.length()>=4){
                 mPasswordTxt.setError("No More Input");
             }else{
                 input += num;

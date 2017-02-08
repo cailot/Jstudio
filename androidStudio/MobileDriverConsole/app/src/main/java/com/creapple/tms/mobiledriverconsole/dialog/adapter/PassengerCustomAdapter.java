@@ -1,4 +1,4 @@
-package com.creapple.tms.mobiledriverconsole.dialog;
+package com.creapple.tms.mobiledriverconsole.dialog.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,18 +12,18 @@ import com.creapple.tms.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class VehicleCustomAdapter extends BaseAdapter{
+public class PassengerCustomAdapter extends BaseAdapter{
     private Context mContext;
     private String[] mNames;
 
-    public VehicleCustomAdapter(Context context, String[] names){
+    public PassengerCustomAdapter(Context context, String[] names){
         mContext = context;
         mNames = names;
     }
 
     @Override
     public int getCount() {
-        return mNames==null ? 0 : mNames.length;
+        return mNames==null ? 0 :mNames.length;
     }
 
     @Override
@@ -41,12 +41,12 @@ public class VehicleCustomAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.vehicle_detail, null);
+            view = layoutInflater.inflate(R.layout.passenger_detail, null);
         }
 
         // Get View
-        TextView stopName = (TextView) view.findViewById(R.id.vehicle_name_txt);
-        stopName.setText(mNames==null ? "" : mNames[i]);
+        TextView passengerCount = (TextView) view.findViewById(R.id.passenger_count_txt);
+        passengerCount.setText(mNames==null ? "" : mNames[i]);
 
         return view;
     }

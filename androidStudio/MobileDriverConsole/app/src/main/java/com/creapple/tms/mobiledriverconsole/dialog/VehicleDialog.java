@@ -2,7 +2,6 @@ package com.creapple.tms.mobiledriverconsole.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.dialog.adapter.VehicleCustomAdapter;
 
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class VehicleDialog extends DialogFragment{
+//public class VehicleDialog extends DialogFragment{
+public class VehicleDialog extends ImmersiveDialogFragment{
 
     // Bind the value between user selection in dialog and vehicle name on TripOffActivity
     public interface PassValueFromVehicleDialogListener{

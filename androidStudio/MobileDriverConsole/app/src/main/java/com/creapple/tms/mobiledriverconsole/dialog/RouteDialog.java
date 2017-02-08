@@ -2,7 +2,6 @@ package com.creapple.tms.mobiledriverconsole.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,11 +13,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.dialog.adapter.RouteCustomAdapter;
 
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class RouteDialog extends DialogFragment{
+//public class RouteDialog extends DialogFragment{
+public class RouteDialog extends ImmersiveDialogFragment{
 
     // Bind the value between user selection in dialog and stop name on TripOffActivity
     public interface PassValueFromRouteDialogListener{

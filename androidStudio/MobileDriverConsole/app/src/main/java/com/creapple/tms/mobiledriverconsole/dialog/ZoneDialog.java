@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,14 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.dialog.adapter.ZoneCustomAdapter;
 
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class ZoneDialog extends DialogFragment{
-
+//public class ZoneDialog extends DialogFragment{
+public class ZoneDialog extends ImmersiveDialogFragment4{
+    
     // Bind the value between user selection in dialog and stop name on FareFragment
     public interface PassValueFromZoneDialogListener {
         void sendZoneName(int name, String type);

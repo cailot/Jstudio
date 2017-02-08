@@ -1,4 +1,4 @@
-package com.creapple.tms.mobiledriverconsole.dialog;
+package com.creapple.tms.mobiledriverconsole.dialog.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,15 +12,15 @@ import com.creapple.tms.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class StopCustomAdapter extends BaseAdapter{
+public class RouteCustomAdapter extends BaseAdapter{
     private Context mContext;
     private String[] mNames;
-    private String[] mTypes;
+    private String[] mTeams;
 
-    public StopCustomAdapter(Context context, String[] names, String[] types){
+    public RouteCustomAdapter(Context context, String[] names, String[] teams){
         mContext = context;
         mNames = names;
-        mTypes = types;
+        mTeams = teams;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class StopCustomAdapter extends BaseAdapter{
 
     @Override
     public Object getItem(int i) {
-        return mNames==null ? "" : mNames[i];
+        return mNames==null ? "" :mNames[i];
     }
 
     @Override
@@ -43,14 +43,15 @@ public class StopCustomAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.stop_detail, null);
+            view = layoutInflater.inflate(R.layout.route_detail, null);
         }
 
         // Get View
-        TextView stopName = (TextView) view.findViewById(R.id.stop_name_txt);
-        TextView stopZone = (TextView) view.findViewById(R.id.stop_zone_txt);
+        TextView stopName = (TextView) view.findViewById(R.id.route_id_txt);
+        TextView stopZone = (TextView) view.findViewById(R.id.route_name_txt);
         stopName.setText(mNames==null ? "" : mNames[i]);
-        stopZone.setText(mTypes==null ? "" : mTypes[i]);
+        stopZone.setText(mTeams==null ? "" : mTeams[i]);
+
         return view;
     }
 

@@ -92,6 +92,19 @@ public class PrintConfirmationDialog extends Dialog {
             }
         });
 
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //
+        //              Immersive mode for Dialog
+        //
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        //Set the dialog to immersive
+        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility());
+        //Clear the not focusable flag from the window
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+
     }
 
     public void setMainActivity(MDCMainActivity mMainActivity) {

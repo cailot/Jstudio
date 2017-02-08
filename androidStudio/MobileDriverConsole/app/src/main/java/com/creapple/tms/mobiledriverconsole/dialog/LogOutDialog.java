@@ -3,7 +3,6 @@ package com.creapple.tms.mobiledriverconsole.dialog;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -26,8 +25,8 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 7. 17..
  */
-public class LogOutDialog extends DialogFragment {
-
+//public class LogOutDialog extends DialogFragment {
+public class LogOutDialog extends ImmersiveDialogFragment {
     private TextView mConfirmTxt;
 
     private Button mConfirmBtn, mCancelBtn;
@@ -127,4 +126,5 @@ public class LogOutDialog extends DialogFragment {
 
         return view;
     }
+
 }

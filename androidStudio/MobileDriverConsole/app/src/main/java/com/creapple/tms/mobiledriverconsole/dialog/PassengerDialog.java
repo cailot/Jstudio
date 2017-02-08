@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.creapple.tms.mobiledriverconsole.R;
+import com.creapple.tms.mobiledriverconsole.dialog.adapter.PassengerCustomAdapter;
 
 /**
  * Created by jinseo on 2016. 6. 30..
  */
-public class PassengerDialog extends DialogFragment{
+//public class PassengerDialog extends DialogFragment{
+public class PassengerDialog extends ImmersiveDialogFragment4{
 
     private Activity mActivity;
 

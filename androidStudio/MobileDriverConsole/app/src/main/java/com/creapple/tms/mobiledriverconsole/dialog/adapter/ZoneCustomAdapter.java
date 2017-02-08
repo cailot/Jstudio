@@ -1,4 +1,4 @@
-package com.creapple.tms.mobiledriverconsole.dialog;
+package com.creapple.tms.mobiledriverconsole.dialog.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,23 +12,25 @@ import com.creapple.tms.mobiledriverconsole.R;
 /**
  * Created by jinseo on 2016. 7. 1..
  */
-public class PassengerCustomAdapter extends BaseAdapter{
+public class ZoneCustomAdapter extends BaseAdapter{
     private Context mContext;
-    private String[] mNames;
+    private int[] mFares;
+    private String[] mZones;
 
-    public PassengerCustomAdapter(Context context, String[] names){
+    public ZoneCustomAdapter(Context context, int[] names, String[] types){
         mContext = context;
-        mNames = names;
+        mFares = names;
+        mZones = types;
     }
 
     @Override
     public int getCount() {
-        return mNames==null ? 0 :mNames.length;
+        return mFares ==null ? 0 : mFares.length;
     }
 
     @Override
     public Object getItem(int i) {
-        return mNames==null ? "" : mNames[i];
+        return mFares ==null ? "" : mFares[i];
     }
 
     @Override
@@ -41,13 +43,14 @@ public class PassengerCustomAdapter extends BaseAdapter{
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view==null){
             LayoutInflater layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.passenger_detail, null);
+            view = layoutInflater.inflate(R.layout.zone_detail, null);
         }
 
         // Get View
-        TextView passengerCount = (TextView) view.findViewById(R.id.passenger_count_txt);
-        passengerCount.setText(mNames==null ? "" : mNames[i]);
-
+        TextView stopName = (TextView) view.findViewById(R.id.zone_name_txt);
+        TextView stopZone = (TextView) view.findViewById(R.id.zone_fare_txt);
+        stopName.setText(mFares ==null ? "" : mFares[i]+"");
+        stopZone.setText(mZones ==null ? "" : mZones[i]);
         return view;
     }
 

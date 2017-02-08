@@ -2,7 +2,6 @@ package com.creapple.tms.mobiledriverconsole.dialog;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,8 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 7. 17..
  */
-public class TripOffDialog extends DialogFragment {
+//public class TripOffDialog extends DialogFragment {
+public class TripOffDialog extends ImmersiveDialogFragment{
 
     private TextView mConfirmTxt;
 
