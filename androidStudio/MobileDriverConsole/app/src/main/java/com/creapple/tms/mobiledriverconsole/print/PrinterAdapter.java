@@ -44,16 +44,27 @@ public class PrinterAdapter {
 
     BluetoothAdapter bluetoothAdapter;
 
+    ConnStateHandler mConnStateHandler;
+
+
     public PrinterAdapter(PrinterViewAction viewAction, BluetoothAdapter bluetoothAdapter){
         this.viewAction = viewAction;
         this.bluetoothAdapter = bluetoothAdapter;
+        connectBluetooth(bluetoothAdapter);
+    }
+
+    /**
+     * This can be called several times to ensure pairing printer
+     * @param bluetoothAdapter
+     */
+    public void connectBluetooth(BluetoothAdapter bluetoothAdapter) {
         Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
         outter:for(BluetoothDevice device : devices){
             ParcelUuid[] uuids = device.getUuids();
             for(ParcelUuid parcelUuid: uuids){
                 Log.e(LOG_TAG, device.getName() + "\t" + device.getAddress() + "\t" + parcelUuid);
                 if(parcelUuid.toString().equalsIgnoreCase(UUID_TEST)){
-                    connectBluetooth(device);
+                    connect(device);
                     Log.d(LOG_TAG, device.getName() + "\t" + device.getAddress() + "\t" + parcelUuid);
                     break outter;
                 }
@@ -61,10 +72,10 @@ public class PrinterAdapter {
         }
     }
 
-    public void connectBluetooth(BluetoothDevice bluetoothDevice){
-        ConnStateHandler connStateHandler = new ConnStateHandler();
+    public void connect(BluetoothDevice bluetoothDevice){
+        mConnStateHandler = new ConnStateHandler();
         HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
-        hsBluetoothPrintDriver.setHandler(connStateHandler);
+        hsBluetoothPrintDriver.setHandler(mConnStateHandler);
         hsBluetoothPrintDriver.start();
         hsBluetoothPrintDriver.connect(bluetoothDevice);
     }

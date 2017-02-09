@@ -85,11 +85,7 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
     public static String nextStopName = "ด่านทับช้าง";
 
-//    public static int mPassengerCount; // passenger count during specific interval
-
     public static int mPassengerCountSum; // total passenger count
-
-//    public static int mFareCash; // fare during specific interval
 
     public static int mFareCashSum; // total fare
 
@@ -130,6 +126,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      * PrinterAdapter shared by FareFragment & SettingFragment
      */
     private PrinterAdapter mPrinterAdapter;
+
+    private BluetoothAdapter mBluetoothAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,8 +211,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         registerTripInfo();
         
         // set up bluetooth printer
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        mPrinterAdapter = new PrinterAdapter(this, mBluetoothAdapter);
 
     }
 
@@ -303,6 +301,10 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     turnOffSpeedCheck();
                     // call auditTx
                     //
+                    ////////////////////////////////////////////////////////////
+                    // make sure pairing with printer
+                    //getPrinterAdapter().connectBluetooth(mBluetoothAdapter);
+                    ////////////////////////////////////////////////////////////
                     break;
                 case Geofence.GEOFENCE_TRANSITION_EXIT :
                     // set timestamp for exiting geofence
@@ -816,8 +818,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
      */
     public PrinterAdapter getPrinterAdapter(){
         if(mPrinterAdapter==null){
-            BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            mPrinterAdapter = new PrinterAdapter(this, bluetoothAdapter);
+            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            mPrinterAdapter = new PrinterAdapter(this, mBluetoothAdapter);
         }
         return mPrinterAdapter;
     }
