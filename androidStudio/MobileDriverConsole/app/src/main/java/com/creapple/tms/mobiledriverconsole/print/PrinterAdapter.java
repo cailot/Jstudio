@@ -80,6 +80,24 @@ public class PrinterAdapter {
         hsBluetoothPrintDriver.connect(bluetoothDevice);
     }
 
+    /**
+     * This checks pulse whether it is currently paired with BluetoothPrinter or not
+     * @return
+     */
+    public boolean isConnected(){
+        boolean connected = true;
+        byte heartBit = 0;
+        HsBluetoothPrintDriver hsBluetoothPrintDriver = HsBluetoothPrintDriver.getInstance();
+        byte[] cmd = {0x1F, 0x61, 0x01};
+        hsBluetoothPrintDriver.BT_Write(cmd, 3);
+        heartBit = hsBluetoothPrintDriver.BT_read();
+        if(heartBit==0)
+        {
+            connected = false;
+        }
+        return connected;
+    }
+
     public void stopConnection(){
         HsBluetoothPrintDriver.getInstance().stop();
     }

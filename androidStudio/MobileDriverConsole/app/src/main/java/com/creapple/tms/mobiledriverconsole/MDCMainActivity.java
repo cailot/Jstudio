@@ -303,8 +303,10 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
                     //
                     ////////////////////////////////////////////////////////////
                     // make sure pairing with printer
-                    //getPrinterAdapter().connectBluetooth(mBluetoothAdapter);
-                    ////////////////////////////////////////////////////////////
+                    /////////////////////////////////////////////////////////////
+                    if(!getPrinterAdapter().isConnected()){
+                        mPrinterAdapter.connectBluetooth(mBluetoothAdapter);
+                    }
                     break;
                 case Geofence.GEOFENCE_TRANSITION_EXIT :
                     // set timestamp for exiting geofence
