@@ -5,16 +5,21 @@ package com.creapple.tms.mobiledriverconsole.fragments;
  */
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.ImageSpan;
 import android.view.ViewGroup;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import com.creapple.tms.mobiledriverconsole.R;
 import com.creapple.tms.mobiledriverconsole.utils.Constants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -100,15 +105,97 @@ public class TabAdapter extends FragmentPagerAdapter{
 
     @Override
     public CharSequence getPageTitle(int position) {
-        switch (position) {
-            case Constants.TRIP_ON_FRAGMENT_TAB:
-                return mContext.getResources().getString(R.string.first_tab_name);
-            case Constants.FARE_FRAGMENT_TAB:
-                return mContext.getResources().getString(R.string.second_tab_name);
-            case Constants.SETTING_FRAGMENT_TAB:
-                return mContext.getResources().getString(R.string.third_tab_name);
-        }
-        return null;
+//        switch (position) {
+//            case Constants.TRIP_ON_FRAGMENT_TAB:
+//                return mContext.getResources().getString(R.string.first_tab_name);
+//            case Constants.FARE_FRAGMENT_TAB:
+//                return mContext.getResources().getString(R.string.second_tab_name);
+//            case Constants.SETTING_FRAGMENT_TAB:
+//                return mContext.getResources().getString(R.string.third_tab_name);
+//        }
+//        return null;
+
+
+
+
+//        SpannableStringBuilder sb;
+//        ImageSpan span;
+//        Drawable myDrawable;
+//        switch (position) {
+//            case Constants.TRIP_ON_FRAGMENT_TAB:
+//                myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+//                sb = new SpannableStringBuilder("  " + mContext.getResources().getString(R.string.first_tab_name)); // space added before text for convenience
+//
+//                myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+//                span = new ImageSpan(myDrawable, ImageSpan.ALIGN_BASELINE);
+//                sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                return sb;
+//            case Constants.FARE_FRAGMENT_TAB:
+//                myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+//                sb = new SpannableStringBuilder("  " + mContext.getResources().getString(R.string.second_tab_name)); // space added before text for convenience
+//
+//                myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+//                span = new ImageSpan(myDrawable, ImageSpan.ALIGN_BASELINE);
+//                sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                return sb;
+//            case Constants.SETTING_FRAGMENT_TAB:
+//                myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+//                sb = new SpannableStringBuilder("  " + mContext.getResources().getString(R.string.third_tab_name)); // space added before text for convenience
+//
+//                myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+//                span = new ImageSpan(myDrawable, ImageSpan.ALIGN_BASELINE);
+//                sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//                return sb;
+//
+//        }
+//        return null;
+
+
+
+
+
+
+
+
+    Drawable myDrawable = null;
+    String title = null;
+
+
+
+            switch (position) {
+                case Constants.TRIP_ON_FRAGMENT_TAB:
+                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+                    title = mContext.getResources().getString(R.string.first_tab_name); // space added before text for convenience
+                    break;
+                case Constants.FARE_FRAGMENT_TAB:
+                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+                    title = mContext.getResources().getString(R.string.second_tab_name); // space added before text for convenience
+                    break;
+                case Constants.SETTING_FRAGMENT_TAB:
+                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+                    title = mContext.getResources().getString(R.string.third_tab_name); // space added before text for convenience
+                    break;
+            }
+
+
+
+    SpannableStringBuilder sb = new SpannableStringBuilder("   " + title); // space added before text for convenience
+    try {
+        myDrawable.setBounds(5, 5, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+        ImageSpan span = new ImageSpan(myDrawable, DynamicDrawableSpan.ALIGN_BASELINE);
+        sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    } catch (Exception e) {
+        // TODO: handle exception
     }
+
+
+
+    return sb;}
+
+
+
 
 }

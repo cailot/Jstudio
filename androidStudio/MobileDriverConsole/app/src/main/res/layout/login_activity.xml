@@ -231,8 +231,9 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:onClick="pushButton"
-                        android:background="@drawable/key_enter"
-                        android:textSize="40dp" />
+                        android:textSize="40dp"
+                        android:background="@mipmap/ic_touch_app_black_24dp"
+                        android:scaleType="fitXY" />
                 </LinearLayout>
             </LinearLayout>
 

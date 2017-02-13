@@ -41,6 +41,8 @@ public class LoginManager extends ProgressActivity {
 
     private Button[] mButton;
 
+//    private ImageButton[] mImageButton;
+
 //    private ImageView mLoginImg;
 
     // this is reported bug that 'onAuthStateChanged()' called twice times.
@@ -59,6 +61,22 @@ public class LoginManager extends ProgressActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener(){
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null && isFirst){ // user is signed in
+//                    Log.d(LOG_TAG, "Signed in - " + user.getUid());
+                    isFirst = false;
+
+                }else { // user is signed out
+//                    Log.d(LOG_TAG, "Signed out");
+                }
+            }
+        };
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
@@ -76,28 +94,25 @@ public class LoginManager extends ProgressActivity {
         mButton[7] = (Button) findViewById(R.id.login_btn_7);
         mButton[8] = (Button) findViewById(R.id.login_btn_8);
         mButton[9] = (Button) findViewById(R.id.login_btn_9);
+//        mImageButton = new ImageButton[2];
         mButton[10] = (Button) findViewById(R.id.login_btn_10); // back
         mButton[11] = (Button) findViewById(R.id.login_btn_11); // enter
 
-//        Drawable enterImage = getResources().getDrawable(R.drawable.key_enter);
-////        enterImage.setBounds(0,0, (int)(enterImage.getIntrinsicWidth()*0.5), (int)(enterImage.getIntrinsicHeight()*0.5));
-////        ScaleDrawable scaleEnter = new ScaleDrawable(enterImage, 0, enterImage.getIntrinsicWidth(), enterImage.getIntrinsicHeight());
-//        mButton[11].setCompoundDrawables(enterImage, null, null, null);
 
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener(){
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null && isFirst){ // user is signed in
-//                    Log.d(LOG_TAG, "Signed in - " + user.getUid());
-                    isFirst = false;
-
-                }else { // user is signed out
-//                    Log.d(LOG_TAG, "Signed out");
-                }
-            }
-        };
+//        mAuth = FirebaseAuth.getInstance();
+//        mAuthListener = new FirebaseAuth.AuthStateListener(){
+//            @Override
+//            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if(user != null && isFirst){ // user is signed in
+////                    Log.d(LOG_TAG, "Signed in - " + user.getUid());
+//                    isFirst = false;
+//
+//                }else { // user is signed out
+////                    Log.d(LOG_TAG, "Signed out");
+//                }
+//            }
+//        };
     }
 
     /**
