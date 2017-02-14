@@ -1,11 +1,15 @@
 package com.creapple.tms.mobiledriverconsole.dialog;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.SpannableStringBuilder;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -20,36 +24,68 @@ import java.util.Map;
 /**
  * Created by jinseo on 2016. 7. 17..
  */
-public class PrintConfirmationDialog extends Dialog {
-
+//public class PrintConfirmationDialog extends Dialog {
+public class PrintConfirmationDialog extends ImmersiveDialogFragment {
     private TextView mConfirmTxt;
 
     private Button mConfirmBtn, mCancelBtn;
+
+    private Context mContext;
 
     private MDCMainActivity mMainActivity;
 
     private PrinterAdapter mPrinterAdapter;
 
-    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final Map map) {
-        super(context);
+    private SpannableStringBuilder mConfirm;
 
+    private Map mData;
+
+
+    public PrintConfirmationDialog() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public PrintConfirmationDialog(Context context, PrinterAdapter printerAdapter, final SpannableStringBuilder confirm, final Map data) {
+        mContext = context;
         mPrinterAdapter = printerAdapter;
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.print_confirmation);
+        mConfirm = confirm;
+        mData = data;
+    }
 
-        getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Dialog dialog = super.onCreateDialog(savedInstanceState);
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        return dialog;
+    }
 
-        mConfirmTxt = (TextView) findViewById(R.id.print_confimation_txt);
-        mConfirmTxt.setText(confirm);
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if(dialog != null){
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            dialog.getWindow().setBackgroundDrawable(null);
+        }
+    }
 
-        mConfirmBtn = (Button) findViewById(R.id.print_confirmation_btn);
-        mConfirmBtn.setText(context.getString(R.string.dialog_confirm));
+
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.print_confirmation, container, false);
+
+        mConfirmTxt = (TextView) view.findViewById(R.id.print_confimation_txt);
+        mConfirmTxt.setText(mConfirm);
+        mConfirmBtn = (Button) view.findViewById(R.id.print_confirmation_btn);
+        mConfirmBtn.setText(mContext.getString(R.string.dialog_confirm));
         mConfirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPrinterAdapter.printTicket(map);
+                mPrinterAdapter.printTicket(mData);
 
-                Map params = map;
+                Map params = mData;
                 int adultCount = Integer.parseInt(params.get(Constants.PRINT_ADULT_NUMBER_OF_PERSON).toString());
                 int adultFare = Integer.parseInt(params.get(Constants.PRINT_ADULT_TOTAL).toString());
                 int seniorCount = Integer.parseInt(params.get(Constants.PRINT_SENIOR_NUMBER_OF_PERSON).toString());
@@ -83,28 +119,15 @@ public class PrintConfirmationDialog extends Dialog {
                 dismiss();
             }
         });
-        mCancelBtn = (Button) findViewById(R.id.print_cancel_btn);
-        mCancelBtn.setText(context.getString(R.string.dialog_cancel));
+        mCancelBtn = (Button) view.findViewById(R.id.print_cancel_btn);
+        mCancelBtn.setText(mContext.getString(R.string.dialog_cancel));
         mCancelBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 dismiss();
             }
         });
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //
-        //              Immersive mode for Dialog
-        //
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        //Set the dialog to immersive
-        getWindow().getDecorView().setSystemUiVisibility(getWindow().getDecorView().getSystemUiVisibility());
-        //Clear the not focusable flag from the window
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-
-
+        return view;
     }
 
     public void setMainActivity(MDCMainActivity mMainActivity) {

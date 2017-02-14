@@ -211,7 +211,7 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="1"
                         android:onClick="pushButton"
-                        android:background="@drawable/key_delete"
+                        android:background="@mipmap/ic_arrow_back_white_24dp"
                         android:textSize="40dp" />
 
                     <Button
@@ -232,7 +232,7 @@
                         android:layout_weight="1"
                         android:onClick="pushButton"
                         android:textSize="40dp"
-                        android:background="@mipmap/ic_touch_app_black_24dp"
+                        android:background="@mipmap/ic_check_white_24dp"
                         android:scaleType="fitXY" />
                 </LinearLayout>
             </LinearLayout>

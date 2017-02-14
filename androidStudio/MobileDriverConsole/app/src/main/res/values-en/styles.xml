@@ -17,12 +17,5 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="MDCTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabTextAppearance">@style/MDCTextAppearance</item>
-    </style>
-
-    <style name="MDCTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="textAllCaps">false</item>
-    </style>
 
 </resources>

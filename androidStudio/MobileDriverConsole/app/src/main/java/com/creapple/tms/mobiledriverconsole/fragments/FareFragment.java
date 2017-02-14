@@ -235,7 +235,8 @@ public class FareFragment extends Fragment implements StopDialog.PassValueFromSt
 
         PrintConfirmationDialog printConfirmationDialog = new PrintConfirmationDialog(mContext, mPrinterAdapter, stringBuilder, map);
         printConfirmationDialog.setMainActivity(mMainActivity);
-        printConfirmationDialog.show();
+        //printConfirmationDialog.show();
+        printConfirmationDialog.show(mMainActivity.getFragmentManager(), Constants.PRINT_DIALOG_TAG);
     }
 
 

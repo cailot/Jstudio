@@ -309,6 +309,8 @@ public interface Constants {
 
     public static final String LOGOUT_DIALOG_TAG = "Logout Dialog";
 
+    public static final String PRINT_DIALOG_TAG = "Print Dialog";
+
     public static final String TRIPOFF_DIALOG_TAG = "TripOff Dialog";
 
 

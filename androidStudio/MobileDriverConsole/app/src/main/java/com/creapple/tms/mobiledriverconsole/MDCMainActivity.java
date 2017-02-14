@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -170,8 +169,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
         }
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
 
@@ -185,6 +184,22 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewPager);
+        for (int i = 0; i < mTabLayout.getTabCount(); i++) {
+            switch(i)
+            {
+                case Constants.TRIP_ON_FRAGMENT_TAB :
+                    mTabLayout.getTabAt(i).setIcon(R.mipmap.ic_directions_white_24dp);
+                    break;
+                case Constants.FARE_FRAGMENT_TAB :
+                    mTabLayout.getTabAt(i).setIcon(R.mipmap.ic_attach_money_white_24dp);
+                    break;
+                case Constants.SETTING_FRAGMENT_TAB :
+                    mTabLayout.getTabAt(i).setIcon(R.mipmap.ic_settings_white_24dp);
+                    break;
+            }
+
+        }
+
 
 //        mVehicleId = getVehicleId(Constants.VEHICLE_NAME);
 
@@ -223,7 +238,8 @@ public class MDCMainActivity extends AppCompatActivity implements GoogleApiClien
     public void switchTabSelection(int choice) {
         switch (choice){
             case Constants.FARE_FRAGMENT_TAB :
-                mTabLayout.getTabAt(Constants.FARE_FRAGMENT_TAB).select();
+//                mTabLayout.getTabAt(Constants.FARE_FRAGMENT_TAB).select();
+                mTabLayout.getTabAt(Constants.FARE_FRAGMENT_TAB).setIcon(getResources().getDrawable(R.mipmap.ic_monetization_on_white_24dp)).select();
                 break;
             case Constants.TRIP_ON_FRAGMENT_TAB :
                 mTabLayout.getTabAt(Constants.TRIP_ON_FRAGMENT_TAB).select();

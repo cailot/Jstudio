@@ -5,14 +5,9 @@ package com.creapple.tms.mobiledriverconsole.fragments;
  */
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.DynamicDrawableSpan;
-import android.text.style.ImageSpan;
 import android.view.ViewGroup;
 
 import com.creapple.tms.mobiledriverconsole.R;
@@ -103,17 +98,22 @@ public class TabAdapter extends FragmentPagerAdapter{
         return 3;
     }
 
+
+
+//    Drawable myDrawable;
+//    String title;
+
     @Override
     public CharSequence getPageTitle(int position) {
-//        switch (position) {
-//            case Constants.TRIP_ON_FRAGMENT_TAB:
-//                return mContext.getResources().getString(R.string.first_tab_name);
-//            case Constants.FARE_FRAGMENT_TAB:
-//                return mContext.getResources().getString(R.string.second_tab_name);
-//            case Constants.SETTING_FRAGMENT_TAB:
-//                return mContext.getResources().getString(R.string.third_tab_name);
-//        }
-//        return null;
+        switch (position) {
+            case Constants.TRIP_ON_FRAGMENT_TAB:
+                return mContext.getResources().getString(R.string.first_tab_name);
+            case Constants.FARE_FRAGMENT_TAB:
+                return mContext.getResources().getString(R.string.second_tab_name);
+            case Constants.SETTING_FRAGMENT_TAB:
+                return mContext.getResources().getString(R.string.third_tab_name);
+        }
+        return null;
 
 
 
@@ -123,7 +123,7 @@ public class TabAdapter extends FragmentPagerAdapter{
 //        Drawable myDrawable;
 //        switch (position) {
 //            case Constants.TRIP_ON_FRAGMENT_TAB:
-//                myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
+//                mDrawable = mContext.getResources().getDrawable(R.mipmap.ic_directions_white_24dp);
 //                sb = new SpannableStringBuilder("  " + mContext.getResources().getString(R.string.first_tab_name)); // space added before text for convenience
 //
 //                myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
@@ -160,40 +160,48 @@ public class TabAdapter extends FragmentPagerAdapter{
 
 
 
-    Drawable myDrawable = null;
-    String title = null;
+//    Drawable myDrawable = null;
+//    String title = null;
 
 
 
-            switch (position) {
-                case Constants.TRIP_ON_FRAGMENT_TAB:
-                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
-                    title = mContext.getResources().getString(R.string.first_tab_name); // space added before text for convenience
-                    break;
-                case Constants.FARE_FRAGMENT_TAB:
-                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
-                    title = mContext.getResources().getString(R.string.second_tab_name); // space added before text for convenience
-                    break;
-                case Constants.SETTING_FRAGMENT_TAB:
-                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_touch_app_black_24dp);
-                    title = mContext.getResources().getString(R.string.third_tab_name); // space added before text for convenience
-                    break;
-            }
-
-
-
-    SpannableStringBuilder sb = new SpannableStringBuilder("   " + title); // space added before text for convenience
-    try {
-        myDrawable.setBounds(5, 5, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
-        ImageSpan span = new ImageSpan(myDrawable, DynamicDrawableSpan.ALIGN_BASELINE);
-        sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-    } catch (Exception e) {
-        // TODO: handle exception
+//            switch (position) {
+//                case Constants.TRIP_ON_FRAGMENT_TAB:
+//                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_directions_white_24dp);
+//                    title = mContext.getResources().getString(R.string.first_tab_name); // space added before text for convenience
+//                    break;
+//                case Constants.FARE_FRAGMENT_TAB:
+//                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_monetization_on_white_24dp);
+//                    title = mContext.getResources().getString(R.string.second_tab_name); // space added before text for convenience
+//                    break;
+//                case Constants.SETTING_FRAGMENT_TAB:
+//                    myDrawable = mContext.getResources().getDrawable(R.mipmap.ic_settings_white_24dp);
+//                    title = mContext.getResources().getString(R.string.third_tab_name); // space added before text for convenience
+//                    break;
+//            }
+//
+//
+//
+////    SpannableStringBuilder sb = new SpannableStringBuilder("   " + title); // space added before text for convenience
+//
+//        SpannableString sb = null;
+//        try {
+//        myDrawable.setBounds(5, 5, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+////        ImageSpan span = new ImageSpan(myDrawable, DynamicDrawableSpan.ALIGN_BASELINE);
+////        sb.setSpan(span, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        myDrawable.setBounds(0, 0, myDrawable.getIntrinsicWidth(), myDrawable.getIntrinsicHeight());
+//        // Replace blank spaces with image icon
+//        sb = new SpannableString("   " + title);
+//        ImageSpan imageSpan = new ImageSpan(myDrawable, ImageSpan.ALIGN_BOTTOM);
+//        sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//    } catch (Exception e) {
+//        // TODO: handle exception
+//    }
+//
+//
+//
+//    return sb;
     }
-
-
-
-    return sb;}
 
 
 
